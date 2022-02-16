@@ -1,0 +1,61 @@
+.App {
+  text-align: center;
+}
+.Dropzone{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-width: 2px;
+  border-radius: 2px;
+  border-style: dashed;
+  background-color: #fafafa;
+  color: #bdbdbd;
+  outline: none;
+  transition: border .24s ease-in-out;
+}
+.Header{
+  display: flex;
+  padding: 10px;
+  margin: 10px;
+  float: right;
+}
+.Recomendations{
+  margin-left: 10px;
+
+  padding: 10px;
+}
+.Likes{
+  margin-left: 10px;
+  padding: 10px;
+}
+.User{
+  padding: 10px;
+}
+.Post{
+  max-width: 600px;
+  display: block; margin: 0 auto;
+  background-color: #faf6fd;
+  border: 6px solid #7922CC;
+  padding: 10px;
+  border-radius: 25px;
+}
+ul{
+  margin: 0; 
+    padding: 4px; 
+}
+li {
+  display: inline; /* Отображать как строчный элемент */
+  margin-right: 5px; /* Отступ слева */
+  padding: 3px; /* Поля вокруг текста */
+  list-style-type: none; /* Убираем маркеры */
+ }
+
+.Title{
+  text-align: left;
+}
+.Input{
+  display: flex;
+  width: 100%;
+}
