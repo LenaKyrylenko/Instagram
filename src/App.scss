@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  // text-align: center;
 }
 .Dropzone{
   flex: 1;
@@ -51,11 +51,38 @@ li {
   padding: 3px; /* Поля вокруг текста */
   list-style-type: none; /* Убираем маркеры */
  }
-
+main{
+  margin-left:200px;
+  margin-right: 200px;
+}
 .Title{
   text-align: left;
 }
 .Input{
   display: flex;
   width: 100%;
+}
+.AboutMe{
+  
+  display: flex;
+  justify-content: center;
+  //  float: left;
+  // margin:30px;
+}
+.Info{ 
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  // float: right;
+  // margin-left:200px;
+
+}
+.Card{
+  // margin: 0 1.5%;
+  //  width:  33.3%;
+   padding: 10px;
+   margin:50px;
+  // padding-top: 30%;
+  // background-size: 100% 100%;
+ 
 }

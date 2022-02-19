@@ -7,7 +7,7 @@ import { store } from './reducers'
 import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import { arrayMove, arrayMoveImmutable, arrayMoveMutable } from 'array-move'
 import { useDropzone } from 'react-dropzone'
-import 'antd/dist/antd.css' // or 'antd/dist/antd.less'
+import 'antd/dist/antd.css'
 import {
   actionPromise,
   actionPending,
@@ -16,95 +16,116 @@ import {
   actionRegister,
   actionFullRegister,
   gql,
+  actionAboutMe,
+  actionAvatar,
+  actionUploadFile,
+  actionUploadFiles,
+  actionSetAvatar,
+  actionPostUpsert,
   backendURL,
+  actionAllPosts,
+  actionOnePost
 } from './actions'
-import { Upload, Button } from 'antd'
+import { Upload, Button ,  DatePicker, Space } from 'antd'
+import moment from 'moment';
 import { UploadOutlined } from '@ant-design/icons'
 import ImgCrop from 'antd-img-crop'
 import { Avatar, Image, Divider, Radio } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import user from './materials/user.png'
+import photoNotFound from './materials/photoNotFound.png'
+
 console.log(store.getState())
 store.subscribe(() => console.log(store.getState()))
 const PageMain = () => <div className="PageMain">ГЛАВНАЯ</div>
-const uploadFile = (file) => {
-  const myForm = new FormData()
-  myForm.append('photo', file)
-  return fetch(backendURL + '/upload', {
-    method: 'POST',
-    headers: localStorage.authToken
-      ? { Authorization: 'Bearer ' + localStorage.authToken }
-      : {},
-    body: myForm,
-  }).then((result) => result.json())
-}
-const actionUploadFile = (file) => actionPromise('uploadFile', uploadFile(file))
 
-const actionAvatar = (imageId) => async (dispatch, getState) => {
-  await dispatch(
-    actionPromise(
-      'setAvatar',
-      gql(
-        `mutation setAvatar($imageId:ID, $userId:String){
-    UserUpsert(user:{_id: $userId, avatar: {_id: $imageId}}){
-    _id, avatar{
-        _id
-    }
-    }
-    }`,
-        { imageId, userId: getState().auth?.payload?.sub?.id },
-      ),
-    ),
-  )
+const Card = ({post, onPost} )=>(
+<>
+<Link to={`/post/${post?._id}`} onClick={()=>onPost(post?._id)}>
+{post?.images && post?.images[0] && post.images[0]?.url ?
+<img className='Card'
+        src={
+          backendURL+'/' + post.images[0].url 
+        }
+        style={{ maxWidth: '200px', maxHeight: '200px' }} />
+        :
+        <img className='Card'
+        src={
+          photoNotFound
+        }
+        style={{ maxWidth: '200px', maxHeight: '200px' }} /> }
+{/* {console.log(post?._id)} */}
+</Link>
+</>
+)
+
+const PagePost=({onePost,aboutMe:{avatar, login}={}, onPost})=>{
+  return(
+    <>
+  
+  {onePost?.images && onePost?.images[0] && onePost.images[0]?.url ?
+<img className='Card'
+        src={
+          backendURL+'/' + onePost.images[0].url 
+        }
+        style={{ maxWidth: '600px', maxHeight: '600px' }} />
+        :
+        <img className='Card'
+        src={
+          photoNotFound
+        }
+        style={{ maxWidth: '600px', maxHeight: '600px' }} /> }
+        {avatar ?
+<Avatar style={{width:'50px',height:'50px',position:'absolute'}} src={backendURL + '/' + avatar?.url} />
+  :
+<Avatar style={{width:'50px',height:'50px',position:'absolute'}} src={user} />
+
 }
-const actionAboutMe = () => async (dispatch, getState) => {
-  await dispatch(
-    actionPromise(
-      'aboutMe',
-      gql(
-        `query AboutMe($userId:String){
-  UserFindOne(query:$userId)
-  {
-    _id createdAt login nick  avatar{_id url} 
-    likesCount followers{_id login nick} following{_id login nick}
-  }
-}`,
-        {
-          userId: JSON.stringify([{ _id: getState().auth?.payload?.sub?.id }]),
-        },
-      ),
-    ),
-  )
+  <h2> {onePost?.title||''} </h2>
+        </>)
 }
-const actionPostUpsert = (post) =>
-  actionPromise(
-    'postUpsert',
-    gql(
-      `
-mutation PostUpsert($post:PostInput){
-  PostUpsert(post:$post){
-    _id title text 
-  }
-}`,
-      {
-        post: {
-          ...post,
-          images: post.images.map(({ _id }) => ({ _id })),
-          // title: post.title,
-          // text:post.text,
-          // title:post.title
-        },
-      },
-    ),
-  )
-const actionSetAvatar = (file) => async (dispatch) => {
-  let result = await dispatch(actionUploadFile(file))
-  if (result) {
-    await dispatch(actionAvatar(result._id))
-    await dispatch(actionAboutMe())
-  }
-}
-const Page2 = () => <div className="PageMain">юзер</div>
+
+const CPost = connect((state)=>({ onePost: state.promise?.onePost?.payload, aboutMe: state.promise?.aboutMe?.payload}))(PagePost)
+const PageAboutMe = ({ aboutMe: {_id, login, nick, createdAt, avatar, followers,following } = {}, allPosts, onPosts,onPost }) => {
+  useEffect(() => { onPosts() }, []);
+  // console.log('CREATED AT',new Intl.DateTimeFormat().format(createdAt));
+return (
+<section className="AboutMe"> 
+<Avatar style={{width:'150px',height:'150px',position:'absolute'}} src={backendURL + '/' + avatar?.url || user} />
+<div className="Info">
+
+<h1>  {login}</h1>
+<h3> Created Account: {new Intl.DateTimeFormat(('en-GB')).format(createdAt)}</h3>
+<div style={{display: 'flex'}}>
+
+{/* {allPosts?.length} style={{display: 'flex',justifyContent: 'space-between'}}*/}
+<h3  > {allPosts?.length} posts  </h3>
+
+<h3 style={{marginLeft: '20px'}}> {followers?.length} followers  </h3>
+
+<h3 style={{marginLeft: '20px'}}> {following?.length} following  </h3>
+
+</div>
+<h3> nick: {nick==null?login:nick}</h3>
+<div style={{display:'flex',flexWrap: 'wrap', padding: '20px',margin:'20px'}}>
+
+{(allPosts||[])?.map((item) => (
+    <Card post={item} onPost={onPost}/> 
+    ))}
+</div>
+{/* <h3> Created Account: {
+<div>
+<img
+      src={backendURL + '/' + allPosts?.url}
+      style={{ maxWidth: '200px', maxHeight: '200px' }}/>
+</div>
+date} </h3> */}
+
+</div>
+</section>)}
+const CPageAboutMe = connect( (state) => ({ aboutMe: state.promise?.aboutMe?.payload,
+allPosts:state.promise?.allPosts?.payload
+}),{onPosts:actionAllPosts, onPost:actionOnePost})(PageAboutMe)
 const PageCreatePost = () => (
   <div style={{ maxWidth: '700px', maxHeight: '700px', background: '#FFFACD' }}>
     <h2>Edit Post</h2>
@@ -115,9 +136,10 @@ const Main = () => (
   <main>
     <Switch>
       <Route path="/" exact component={PageMain} />
-      <Route path="/profile/:_id" component={Page2} />
+      <Route path="/profile/:_id" component={CPageAboutMe} />
       <Route path="/edit/post" component={PageCreatePost} />
-      <CBasic />
+      <Route path="/post/:_id" component={CPost} />
+      {/* <CBasic /> */}
     </Switch>
   </main>
 )
@@ -148,25 +170,25 @@ const AddPost = ({ children }) => {
 
 const CBasic = connect(null, { onLoad: actionSetAvatar })(Basic)
 // const CAddPost =connect(null,{actionPostUpsert})
-const User = ({ aboutMe: { _id, login, avatar } = {}, getData }) => (
-  <Link className="User" to={`/profile/${_id}`} onClick={() => getData()}>
+const User = ({ aboutMe: { _id, login, avatar } = {}}) => (
+  <Link className="User" to={`/profile/${_id}`} >
     <Avatar src={backendURL + '/' + avatar?.url || user} />
   </Link>
 )
 
 const CUser = connect(
   (state) => ({ aboutMe: state.promise.aboutMe?.payload }),
-  { getData: actionAboutMe },
+ 
 )(User)
 
 function Basic({ onLoad }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
-
   const files = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
+    
     </li>
-  )) // console.log('FILES',acceptedFiles[0])
+  ))
   useEffect(() => {
     acceptedFiles[0] && onLoad(acceptedFiles[0])
   }, [acceptedFiles])
@@ -185,9 +207,8 @@ function Basic({ onLoad }) {
     </section>
   )
 }
-
 const defaultPost = {
-  _id: '620b83e3ad55d22f3e2fb319',
+  _id: '620cfd26ad55d22f3e2fb336',
   title: 'Bmw',
   text: 'Bmw',
   images: [
@@ -221,6 +242,7 @@ const SortableContainer = sortableContainer(({ children }) => {
   return (
     <>
       <ul>{children}</ul>
+
       {/* <input value={title}/> */}
     </>
   )
@@ -234,53 +256,80 @@ const Input = ({ state, onChangeText }) => (
   />
 )
 const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
+  //по файлу в дропзоне:
+  //дергать onFileDrop
+  //fileStatus - информация о заливке файла из redux
+  //через useEffect дождаться когда файл зальется
+  console.log('STATUS ', fileStatus?.status)
+  console.log('ON FILE DROP ', onFileDrop)
+
   const [state, setState] = useState(post)
-  // const [newTitle, setTitle] = useState(post.title || '')
+  useEffect(() => {
+    fileStatus?.status == 'FULFILLED' &&
+     setState({
+        ...state,
+        images: [
+          ...state.images,
+          {
+            _id: fileStatus?.payload?._id,
+            url: fileStatus?.payload?.url,
+          },
+        ],
+      })
+  }, [fileStatus])
+
   const onSortEnd = ({ oldIndex, newIndex }) => {
     setState({
       ...state,
       images: arrayMoveImmutable(state.images, oldIndex, newIndex),
     })
   }
- const onChangeTitle=(event)=> 
+  const onChangeTitle = (event) =>
     setState({
       ...state,
-      title: event.target.value})
+      title: event.target.value,
+    })
 
-  const onChangeText=(event)=> 
-      setState({
-        ...state,
-        text: event.target.value})
+  const onChangeText = (event) =>
+    setState({
+      ...state,
+      text: event.target.value,
+    })
+  const onRemoveImage = (_id) =>
+    setState({
+      ...state,
+      images: state.images.filter((item) => item._id !== _id),
+    })
   return (
     <section className="Post">
+      <Basic  onLoad={onFileDrop}/>
       <SortableContainer onSortEnd={onSortEnd}>
         {(state.images || []).map(({ _id, url }, index) => (
-          <SortableItem key={`item-${_id}`} index={index} url={url} />
+          <>
+            <SortableItem key={`item-${_id}`} index={index} url={url} />
+            <button onClick={() => onRemoveImage(_id)}> x </button>
+          </>
         ))}
       </SortableContainer>
-       <h1 className="Title"> Title </h1>
-      <Input state={state.title} onChangeText={onChangeTitle}/>
+      <h1 className="Title"> Title </h1>
+      <Input state={state.title || ''} onChangeText={onChangeTitle} />
       <h1 className="Title"> Text </h1>
 
-      <Input state={state.text} onChangeText={onChangeText}/>
-     
-      <button onClick={() => onSave(state)}> Save </button>
+      <Input state={state.text || ''} onChangeText={onChangeText} />
+      <button
+        disabled={state?.images?.length == 0}
+        onClick={() => onSave(state)}
+      >
+        Save
+      </button>
     </section>
   )
 }
-
-const CPost = connect(null, { onSave: actionPostUpsert })(PostEditor)
-// fileStatus=actionUploadFile(entity)
-//по файлу в дропзоне:
-//дергать onFileDrop
-//fileStatus - информация о заливке файла из redux
-//через useEffect дождаться когда файл зальется
-//и сделать setState({...state, array: [...state.array, {объект файла с бэка с _id и url}]})
-//по react-sortable-hoc
-//делаете как в пример arrayMove для state.array
-//по кнопке сохранения делаем onSave(state)
-//где-то рядом остальные поля из state типа title name text
-//но это вы уже знаете
+const CPostEditor = connect((state) => ({ fileStatus: state.promise?.uploadFiles }), {
+  onSave: actionPostUpsert,
+  onFileDrop: actionUploadFiles,
+})(PostEditor)
+// fileStatus=connect((state)=>(state.promise?.uploadFile))(CUploadFile)
 
 const history = createHistory()
 function App() {
@@ -291,10 +340,9 @@ function App() {
           <Header />
           <Divider />
           <Main />
-
           {/* <PostEditor /> */}
-          <CPost />
-          {/* <MyImages Images={Images}/> */}
+          {/* <CPost /> */}
+          {/* <Gallery/> */}
         </div>
       </Provider>
     </Router>
