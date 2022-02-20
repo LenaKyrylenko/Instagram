@@ -101,8 +101,8 @@ export const uploadFile = (file) => {
 export const actionUploadFile = (file) =>
   actionPromise('uploadFile', uploadFile(file))
 //тут еще неправильно
-// export const actionUploadFiles = (files) =>
-//   actionPromise('uploadFiles', Promise.all([uploadFile(files)]))
+export const actionUploadFiles = (files) =>
+  actionPromise('uploadFiles', Promise.all([uploadFile(files)]))
 
 const actionAvatar = (imageId) => async (dispatch, getState) => {
   await dispatch(
@@ -178,8 +178,8 @@ export const actionAllPosts = () => async (dispatch, getState) => {
     ),
   )
 }
-
-export const actionOnePost = (_id) =>
+export const actionOnePost = (_id) => async (dispatch) => {
+  await dispatch(
   actionPromise(
     'onePost',
     gql(
@@ -192,8 +192,8 @@ export const actionOnePost = (_id) =>
         post: JSON.stringify([{ _id }]),
       },
     ),
-  )
-
+  ))
+    }
 export const actionSetAvatar = (file) => async (dispatch) => {
   let result = await dispatch(actionUploadFile(file))
   if (result) {

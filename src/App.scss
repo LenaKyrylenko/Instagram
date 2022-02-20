@@ -82,7 +82,31 @@ main{
   //  width:  33.3%;
    padding: 10px;
    margin:50px;
+
   // padding-top: 30%;
   // background-size: 100% 100%;
  
+}
+.PostImage{
+  // display: flex;
+  // align-items: 'center';
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  // margin: 0 1.5%;
+  //  width:  33.3%;
+   padding: 10px;
+  //  margin:50px;
+   
+  // padding-top: 30%;
+  // background-size: 100% 100%;
+ 
+}
+.slick-arrow.slick-prev {
+  background-color: red;
+  color: red;
+}
+.slick-arrow.slick-next {
+  background-color: red;
+  color: red;
 }
