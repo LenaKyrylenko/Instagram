@@ -4,31 +4,28 @@ import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
 import createHistory from 'history/createBrowserHistory'
 import React, { useMemo, useState, useEffect } from 'react'
 import { store } from './reducers'
+import { Basic } from './components/DropZone'
+import {CPageAboutUser} from './components/User'
+import { PageCreatePost,AddPost } from './components/NewPost'
+import {CPost } from './components/Post'
+
 import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import { arrayMove, arrayMoveImmutable, arrayMoveMutable } from 'array-move'
-import { useDropzone } from 'react-dropzone'
 import 'antd/dist/antd.css'
+
 import {
-  actionPromise,
-  actionPending,
-  actionFulfilled,
-  actionFullLogin,
-  actionRegister,
-  actionFullRegister,
-  gql,
-  actionAboutMe,
-  actionAvatar,
-  actionUploadFile,
-  actionUploadFiles,
-  actionSetAvatar,
-  actionPostUpsert,
   backendURL,
-  actionAllPosts,
-  actionOnePost,
+  actionAboutMe,
+  actionSetAvatar,
+  actionPostsFeed,
+  actionAllFollowing,
+  actionAllFollowers,
+  actionPostsMyFollowing2,
+  actionSearchUser
 } from './actions'
 import { Upload, Button, DatePicker, Space } from 'antd'
 import moment from 'moment'
-import { UploadOutlined } from '@ant-design/icons'
+import { UploadOutlined,SearchOutlined } from '@ant-design/icons'
 import ImgCrop from 'antd-img-crop'
 import { Avatar, Image, Divider, Radio } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
@@ -36,425 +33,139 @@ import user from './materials/user.png'
 import photoNotFound from './materials/photoNotFound.png'
 // import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 // import { Carousel } from 'react-responsive-carousel';
-import { Carousel } from 'antd'
+import { Carousel,Popover } from 'antd'
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
+import { Input,Select } from 'antd';
 console.log(store.getState())
 store.subscribe(() => console.log(store.getState()))
+
+console.log('ABOUT ME',store.getState().auth?.payload?.sub?._id);
 const PageMain = () => <div className="PageMain">ГЛАВНАЯ</div>
 
-const Card = ({ post, onPost }) => (
-  <>
-    <Link to={`/post/${post?._id}`} onClick={() => onPost(post?._id)}>
-      {post?.images && post?.images[0] && post.images[0]?.url ? (
-        <img
-          className="Card"
-          src={backendURL + '/' + post.images[0].url}
-          style={{ maxWidth: '200px', maxHeight: '200px' }}
-        />
-      ) : (
-        <img
-          className="Card"
-          src={photoNotFound}
-          style={{ maxWidth: '200px', maxHeight: '200px' }}
-        />
-      )}
-      {/* {console.log(post?._id)} */}
-    </Link>
-  </>
-)
-const SampleNextArrow = (props) => {
-  const { className, style, onClick } = props
-  return (
-    <div
-      className="carousel-control-next"
-      style={{
-        fontSize: '50px',
-        color: '#a8a8a8',
-        position: 'absolute',
-        left: '100%',
-        top: '50%',
-        margin: 'auto',
-      }}
-      onClick={onClick}
-    >
-      <RightCircleFilled />
-    </div>
-  )
-}
 
-const SamplePrevArrow = (props) => {
-  const { className, style, onClick } = props
-  return (
-    <div
-      className="carousel-control-prev"
-      style={{
-        color: '#a8a8a8',
-        fontSize: '50px',
-        position: 'absolute',
-        margin: 'auto',
-        right: '100%',
-        top: '50%'
-      }}
-      onClick={onClick}
-    >
-      <LeftCircleFilled />
-    </div>
-  )
-}
-
-const MyCarousel = ({ images = [] }) => {
-  console.log('IMAGES', images)
-  return (
-    <>
-      <div>
-        <Carousel
-          style={{
-            display: 'block',
-            minWidth: '500px',
-            minHeight: '500px',
-            background: 'blue',
-          }}
-          effect="fade"
-          arrows
-          nextArrow={<SampleNextArrow />}
-          prevArrow={<SamplePrevArrow />}
-        >
-          {images &&
-            images.map((i, index) =>
-              i?.url ? (
-                <div key={index}>
-                  <img
-                    className="PostImage"
-                    src={backendURL + '/' + i?.url}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      maxWidth: '400px',
-                      maxHeight: '400px',
-                    }}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <img
-                    className="PostImage"
-                    src={photoNotFound}
-                    style={{ maxWidth: '400px', maxHeight: '400px' }}
-                  />
-                </div>
-              ),
-            )}
-        </Carousel>
-      </div>
-    </>
-  )
-}
-const PagePost = ({ onePost, aboutMe: { avatar, login } = {}, onPost }) => {
-  return (
-    <>
-      <MyCarousel images={onePost?.images} />
-
-      {avatar ? (
-        <Avatar
-          style={{ width: '50px', height: '50px' }}
-          src={backendURL + '/' + avatar?.url}
-        />
-      ) : (
-        <Avatar style={{ width: '50px', height: '50px' }} src={user} />
-      )}
-      <h2> {onePost?.title || ''} </h2>
-      <h2> {onePost?.text || ''} </h2>
-    </>
-  )
-}
-
-const CPost = connect((state) => ({
-  onePost: state.promise.onePost?.payload,
-  aboutMe: state.promise?.aboutMe?.payload,
-}))(PagePost)
-const PageAboutMe = ({
-  aboutMe: { _id, login, nick, createdAt, avatar, followers, following } = {},
-  allPosts,
-  onPosts,
-  onPost,
-}) => {
+const PageFeed = ({ aboutMe,allFollowing, onPostsFeed, onAllFollowing}) => {
+// const Following =[]
   useEffect(() => {
-    onPosts()
+    onAllFollowing(aboutMe?._id)
   }, [])
-  // console.log('CREATED AT',new Intl.DateTimeFormat().format(createdAt));
-  return (
-    <section className="AboutMe">
-      <Avatar
-        style={{ width: '150px', height: '150px', position: 'absolute' }}
-        src={backendURL + '/' + avatar?.url || user}
-      />
-      <div className="Info">
-        <h1> {login}</h1>
-        <h3>
-          {' '}
-          Created Account: {new Intl.DateTimeFormat('en-GB').format(createdAt)}
-        </h3>
-        <div style={{ display: 'flex' }}>
-          {/* {allPosts?.length} style={{display: 'flex',justifyContent: 'space-between'}}*/}
-          <h3> {allPosts?.length} posts </h3>
+  useEffect(() => {
+     onPostsFeed(allFollowing?.following?.map(({_id})=>(_id)))
+  }, [])
+  console.log('allFollowing',allFollowing?.following?.map(({_id})=>(_id)))
 
-          <h3 style={{ marginLeft: '20px' }}>
-            {' '}
-            {followers?.length} followers{' '}
-          </h3>
-
-          <h3 style={{ marginLeft: '20px' }}>
-            {' '}
-            {following?.length} following{' '}
-          </h3>
-        </div>
-        <h3> nick: {nick == null ? login : nick}</h3>
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            padding: '20px',
-            margin: '20px',
-          }}
-        >
-          {(allPosts || [])?.map((item) => (
-            <Card post={item} onPost={onPost} />
-          ))}
-        </div>
-        {/* <h3> Created Account: {
-<div>
-<img
-      src={backendURL + '/' + allPosts?.url}
-      style={{ maxWidth: '200px', maxHeight: '200px' }}/>
-</div>
-date} </h3> */}
-      </div>
-    </section>
-  )
-}
-const CPageAboutMe = connect(
-  (state) => ({
-    aboutMe: state.promise?.aboutMe?.payload,
-    allPosts: state.promise?.allPosts?.payload,
-  }),
-  { onPosts: actionAllPosts, onPost: actionOnePost },
-)(PageAboutMe)
-const PageCreatePost = () => (
-  <div style={{ maxWidth: '700px', maxHeight: '700px', background: '#FFFACD' }}>
-    <h2>Edit Post</h2>
-    <CBasic />
+  return <>
+ <div style={{background: '#FFFACD' }}>
+    <h2>Feed</h2>
+  
   </div>
-)
+   </>
+}
+const CPageFeed =connect((state)=>({
+  aboutMe: state.promise.aboutMe?.payload , 
+   allFollowing: state.promise?.allFollowing?.payload,
+   allPosts: state.promise?.allPosts?.payload,
+   postsFeed: state.promise?.postsFeed?.payload,
+   followingPosts: state.promise?.followingPosts?.payload
+  }), {onPostsFeed:actionPostsFeed,
+      onAllFollowing:actionAllFollowing})(PageFeed)
 const Main = () => (
   <main>
     <Switch>
       <Route path="/" exact component={PageMain} />
-      <Route path="/profile/:_id" component={CPageAboutMe} />
+      <Route path="/profile/:_id" component={CPageAboutUser} />
       <Route path="/edit/post" component={PageCreatePost} />
       <Route path="/post/:_id" component={CPost} />
+      <Route path="/feed" component={CPageFeed} />
+
       {/* <CBasic /> */}
     </Switch>
   </main>
 )
-const Header = () => (
-  <section className="Header">
+
+const ResultUserFind =({userFind})=>
+<div>
+{userFind?.map(({_id, login, avatar})=>(
+  <Link to={`/profile/${_id}`} >
+    <Avatar
+          style={{ width: '20px', height: '20px',marginRight:'30px', position: 'absolute' }}
+          src={backendURL + '/' + avatar?.url || user}
+        />
+       
+          <h3 style={{ marginLeft:'30px'}} > {login}</h3>
+  </Link>
+))}
+</div>
+
+const SearchUser =({onSearch,searchUser})=>{
+  // const [value, setValue]=useState('')
+  const onSearchUser = value => onSearch(value)
+   const { Search } = Input;
+return <>
+    <Popover  placement="bottom" content={<ResultUserFind userFind={searchUser}/>} trigger="click">
+    <Search
+      placeholder="input search text"
+      allowClear
+      enterButton="Search"
+      size="large"
+      onSearch={onSearchUser}
+    />
+</Popover>
+</>
+}
+const CSearch = connect((state)=>({searchUser:state.promise?.searchUser?.payload}), {onSearch:actionSearchUser})(SearchUser)
+const Header = () => {
+
+ return  <section className="Header">
+    <CSearch/>
+    {/* <Button icon={<SearchOutlined />}>Search</Button> */}
+    <CFeed/>
     <AddPost />
     <Recommendations />
     <Likes />
     <CUser />
   </section>
-)
-const Likes = () => <button className="Likes"> Likes </button>
-const Recommendations = () => (
-  <button className="Recomendations"> Recommendations </button>
-)
-const AddPost = ({ children }) => {
-  const [state, setState] = useState(false)
-
-  return (
-    <>
-      <Link to={`/edit/post`}>
-        <button onClick={() => setState(!state)}> + </button>
-        {!state && children}
-      </Link>
-    </>
-  )
 }
+const Likes = () => <Button className="Likes"> Likes </Button>
+const Feed = ({aboutMe,onAllFollowing}) => 
+<>
+
+<Link className="Feed" to={`/feed`}>
+
+<Button className="Feed" onClick={()=>onAllFollowing(aboutMe?._id)}> Feed </Button>
+</Link>
+</>
+const CFeed =connect((state) => ({aboutMe: state.promise?.aboutMe?.payload}),{onAllFollowing:actionAllFollowing})(Feed)
+const Recommendations = () => (
+  <Button className="Recomendations"> Recommendations </Button>
+)
 
 const CBasic = connect(null, { onLoad: actionSetAvatar })(Basic)
 // const CAddPost =connect(null,{actionPostUpsert})
 const User = ({ aboutMe: { _id, login, avatar } = {} }) => (
+
   <Link className="User" to={`/profile/${_id}`}>
     <Avatar src={backendURL + '/' + avatar?.url || user} />
   </Link>
 )
 
 const CUser = connect((state) => ({ aboutMe: state.promise.aboutMe?.payload }))(
-  User,
+  User
 )
-
-function Basic({ onLoad }) {
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
-  const files = acceptedFiles.map((file) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-    </li>
-  ))
-  useEffect(() => {
-    acceptedFiles[0] && onLoad(acceptedFiles[0])
-  }, [acceptedFiles])
-  return (
-    <section className="container">
-      <div {...getRootProps({ className: 'Dropzone' })}>
-        <input {...getInputProps()} />
-        <Button icon={<UploadOutlined />}>
-          Drag 'n' drop some files here, or click to select files
-        </Button>
-      </div>
-      <aside>
-        <h4 style={{ color: 'black' }}>Files</h4>
-        <ul>{files}</ul>
-      </aside>
-    </section>
-  )
-}
-const defaultPost = {
-  _id: '620cfd26ad55d22f3e2fb336',
-  title: 'Bmw',
-  text: 'Bmw',
-  images: [
-    {
-      _id: '620b8374ad55d22f3e2fb316',
-      url: 'images/e125a428191726307968880977dac103',
-    },
-    {
-      _id: '620b8399ad55d22f3e2fb317',
-      url: 'images/4ae46578989c497582995ba8caeb5de5',
-    },
-    {
-      _id: '620b83b0ad55d22f3e2fb318',
-      url: 'images/ae839539f61249b15feda98cad7eb858',
-    },
-  ],
-}
-
-store.getState().auth?.token && store.dispatch(actionAboutMe())
-
-const SortableItem = sortableElement(({ url }) => (
-  <li>
-    <img
-      src={backendURL + '/' + url}
-      style={{ maxWidth: '200px', maxHeight: '200px' }}
-    />
-  </li>
-))
-
-const SortableContainer = sortableContainer(({ children }) => {
-  return (
-    <>
-      <ul>{children}</ul>
-
-      {/* <input value={title}/> */}
-    </>
-  )
-})
-const Input = ({ state, onChangeText }) => (
-  <input
-    className="Input"
-    value={state}
-    placeholder={state || ''}
-    onChange={onChangeText}
-  />
-)
-const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
-  //по файлу в дропзоне:
-  //дергать onFileDrop
-  //fileStatus - информация о заливке файла из redux
-  //через useEffect дождаться когда файл зальется
-  console.log('STATUS ', fileStatus?.status)
-  console.log('ON FILE DROP ', onFileDrop)
-
-  const [state, setState] = useState(post)
-  useEffect(() => {
-    fileStatus?.status == 'FULFILLED' &&
-      setState({
-        ...state,
-        images: [
-          ...state.images,
-          {
-            _id: fileStatus?.payload?._id,
-            url: fileStatus?.payload?.url,
-          },
-        ],
-      })
-  }, [fileStatus])
-
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    setState({
-      ...state,
-      images: arrayMoveImmutable(state.images, oldIndex, newIndex),
-    })
-  }
-  const onChangeTitle = (event) =>
-    setState({
-      ...state,
-      title: event.target.value,
-    })
-
-  const onChangeText = (event) =>
-    setState({
-      ...state,
-      text: event.target.value,
-    })
-  const onRemoveImage = (_id) =>
-    setState({
-      ...state,
-      images: state.images.filter((item) => item._id !== _id),
-    })
-  return (
-    <section className="Post">
-      <Basic onLoad={onFileDrop} />
-      <SortableContainer onSortEnd={onSortEnd}>
-        {(state.images || []).map(({ _id, url }, index) => (
-          <>
-            <SortableItem key={`item-${_id}`} index={index} url={url} />
-            <button onClick={() => onRemoveImage(_id)}> x </button>
-          </>
-        ))}
-      </SortableContainer>
-      <h1 className="Title"> Title </h1>
-      <Input state={state.title || ''} onChangeText={onChangeTitle} />
-      <h1 className="Title"> Text </h1>
-
-      <Input state={state.text || ''} onChangeText={onChangeText} />
-      <button
-        disabled={state?.images?.length == 0}
-        onClick={() => onSave(state)}
-      >
-        Save
-      </button>
-    </section>
-  )
-}
-const CPostEditor = connect(
-  (state) => ({ fileStatus: state.promise?.uploadFiles }),
-  {
-    onSave: actionPostUpsert,
-    onFileDrop: actionUploadFiles,
-  },
-)(PostEditor)
-// fileStatus=connect((state)=>(state.promise?.uploadFile))(CUploadFile)
 
 const history = createHistory()
 function App() {
+  if (store.getState().auth?.token &&store.getState().auth?.payload?.sub?._id)
+ store.dispatch(actionAboutMe(store.getState().auth?.payload?.sub?._id))
+ 
   return (
     <Router history={history}>
       <Provider store={store}>
+        
         <div className="App">
           <Header />
           <Divider />
           <Main />
-          {/* <PostEditor /> */}
+          {/* <CPostEditor /> */}
           {/* <CPost /> */}
           {/* <Gallery/> */}
         </div>

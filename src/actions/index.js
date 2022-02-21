@@ -100,10 +100,12 @@ export const uploadFile = (file) => {
 }
 export const actionUploadFile = (file) =>
   actionPromise('uploadFile', uploadFile(file))
-//тут еще неправильно
-export const actionUploadFiles = (files) =>
-  actionPromise('uploadFiles', Promise.all([uploadFile(files)]))
 
+export const actionUploadFiles = (files) =>
+  actionPromise(
+    'uploadFiles',
+    Promise.all(files?.map((file) => uploadFile(file))),
+  )
 const actionAvatar = (imageId) => async (dispatch, getState) => {
   await dispatch(
     actionPromise(
@@ -121,7 +123,7 @@ const actionAvatar = (imageId) => async (dispatch, getState) => {
     ),
   )
 }
-export const actionAboutMe = () => async (dispatch, getState) => {
+export const actionAboutMe = (id) => async (dispatch, getState) => {
   await dispatch(
     actionPromise(
       'aboutMe',
@@ -134,12 +136,32 @@ export const actionAboutMe = () => async (dispatch, getState) => {
   }
 }`,
         {
-          userId: JSON.stringify([{ _id: getState().auth?.payload?.sub?.id }]),
+          userId: JSON.stringify([{ _id:id }]),
         },
       ),
     ),
   )
 }
+export const actionAboutUser = (_id) => async (dispatch, getState) => {
+  await dispatch(
+    actionPromise(
+      'aboutUser',
+      gql(
+        `query AboutUser($userId:String){
+  UserFindOne(query:$userId)
+    {
+      _id createdAt login nick avatar{_id url} 
+      followers{_id login nick} following{_id login nick}
+    }
+}`,
+        {
+          userId: JSON.stringify([{ _id: _id }]),
+        },
+      ),
+    ),
+  )
+}
+
 export const actionPostUpsert = (post) =>
   actionPromise(
     'postUpsert',
@@ -172,6 +194,8 @@ export const actionAllPosts = () => async (dispatch, getState) => {
         {
           userId: JSON.stringify([
             { ___owner: getState().auth?.payload?.sub?.id },
+
+            { sort: [{ _id: -1 }] },
           ]),
         },
       ),
@@ -180,24 +204,114 @@ export const actionAllPosts = () => async (dispatch, getState) => {
 }
 export const actionOnePost = (_id) => async (dispatch) => {
   await dispatch(
-  actionPromise(
-    'onePost',
-    gql(
-      `query OneFind($post:String){
+    actionPromise(
+      'onePost',
+      gql(
+        `query OneFind($post:String){
   PostFindOne(query:$post){
            _id title text images{_id url}
     }
 }`,
-      {
-        post: JSON.stringify([{ _id }]),
-      },
+        {
+          post: JSON.stringify([{ _id }]),
+        },
+      ),
     ),
-  ))
+  )
+}
+export const actionAllFollowers = (_id) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'allFollowers',
+      gql(
+        `query AllFollowers($userId:String){
+  UserFindOne(query:$userId)
+    {
+          followers{_id login}
     }
+}`,
+        {
+          userId: JSON.stringify([{ _id }]),
+        },
+      ),
+    ),
+  )
+}
+
+export const actionAllFollowing = (_id) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'allFollowing',
+      gql(
+        `query AllFollowing($userId:String){
+  UserFindOne(query:$userId)
+    {
+          following{_id login}
+    }
+}`,
+        {
+          userId: JSON.stringify([{ _id }]),
+        },
+      ),
+    ),
+  )
+}
+
+// query:"[{\"_id\": \"62068eaaad55d22f3e2fb250\"}]")
 export const actionSetAvatar = (file) => async (dispatch) => {
   let result = await dispatch(actionUploadFile(file))
   if (result) {
     await dispatch(actionAvatar(result._id))
     await dispatch(actionAboutMe())
   }
+}
+
+export const actionPostsFeed = (Following) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'postsFeed',
+      gql(`query PostsFeed($ownerId:String){
+	          PostFind(query:$ownerId){
+            owner{_id login avatar{url}}
+            images{_id url} title text
+            _id likesCount 
+            likes{
+                owner{				
+                    login avatar {url}
+                  }
+            }
+      	}
+    }`,
+        {
+          ownerId: JSON.stringify([
+            { ___owner: {$in: Following}},
+            {
+              sort: [{ _id: -1 }], //сортировка в обратном хронологическом порядке
+              skip: [0], //отступаем 1000 записей
+               limit: [10], //100 записей максимум
+            },
+          ]),
+        },
+      ),
+    ),
+  )
+}
+
+export const actionSearchUser =(userName)=> async (dispatch)=>{
+
+  await dispatch(actionPromise(
+    'searchUser', gql(`
+    query gf($query: String){
+        UserFind(query: $query){
+            _id, login avatar{url}
+        }
+    }`, {query: JSON.stringify([
+                {
+                    $or: [{login: `/${userName}/`}] //регулярки пишутся в строках
+                },
+                {
+                    sort: [{login: 1}]} //сортируем по title алфавитно
+                ])
+    })
+  ))
 }
