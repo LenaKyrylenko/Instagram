@@ -66,18 +66,23 @@ const SamplePrevArrow = (props) => {
   )
 }
 
-const MyCarousel = ({ images = [] }) => {
+export const MyCarousel = ({ images = [] }) => {
   console.log('IMAGES', images)
   return (
     <>
-      <div>
-        <Carousel
-          style={{
+      <div style={{
             display: 'block',
-            minWidth: '500px',
-            minHeight: '500px',
-            background: 'blue',
-          }}
+            maxWidth: '50%',
+            maxHeight: '50%',
+            background: '#a0a0a0',
+            borderWidth:'10',
+            borderColor: '#000',
+            borderStyle: 'solid',
+            marginBottom: '40px',
+            margin: '0 auto'
+          }}>
+        <Carousel
+          
           effect="fade"
           arrows
           nextArrow={<SampleNextArrow />}
@@ -93,8 +98,14 @@ const MyCarousel = ({ images = [] }) => {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      maxWidth: '400px',
-                      maxHeight: '400px',
+                      width: '100%',
+                      margin: '0 auto',
+                      maxWidth: '600px',
+                      height:'100%',
+                      minWidth: '200px',
+                      minHeight: '200px',
+                      maxHeight: '600px',
+                      marginBottom: '40px',
                     }}
                   />
                 </div>
@@ -113,7 +124,7 @@ const MyCarousel = ({ images = [] }) => {
     </>
   )
 }
-const PagePost = ({ onePost, aboutMe: { avatar, login } = {}, onPost }) => {
+export const PagePost = ({ onePost, aboutMe: { avatar, login } = {}, onPost }) => {
   return (
     <>
       <MyCarousel images={onePost?.images} />

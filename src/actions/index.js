@@ -272,7 +272,7 @@ export const actionPostsFeed = () => async (dispatch,getState) => {
             {
               sort: [{ _id: -1 }],
               skip: [0],
-               limit: [30],
+               limit: [10],
             },
           ]),
         },

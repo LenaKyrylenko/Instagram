@@ -7,7 +7,7 @@ import { store } from './reducers'
 import { Basic } from './components/DropZone'
 import {CPageAboutUser} from './components/User'
 import { PageCreatePost,AddPost } from './components/NewPost'
-import {CPost } from './components/Post'
+import {CPost,MyCarousel } from './components/Post'
 
 import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import { arrayMove, arrayMoveImmutable, arrayMoveMutable } from 'array-move'
@@ -36,6 +36,7 @@ import photoNotFound from './materials/photoNotFound.png'
 import { Carousel,Popover } from 'antd'
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
 import { Input,Select } from 'antd';
+import {PagePost} from './components/Post'
 console.log(store.getState())
 store.subscribe(() => console.log(store.getState()))
 // 
@@ -44,36 +45,76 @@ console.log('ABOUT ME',store.getState().auth?.payload?.sub?.id);
 //store.dispatch(actionPostsFeed())
 
 const PageMain = () => <div className="PageMain">ГЛАВНАЯ</div>
-
-
-const PageFeed = ({ aboutMe,allFollowing, onPostsFeed, onAllFollowing}) => {
-  console.log('ABOUT FOLLOWING',store.getState().promise.aboutMe?.payload?.following);
-// const Following =[]
+const MyPostFeed =({postsFeed, onPostsFeed})=>{
   useEffect(() => {
     onPostsFeed()
+    
   }, [])
-  // useEffect(() => {
-  //    onPostsFeed()
-  // store.dispatch(actionPostsFeed())
-  // console.log('allFollowing',allFollowing?.following?.map(({_id})=>(_id)))
-  // console.log('onPost', store.dispatch(actionPostsFeed))
+ 
+ return <> 
+  <h2>Feed</h2>
 
-  return <>
- <div style={{background: '#FFFACD' }}>
-    <h2>Feed</h2>
-  
-  </div>
-   </>
+  <div>
+  {  
+
+    (postsFeed||[]).map(({images, title,text,owner})=>(
+     
+     <div style={{borderWidth:'10',
+     borderColor: '#000',
+     borderStyle: 'solid',
+     marginBottom: '40px', }}>
+
+      {owner?.avatar ? (
+        <Avatar
+          style={{ width: '50px', height: '50px' }}
+          src={backendURL + '/' + owner?.avatar?.url}
+        />
+      ) : (
+        <Avatar style={{ width: '50px', height: '50px' }} src={user} />
+      )}
+       <h1> {owner?.login || 'anon'}</h1>
+     
+      <MyCarousel images={images} style={{  marginTop: '60px'}} />
+     <h1> Title: {title || ''}</h1>
+     <h1> Text: {text || ''}</h1>
+
+    </div>
+      
+     )
+    )
+   
+  }
+   </div>
+           
+          {/* </div> */}
+ 
+ {/* <PagePost onePost={postsFeed}/> <MyCarousel images={postsFeed?.images} />*/}
+ 
+  </>
 }
-const CPageFeed =connect((state)=>(
-  {
-  
-    aboutMe: state.promise.aboutMe?.payload , 
-  //  allFollowing: state.promise?.allFollowing?.payload,
-   allPosts: state.promise?.allPosts?.payload,
-   postsFeed: state.promise?.postsFeed?.payload,
-  //  followingPosts: state.promise?.followingPosts?.payload
-  }), {onPostsFeed:actionPostsFeed})(PageFeed)
+export const CPostForFeed = connect((state) => ({
+  postsFeed: state.promise?.postsFeed?.payload,
+}), {onPostsFeed:actionPostsFeed})(MyPostFeed)
+
+// const PageFeed = ({ aboutMe,allFollowing, onPostsFeed, onAllFollowing}) => {
+//   console.log('ABOUT FOLLOWING',
+//   store.getState().promise.aboutMe?.payload?.following);
+//   useEffect(() => {
+//     onPostsFeed()
+//   }, [])
+//   return <>
+//  <div style={{background: '#FFFACD' }}>
+//     <h2>Feed</h2>
+
+//   </div>
+//    </>
+// }
+// const CPageFeed =connect((state)=>(
+//   {
+//     aboutMe: state.promise.aboutMe?.payload , 
+//   //  allPosts: state.promise?.allPosts?.payload,
+//    postsFeed: state.promise?.postsFeed?.payload,
+//   }), {onPostsFeed:actionPostsFeed})(PageFeed)
 const Main = () => (
   <main>
     <Switch>
@@ -81,7 +122,7 @@ const Main = () => (
       <Route path="/profile/:_id" component={CPageAboutUser} />
       <Route path="/edit/post" component={PageCreatePost} />
       <Route path="/post/:_id" component={CPost} />
-      <Route path="/feed" component={CPageFeed} />
+      <Route path="/feed" component={CPostForFeed} />
 
       {/* <CBasic /> */}
     </Switch>
