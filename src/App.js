@@ -38,20 +38,25 @@ import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
 import { Input,Select } from 'antd';
 console.log(store.getState())
 store.subscribe(() => console.log(store.getState()))
+// 
+console.log('ABOUT ME',store.getState().auth?.payload?.sub?.id);
+// console.log('ABOUT FOLLOWING',store.getState().promise.aboutUser?.payload?.following);
+//store.dispatch(actionPostsFeed())
 
-console.log('ABOUT ME',store.getState().auth?.payload?.sub?._id);
 const PageMain = () => <div className="PageMain">ГЛАВНАЯ</div>
 
 
 const PageFeed = ({ aboutMe,allFollowing, onPostsFeed, onAllFollowing}) => {
+  console.log('ABOUT FOLLOWING',store.getState().promise.aboutMe?.payload?.following);
 // const Following =[]
   useEffect(() => {
-    onAllFollowing(aboutMe?._id)
+    onPostsFeed()
   }, [])
-  useEffect(() => {
-     onPostsFeed(allFollowing?.following?.map(({_id})=>(_id)))
-  }, [])
-  console.log('allFollowing',allFollowing?.following?.map(({_id})=>(_id)))
+  // useEffect(() => {
+  //    onPostsFeed()
+  // store.dispatch(actionPostsFeed())
+  // console.log('allFollowing',allFollowing?.following?.map(({_id})=>(_id)))
+  // console.log('onPost', store.dispatch(actionPostsFeed))
 
   return <>
  <div style={{background: '#FFFACD' }}>
@@ -60,14 +65,15 @@ const PageFeed = ({ aboutMe,allFollowing, onPostsFeed, onAllFollowing}) => {
   </div>
    </>
 }
-const CPageFeed =connect((state)=>({
-  aboutMe: state.promise.aboutMe?.payload , 
-   allFollowing: state.promise?.allFollowing?.payload,
+const CPageFeed =connect((state)=>(
+  {
+  
+    aboutMe: state.promise.aboutMe?.payload , 
+  //  allFollowing: state.promise?.allFollowing?.payload,
    allPosts: state.promise?.allPosts?.payload,
    postsFeed: state.promise?.postsFeed?.payload,
-   followingPosts: state.promise?.followingPosts?.payload
-  }), {onPostsFeed:actionPostsFeed,
-      onAllFollowing:actionAllFollowing})(PageFeed)
+  //  followingPosts: state.promise?.followingPosts?.payload
+  }), {onPostsFeed:actionPostsFeed})(PageFeed)
 const Main = () => (
   <main>
     <Switch>
@@ -113,8 +119,16 @@ return <>
 </>
 }
 const CSearch = connect((state)=>({searchUser:state.promise?.searchUser?.payload}), {onSearch:actionSearchUser})(SearchUser)
-const Header = () => {
+const Feed = ({aboutMe,onAllFollowing, onPostsFeed, postsFeed}) => {
+console.log('POST FEED', postsFeed)
+return <> 
+<Link className="Feed" to={`/feed`}>
 
+<Button className="Feed" onClick={()=>console.log('click')}> Feed </Button>
+</Link>
+</>}
+const Header = () => {
+  const CFeed =connect((state) => ({aboutMe: state.promise?.aboutMe?.payload}))(Feed)
  return  <section className="Header">
     <CSearch/>
     {/* <Button icon={<SearchOutlined />}>Search</Button> */}
@@ -126,15 +140,7 @@ const Header = () => {
   </section>
 }
 const Likes = () => <Button className="Likes"> Likes </Button>
-const Feed = ({aboutMe,onAllFollowing}) => 
-<>
 
-<Link className="Feed" to={`/feed`}>
-
-<Button className="Feed" onClick={()=>onAllFollowing(aboutMe?._id)}> Feed </Button>
-</Link>
-</>
-const CFeed =connect((state) => ({aboutMe: state.promise?.aboutMe?.payload}),{onAllFollowing:actionAllFollowing})(Feed)
 const Recommendations = () => (
   <Button className="Recomendations"> Recommendations </Button>
 )
@@ -151,13 +157,40 @@ const User = ({ aboutMe: { _id, login, avatar } = {} }) => (
 const CUser = connect((state) => ({ aboutMe: state.promise.aboutMe?.payload }))(
   User
 )
+  
+//  store.getState().auth?.payload?.sub?.id
 
+
+const ProtectedRoute = ({roles=[], fallback='/login', component, auth, ...routeProps})=>{
+  console.log('LFLFLFL')
+  const WrapperComponent = (renderProps)=>{
+    // console.log('тут шото ', intersection)
+    const C = component;
+   if (!auth)
+    auth=["anon"]
+
+    let intersection = auth.filter(x => roles.includes(x));
+   if (intersection.length==0)
+    return <Redirect  to={fallback} />
+
+    return <C {...renderProps}/>
+  }
+  return <Route {...routeProps} component ={WrapperComponent}/>
+}
+const PageRegister = ()=>{
+return <div>
+  REGISTER
+</div>}
+const CProtectedRoute = connect(state=>({auth:state.auth?.payload?.sub.acl}))(ProtectedRoute);
+
+
+ 
 const history = createHistory()
 function App() {
-  if (store.getState().auth?.token &&store.getState().auth?.payload?.sub?._id)
- store.dispatch(actionAboutMe(store.getState().auth?.payload?.sub?._id))
- 
+    if (store.getState().auth?.token)
+    store.dispatch(actionAboutMe(store.getState().auth?.payload?.sub?.id))
   return (
+
     <Router history={history}>
       <Provider store={store}>
         
@@ -165,6 +198,8 @@ function App() {
           <Header />
           <Divider />
           <Main />
+          <CProtectedRoute roles={["anon"]} fallback="/dashboard"
+           path="/register" component={PageRegister}/>
           {/* <CPostEditor /> */}
           {/* <CPost /> */}
           {/* <Gallery/> */}

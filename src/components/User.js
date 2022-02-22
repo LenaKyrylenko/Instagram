@@ -7,14 +7,14 @@ import { Avatar, Image, Divider, Radio } from 'antd'
 import { store } from '../reducers'
 
 const PageAboutUser = ({
-    aboutMe: { _id, login, nick, createdAt, avatar, followers, following } = {},
+  aboutMe: { _id, login, nick, createdAt, avatar, followers, following } = {},
     allPosts,
     onPosts,
     onPost,
     onAboutUser
   }) => {
     useEffect(() => {
-      // onAboutUser(_id)
+      onAboutUser(_id)
       onPosts()
     }, [])
 
@@ -75,6 +75,6 @@ const PageAboutUser = ({
       allPosts: state.promise?.allPosts?.payload,
     }),
     { onPosts: actionAllPosts, onPost: actionOnePost,
-    // onAboutUser: actionAboutMe
+     onAboutUser: actionAboutMe
     },
   )(PageAboutUser)

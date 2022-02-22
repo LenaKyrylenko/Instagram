@@ -104,7 +104,7 @@ export const actionUploadFile = (file) =>
 export const actionUploadFiles = (files) =>
   actionPromise(
     'uploadFiles',
-    Promise.all(files?.map((file) => uploadFile(file))),
+    Promise.all(files.map((file) => uploadFile(file))),
   )
 const actionAvatar = (imageId) => async (dispatch, getState) => {
   await dispatch(
@@ -123,10 +123,10 @@ const actionAvatar = (imageId) => async (dispatch, getState) => {
     ),
   )
 }
-export const actionAboutMe = (id) => async (dispatch, getState) => {
+export const actionAboutMe = () => async (dispatch, getState) => {
   await dispatch(
     actionPromise(
-      'aboutMe',
+    'aboutMe',
       gql(
         `query AboutMe($userId:String){
   UserFindOne(query:$userId)
@@ -136,32 +136,14 @@ export const actionAboutMe = (id) => async (dispatch, getState) => {
   }
 }`,
         {
-          userId: JSON.stringify([{ _id:id }]),
+          userId: JSON.stringify([{ _id: getState().auth?.payload?.sub?.id }]),
         },
       ),
     ),
   )
 }
-export const actionAboutUser = (_id) => async (dispatch, getState) => {
-  await dispatch(
-    actionPromise(
-      'aboutUser',
-      gql(
-        `query AboutUser($userId:String){
-  UserFindOne(query:$userId)
-    {
-      _id createdAt login nick avatar{_id url} 
-      followers{_id login nick} following{_id login nick}
-    }
-}`,
-        {
-          userId: JSON.stringify([{ _id: _id }]),
-        },
-      ),
-    ),
-  )
-}
-
+// export const actionAboutUser = actionAboutMe
+// :'aboutMe'
 export const actionPostUpsert = (post) =>
   actionPromise(
     'postUpsert',
@@ -208,8 +190,8 @@ export const actionOnePost = (_id) => async (dispatch) => {
       'onePost',
       gql(
         `query OneFind($post:String){
-  PostFindOne(query:$post){
-           _id title text images{_id url}
+         PostFindOne(query:$post){
+        _id title text images{_id url}
     }
 }`,
         {
@@ -265,8 +247,9 @@ export const actionSetAvatar = (file) => async (dispatch) => {
     await dispatch(actionAboutMe())
   }
 }
-
-export const actionPostsFeed = (Following) => async (dispatch) => {
+// let following =  getState().promise.aboutUser?.payload?.following  
+// let result =  await dispatch (actionAboutMe())
+export const actionPostsFeed = () => async (dispatch,getState) => {
   await dispatch(
     actionPromise(
       'postsFeed',
@@ -283,12 +266,13 @@ export const actionPostsFeed = (Following) => async (dispatch) => {
       	}
     }`,
         {
-          ownerId: JSON.stringify([
-            { ___owner: {$in: Following}},
+            ownerId: JSON.stringify([
+            { ___owner: {$in:  
+              getState().promise.aboutMe?.payload?.following.map(({ _id }) => (_id))}},
             {
-              sort: [{ _id: -1 }], //сортировка в обратном хронологическом порядке
-              skip: [0], //отступаем 1000 записей
-               limit: [10], //100 записей максимум
+              sort: [{ _id: -1 }],
+              skip: [0],
+               limit: [30],
             },
           ]),
         },

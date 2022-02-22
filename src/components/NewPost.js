@@ -55,15 +55,7 @@ export const AddPost = ({ children }) => {
     />
   )
 const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
-    //по файлу в дропзоне:
-    //дергать onFileDrop
-    //fileStatus - информация о заливке файла из redux
-    //через useEffect дождаться когда файл зальется
-    // console.log('_id ', uploadFiles?.payload?.images?._id)
-    // console.log('url  ', uploadFiles?.payload?.images?.url)
-  
-    console.log('ON FILE DROP ', onFileDrop)
-  
+    console.log('filestatus ', fileStatus)
     const [state, setState] = useState(post)
     useEffect(() => {
       fileStatus?.status == 'FULFILLED' &&
@@ -71,15 +63,9 @@ const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
           ...state,
           images: [
             ...state.images,
-            {
-              
-              _id: fileStatus?.payload?._id,
-              url: fileStatus?.payload?.url,
-            },
+            ...fileStatus.payload
           ],
         })
-        &&  console.log('_id ', fileStatus?.payload?._id)&&
-        console.log('url  ', fileStatus?.payload?.url)
     }, [fileStatus])
   
     const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -130,9 +116,9 @@ const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
     )
   }
  export const CPostEditor = connect(
-    (state) => ({ fileStatus: state.promise?.uploadFile}),
+    (state) => ({ fileStatus: state.promise?.uploadFiles}),
     {
       onSave: actionPostUpsert,
-      onFileDrop: actionUploadFile,
+      onFileDrop: actionUploadFiles,
     },
   )(PostEditor)

@@ -15,8 +15,8 @@ export function Basic({ onLoad }) {
     ))
     console.log('acceptedFiles',acceptedFiles)
     useEffect(() => {
-      if(acceptedFiles[0])
-        onLoad(acceptedFiles[0])
+      if(acceptedFiles)
+        onLoad(acceptedFiles)
     }
     , [acceptedFiles])
     return (
