@@ -1,28 +1,31 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
-import { actionUploadFile, actionUploadFiles, actionPostUpsert} from '../actions'
+import { actionUploadFile, actionUploadFiles, actionPostUpsert,actionUserUpdate} from '../actions'
 import { Upload, Button, DatePicker, Space } from 'antd'
-import {Basic, SortableContainer, SortableItem } from '../components/DropZone'
+import {Basic, SortableContainer, SortableItem , ImageDemo} from '../components/DropZone'
 import { arrayMove, arrayMoveImmutable, arrayMoveMutable } from 'array-move'
+import { ConsoleSqlOutlined } from '@ant-design/icons'
+import ReactDOM from 'react-dom';
 
 const defaultPost = {
-  _id: '620cfd26ad55d22f3e2fb336',
   title: 'Bmw',
   text: 'Bmw',
   images: [
-    {
-      _id: '620b8374ad55d22f3e2fb316',
-      url: 'images/e125a428191726307968880977dac103',
-    },
-    {
-      _id: '620b8399ad55d22f3e2fb317',
-      url: 'images/4ae46578989c497582995ba8caeb5de5',
-    },
-    {
-      _id: '620b83b0ad55d22f3e2fb318',
-      url: 'images/ae839539f61249b15feda98cad7eb858',
-    },
+    // {_id: '6231c4292be7e42fbc9096c4',
+    //  url: 'images/d2438e8c6502eb5da60ecc8f7a6b8aff'}
+    // {
+    //   _id: '620b8374ad55d22f3e2fb316',
+    //   url: 'images/e125a428191726307968880977dac103',
+    // },
+    // {
+    //   _id: '620b8399ad55d22f3e2fb317',
+    //   url: 'images/4ae46578989c497582995ba8caeb5de5',
+    // },
+    // {
+    //   _id: '620b83b0ad55d22f3e2fb318',
+    //   url: 'images/ae839539f61249b15feda98cad7eb858',
+    // },
   ],
 }
 
@@ -54,7 +57,17 @@ export const AddPost = ({ children }) => {
       onChange={onChangeText}
     />
   )
-const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
+  var mountNode = document.getElementById('root');
+  //  mountNode = document.getElementById('root')
+// const ImageDemo = ({_id,index,url})=> {
+//     return (
+      
+//       <SortableItem key={`item-${_id}`} index={index} url={url} />
+//     );
+//   }
+
+
+const PostEditor = ({ post=defaultPost, onSave, onFileDrop, fileStatus, userUpdate }) => {
     console.log('filestatus ', fileStatus)
     const [state, setState] = useState(post)
     useEffect(() => {
@@ -67,7 +80,7 @@ const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
           ],
         })
     }, [fileStatus])
-  
+  console.log('state', state)
     const onSortEnd = ({ oldIndex, newIndex }) => {
       setState({
         ...state,
@@ -90,15 +103,16 @@ const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
         ...state,
         images: state.images.filter((item) => item._id !== _id),
       })
+    // ReactDOM.render(  <SortableItem key={`item-${_id}`} index={index} url={url} />, mountNode)
     return (
       <section className="Post">
         <Basic onLoad={onFileDrop} />
         <SortableContainer onSortEnd={onSortEnd}>
           {(state.images || []).map(({ _id, url }, index) => (
-            <>
-              <SortableItem key={`item-${_id}`} index={index} url={url} />
-              <button onClick={() => onRemoveImage(_id)}> x </button>
-            </>
+          <div >
+          <SortableItem key={`item-${_id}`} index={index} url={url} /> 
+              <button onClick={() => onRemoveImage(_id)}> x </button> 
+              </div>
           ))}
         </SortableContainer>
         <h1 className="Title"> Title </h1>
@@ -116,9 +130,9 @@ const PostEditor = ({ post = defaultPost, onSave, onFileDrop, fileStatus }) => {
     )
   }
  export const CPostEditor = connect(
-    (state) => ({ fileStatus: state.promise?.uploadFiles}),
+    (state) => ({ fileStatus: state.promise?.uploadFiles, }),
     {
       onSave: actionPostUpsert,
-      onFileDrop: actionUploadFiles,
+      onFileDrop: actionUploadFiles
     },
   )(PostEditor)

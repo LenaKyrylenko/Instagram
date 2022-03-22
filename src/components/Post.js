@@ -1,18 +1,18 @@
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
-import {backendURL,actionAllPosts,actionOnePost} from '../actions'
+import {actionAllPosts,actionOnePost} from '../actions'
 import photoNotFound from '../materials/photoNotFound.png'
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
 import { Carousel,Avatar } from 'antd'
 import user from '../materials/user.png'
 import { Provider, connect } from 'react-redux'
-
 export const Card = ({ post, onPost }) => (
   <>
-    <Link to={`/post/${post?._id}`} onClick={() => onPost(post?._id)}>
+    <Link to={`/post/62361ebb92c08631bc4b0e96`} onClick={() => onPost("62361ebb92c08631bc4b0e96")}>
+    {/* <Link to={`/post/${post?._id}`} onClick={() => onPost(post?._id)}> */}
       {post?.images && post?.images[0] && post.images[0]?.url ? (
         <img
           className="Card"
-          src={backendURL + '/' + post.images[0].url}
+          src={ '/' + post.images[0].url}
           style={{ maxWidth: '200px', maxHeight: '200px' }}
         />
       ) : (
@@ -22,6 +22,7 @@ export const Card = ({ post, onPost }) => (
           style={{ maxWidth: '200px', maxHeight: '200px' }}
         />
       )}
+
       {/* {console.log(post?._id)} */}
     </Link>
   </>
@@ -38,6 +39,7 @@ const SampleNextArrow = (props) => {
         left: '100%',
         top: '50%',
         margin: 'auto',
+        paddingLeft:'30px'
       }}
       onClick={onClick}
     >
@@ -57,7 +59,9 @@ const SamplePrevArrow = (props) => {
         position: 'absolute',
         margin: 'auto',
         right: '100%',
-        top: '50%'
+        top: '50%',
+        paddingRight:'30px'
+
       }}
       onClick={onClick}
     >
@@ -82,7 +86,6 @@ export const MyCarousel = ({ images = [] }) => {
             margin: '0 auto'
           }}>
         <Carousel
-          
           effect="fade"
           arrows
           nextArrow={<SampleNextArrow />}
@@ -94,7 +97,7 @@ export const MyCarousel = ({ images = [] }) => {
                 <div key={index}>
                   <img
                     className="PostImage"
-                    src={backendURL + '/' + i?.url}
+                    src={ '/' + i?.url}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -128,17 +131,25 @@ export const PagePost = ({ onePost, aboutMe: { avatar, login } = {}, onPost }) =
   return (
     <>
       <MyCarousel images={onePost?.images} />
+<div  style={{display: 'flex', flexDirection: 'row'}}>
+
 
       {avatar ? (
         <Avatar
           style={{ width: '50px', height: '50px' }}
-          src={backendURL + '/' + avatar?.url}
+          src={ '/' + avatar?.url}
         />
       ) : (
         <Avatar style={{ width: '50px', height: '50px' }} src={user} />
-      )}
+      )
+      }
+      <h1 style={{ marginLeft:'20px'}}> {login}</h1>
+      </div>
       <h2> {onePost?.title || ''} </h2>
       <h2> {onePost?.text || ''} </h2>
+      <h3>
+            Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
+        </h3>
     </>
   )
 }

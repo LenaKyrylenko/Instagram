@@ -5,7 +5,7 @@ import createHistory from 'history/createBrowserHistory'
 import React, { useMemo, useState, useEffect } from 'react'
 import { store } from './reducers'
 import { Basic } from './components/DropZone'
-import {CPageAboutUser} from './components/User'
+import {CPageAboutUser,PageAboutUser} from './components/User'
 import { PageCreatePost,AddPost } from './components/NewPost'
 import {CPost,MyCarousel } from './components/Post'
 
@@ -14,7 +14,7 @@ import { arrayMove, arrayMoveImmutable, arrayMoveMutable } from 'array-move'
 import 'antd/dist/antd.css'
 
 import {
-  backendURL,
+  // backendURL,
   actionAboutMe,
   actionSetAvatar,
   actionPostsFeed,
@@ -56,7 +56,7 @@ const MyPostFeed =({postsFeed, onPostsFeed})=>{
 
   <div>
   {  
-
+// backendURL +
     (postsFeed||[]).map(({images, title,text,owner})=>(
      
      <div style={{borderWidth:'10',
@@ -67,7 +67,7 @@ const MyPostFeed =({postsFeed, onPostsFeed})=>{
       {owner?.avatar ? (
         <Avatar
           style={{ width: '50px', height: '50px' }}
-          src={backendURL + '/' + owner?.avatar?.url}
+          src={ '/' + owner?.avatar?.url}
         />
       ) : (
         <Avatar style={{ width: '50px', height: '50px' }} src={user} />
@@ -123,6 +123,7 @@ const Main = () => (
       <Route path="/edit/post" component={PageCreatePost} />
       <Route path="/post/:_id" component={CPost} />
       <Route path="/feed" component={CPostForFeed} />
+      <Route path="/editProfile" component={CUserEdit} />
 
       {/* <CBasic /> */}
     </Switch>
@@ -135,13 +136,14 @@ const ResultUserFind =({userFind})=>
   <Link to={`/profile/${_id}`} >
     <Avatar
           style={{ width: '20px', height: '20px',marginRight:'30px', position: 'absolute' }}
-          src={backendURL + '/' + avatar?.url || user}
+          src={ '/' + avatar?.url || user}
         />
        
           <h3 style={{ marginLeft:'30px'}} > {login}</h3>
   </Link>
 ))}
 </div>
+// backendURL
 
 const SearchUser =({onSearch,searchUser})=>{
   // const [value, setValue]=useState('')
@@ -159,7 +161,11 @@ return <>
 </Popover>
 </>
 }
-const CSearch = connect((state)=>({searchUser:state.promise?.searchUser?.payload}), {onSearch:actionSearchUser})(SearchUser)
+const CSearch = connect((state)=>({searchUser:state.promise?.searchUser?.payload}),
+ {onSearch:actionSearchUser})(SearchUser)
+const CUserEdit = connect((state)=>({}),
+{}
+)(PageAboutUser)
 const Feed = ({aboutMe,onAllFollowing, onPostsFeed, postsFeed}) => {
 console.log('POST FEED', postsFeed)
 return <> 
@@ -191,10 +197,10 @@ const CBasic = connect(null, { onLoad: actionSetAvatar })(Basic)
 const User = ({ aboutMe: { _id, login, avatar } = {} }) => (
 
   <Link className="User" to={`/profile/${_id}`}>
-    <Avatar src={backendURL + '/' + avatar?.url || user} />
+    <Avatar src={ '/' + avatar?.url || user} />
   </Link>
 )
-
+// backendURL
 const CUser = connect((state) => ({ aboutMe: state.promise.aboutMe?.payload }))(
   User
 )
@@ -241,6 +247,9 @@ function App() {
           <Main />
           <CProtectedRoute roles={["anon"]} fallback="/dashboard"
            path="/register" component={PageRegister}/>
+           
+
+
           {/* <CPostEditor /> */}
           {/* <CPost /> */}
           {/* <Gallery/> */}

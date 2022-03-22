@@ -1,8 +1,8 @@
 export const actionAuthLogin = (token) => ({ type: 'AUTH_LOGIN', token })
 export const actionAuthLogout = () => ({ type: 'AUTH_LOGOUT' })
-
 export const getGQL = (url) => (query, variables) =>
   fetch(url, {
+
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -21,9 +21,8 @@ export const getGQL = (url) => (query, variables) =>
       }
     })
 
-export const backendURL = 'http://hipstagram.asmer.fs.a-level.com.ua'
 
-export const gql = getGQL(backendURL + '/graphql')
+export const gql = getGQL('/graphql');
 
 export const actionPending = (name) => ({
   type: 'PROMISE',
@@ -90,7 +89,7 @@ export const actionFullRegister = (login, password) => async (dispatch) => {
 export const uploadFile = (file) => {
   const myForm = new FormData()
   myForm.append('photo', file)
-  return fetch(backendURL + '/upload', {
+  return fetch('/upload', {
     method: 'POST',
     headers: localStorage.authToken
       ? { Authorization: 'Bearer ' + localStorage.authToken }
@@ -106,7 +105,8 @@ export const actionUploadFiles = (files) =>
     'uploadFiles',
     Promise.all(files.map((file) => uploadFile(file))),
   )
-const actionAvatar = (imageId) => async (dispatch, getState) => {
+
+export const actionAvatar = (imageId) => async (dispatch, getState) => {
   await dispatch(
     actionPromise(
       'setAvatar',
@@ -123,6 +123,24 @@ const actionAvatar = (imageId) => async (dispatch, getState) => {
     ),
   )
 }
+
+// export const actionChangeLogin = (imageId) => async (dispatch, getState) => {
+//   await dispatch(
+//     actionPromise(
+//       'changeLogin',
+//       gql(
+//         `mutation setAvatar($imageId:ID, $userId:String){
+//     UserUpsert(user:{_id: $userId, avatar: {_id: $imageId}}){
+//     _id, avatar{
+//         _id
+//     }
+//     }
+//     }`,
+//         { imageId, userId: getState().auth?.payload?.sub?.id },
+//       ),
+//     ),
+//   )
+// }
 export const actionAboutMe = () => async (dispatch, getState) => {
   await dispatch(
     actionPromise(
@@ -163,27 +181,41 @@ mutation PostUpsert($post:PostInput){
     ),
   )
 
-export const actionAllPosts = () => async (dispatch, getState) => {
-  await dispatch(
-    actionPromise(
-      'allPosts',
-      gql(
-        `query allPosts($userId:String){
-  PostFind(query:$userId){
-           owner{_id} _id title text images{_id url}
-    }
-}`,
-        {
-          userId: JSON.stringify([
-            { ___owner: getState().auth?.payload?.sub?.id },
+// export const actionAllPosts = () => async (dispatch, getState) => {
+//   await dispatch(
+//     actionPromise(
+//       'allPosts',
+//       gql(
+//         `query allPosts($userId:String!){
+//   PostFind(query:$userId){
+//            owner{_id} _id title text images{_id url}
+//     }
+// }`,
+//         {
+//           userId: JSON.stringify([
+//             { ___owner: getState().auth?.payload?.sub?.id },
 
-            { sort: [{ _id: -1 }] },
-          ]),
-        },
-      ),
-    ),
-  )
-}
+//             { sort: [{ _id: -1 }] },
+//           ]),
+//         },
+//       ),
+//     ),
+//   )
+// }
+
+
+export const actionAllPosts = () =>
+    actionPromise('allPosts', 
+    gql(` query allPosts($_id:String!){
+                PostFind(query:$_id){
+                  owner{_id} _id title text images{_id url}
+                }
+            }`, {
+        _id: JSON.stringify([{}, {
+            sort: [{ _id: -1 }],
+        }])
+    }))
+
 export const actionOnePost = (_id) => async (dispatch) => {
   await dispatch(
     actionPromise(
@@ -192,6 +224,8 @@ export const actionOnePost = (_id) => async (dispatch) => {
         `query OneFind($post:String){
          PostFindOne(query:$post){
         _id title text images{_id url}
+        comments{_id, createdAt, text owner{login}}
+
     }
 }`,
         {
@@ -244,6 +278,8 @@ export const actionSetAvatar = (file) => async (dispatch) => {
   let result = await dispatch(actionUploadFile(file))
   if (result) {
     await dispatch(actionAvatar(result._id))
+    // await dispatch(actionAvatar(result._id))
+
     await dispatch(actionAboutMe())
   }
 }
@@ -299,3 +335,40 @@ export const actionSearchUser =(userName)=> async (dispatch)=>{
     })
   ))
 }
+
+export const actionUserUpsert = (user) => async (dispatch, getState) => {
+
+  await dispatch(
+      actionPromise(
+          "userUpsert",
+          gql(
+              `mutation UserUpsert($user:UserInput){
+                  UserUpsert(user:$user){
+                      _id login nick avatar{_id}
+                  }
+              }`,
+              {
+                  user: { ...user, 
+                    _id:  JSON.stringify([{ _id: 
+                      getState().auth?.payload?.sub?.id }]),
+                  },
+              }
+          )
+      )
+  );
+};
+
+export const actionUserUpdate =
+    (user = {}) =>
+    async (dispatch, getState) => {
+        await dispatch(actionUserUpsert(user));
+        const {
+            promise: {
+              userUpsert: { status },
+            },
+        } = getState();
+        if (status === "FULFILLED") {
+            await dispatch(actionAboutMe());
+        }
+        await dispatch(actionAboutMe());
+    };
