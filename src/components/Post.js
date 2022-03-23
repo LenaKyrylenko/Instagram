@@ -1,13 +1,17 @@
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
-import {actionAllPosts,actionOnePost} from '../actions'
+import {actionAllPosts,actionOnePost,actionAddFullComment, actionDeleteFullLike,actionAddFullLike,actionAddLike,actionDeleteLike} from '../actions'
 import photoNotFound from '../materials/photoNotFound.png'
-import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
+import { LeftCircleFilled, RightCircleFilled, HeartOutlined,HeartTwoTone,HeartFilled } from '@ant-design/icons'
 import { Carousel,Avatar } from 'antd'
 import user from '../materials/user.png'
 import { Provider, connect } from 'react-redux'
+import { Row, Col } from 'antd';
+import { Divider,Input,Button } from 'antd';
+import React, { useMemo, useState, useEffect } from 'react'
+const postId="62361ebb92c08631bc4b0e96"
 export const Card = ({ post, onPost }) => (
   <>
-    <Link to={`/post/62361ebb92c08631bc4b0e96`} onClick={() => onPost("62361ebb92c08631bc4b0e96")}>
+    <Link to={`/post/${postId}`} onClick={() => onPost(postId)}>
     {/* <Link to={`/post/${post?._id}`} onClick={() => onPost(post?._id)}> */}
       {post?.images && post?.images[0] && post.images[0]?.url ? (
         <img
@@ -39,7 +43,7 @@ const SampleNextArrow = (props) => {
         left: '100%',
         top: '50%',
         margin: 'auto',
-        paddingLeft:'30px'
+        paddingLeft:'20px'
       }}
       onClick={onClick}
     >
@@ -60,7 +64,7 @@ const SamplePrevArrow = (props) => {
         margin: 'auto',
         right: '100%',
         top: '50%',
-        paddingRight:'30px'
+        paddingRight:'20px'
 
       }}
       onClick={onClick}
@@ -76,14 +80,14 @@ export const MyCarousel = ({ images = [] }) => {
     <>
       <div style={{
             display: 'block',
-            maxWidth: '50%',
-            maxHeight: '50%',
+            minWidth: '80%',
+            minHeight: '80%',
             background: '#a0a0a0',
             borderWidth:'10',
             borderColor: '#000',
             borderStyle: 'solid',
             marginBottom: '40px',
-            margin: '0 auto'
+            margin: '0 10%'
           }}>
         <Carousel
           effect="fade"
@@ -101,13 +105,13 @@ export const MyCarousel = ({ images = [] }) => {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      width: '100%',
+                      width: '50%',
                       margin: '0 auto',
-                      maxWidth: '600px',
-                      height:'100%',
-                      minWidth: '200px',
-                      minHeight: '200px',
-                      maxHeight: '600px',
+                      maxWidth: '60%',
+                      height:'50%',
+                      minWidth: '40%',
+                      minHeight: '40%',
+                      maxHeight: '60%',
                       marginBottom: '40px',
                     }}
                   />
@@ -127,12 +131,25 @@ export const MyCarousel = ({ images = [] }) => {
     </>
   )
 }
-export const PagePost = ({ onePost, aboutMe: { avatar, login } = {}, onPost }) => {
+export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
+ const [comment, setComment]=useState('')
+ const [like, setLike]=useState(false)
+
+ console.log('comment', comment)
   return (
     <>
+     <Row>
+      <Col span={12}>
+{/* <div  style={{display: 'flex'}}> */}
+    
       <MyCarousel images={onePost?.images} />
-<div  style={{display: 'flex', flexDirection: 'row'}}>
-
+      <h3 style={{ textAlign: 'center', padding:'10%'}}>
+            Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
+        </h3>
+{/* </div> */}
+</Col>
+<Col span={12}>
+<div  style={{display: 'flex', flexDirection:'row'}}>
 
       {avatar ? (
         <Avatar
@@ -143,13 +160,59 @@ export const PagePost = ({ onePost, aboutMe: { avatar, login } = {}, onPost }) =
         <Avatar style={{ width: '50px', height: '50px' }} src={user} />
       )
       }
+
       <h1 style={{ marginLeft:'20px'}}> {login}</h1>
       </div>
-      <h2> {onePost?.title || ''} </h2>
-      <h2> {onePost?.text || ''} </h2>
-      <h3>
-            Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
-        </h3>
+      <Divider/>
+      <h2> Title: {onePost?.title || ''} </h2>
+
+      <h2> Text: {onePost?.text || ''} </h2>
+      <Divider>Comments</Divider>
+       {onePost?.comments.map(({text, createdAt, owner})=>
+      (
+        <>
+        <div style={{display: 'flex', flexDirection:'row'}}>
+         
+         {owner?.avatar ? 
+         <Avatar
+          style={{ width: '25px', height: '25px', marginLeft:'2%' }}
+          src={ '/' + owner?.avatar?.url}
+        /> : 
+        <Avatar style={{ width: '25px', height: '25px', marginRight:'2%' }} src={user} />
+      }
+      
+       {owner?.login ? (
+       <h3 style={{marginRight:'2%'}}> {owner?.login} </h3> 
+      ) : (
+        <h3 style={{marginRight:'2%', fontWeight: 'bold'}}> anon </h3>
+        
+      )
+      }
+        <h3 style={{marginRight:'2%'}}>  {text} </h3>
+ </div>
+<p>            {new Intl.DateTimeFormat('en-GB').format(createdAt)}
+           </p>
+        </>
+
+        ))
+      }
+       {
+        like=== true?
+        // setLike(!like)&&
+       <HeartFilled  style={{ fontSize:'xx-large', color:'red'}} onClick={()=>{deleteLike(postId)}}/>
+       :
+       <HeartOutlined  style={{ fontSize:'xx-large' }} onClick={()=>{addLike(postId)}}/>
+       }
+       {/* <HeartTwoTone twoToneColor="#eb2f96" /> */}
+      <div class="Comments" style={{display: 'flex', flexDirection:'row'}}>
+      <Input size="large" placeholder='Add a comment...' 
+      value={comment} onChange={e=>{setComment(e.target.value)}}/>
+
+      <Button size="large" disabled={comment.length<1} type="primary" onClick={()=>
+        addComment(postId,comment)}> Publish </Button>
+      </div>
+        </Col>
+        </Row>
     </>
   )
 }
@@ -157,4 +220,5 @@ export const PagePost = ({ onePost, aboutMe: { avatar, login } = {}, onPost }) =
 export const CPost = connect((state) => ({
   onePost: state.promise.onePost?.payload,
   aboutMe: state.promise?.aboutMe?.payload,
-}))(PagePost)
+}), {addComment:actionAddFullComment, addLike:actionAddFullLike,
+   deleteLike:actionDeleteFullLike})(PagePost)

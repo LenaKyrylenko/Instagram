@@ -23,19 +23,16 @@
   float: right;
 }
 .Recomendations{
-  margin-left: 10px;
-
-  padding: 10px;
+  margin-left: 20px;
 }
 .Likes{
-  margin-left: 10px;
-  padding: 10px;
+  margin-left: 20px;
 }
 .User{
   padding: 10px;
 }
 .Feed{
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .Post{
   max-width: 600px;
@@ -113,4 +110,14 @@ main{
 .slick-arrow.slick-next {
   background-color: red;
   color: red;
+}
+.Comments{
+
+    position: fixed;
+    left: 50%; bottom: 10%; 
+    padding: 10px;
+    margin:20px;
+   
+    // color: #fff; 
+     width: 30%; /* Ширина слоя */
 }

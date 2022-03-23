@@ -225,7 +225,8 @@ export const actionOnePost = (_id) => async (dispatch) => {
          PostFindOne(query:$post){
         _id title text images{_id url}
         comments{_id, createdAt, text owner{login}}
-
+        likes{owner{login}}
+        likesCount
     }
 }`,
         {
@@ -272,7 +273,109 @@ export const actionAllFollowing = (_id) => async (dispatch) => {
     ),
   )
 }
+export const actionAddComment = (postId,comment) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'addComment',
+      gql(
+        `mutation AddComment($text:String, $postId:ID){
+          CommentUpsert(comment:{
+            post:{
+            _id: $postId
+          } text:$text
+          })
+          {
+            _id
+            text 
+            createdAt
+          }
+        }`,
+        {postId:postId,
+          text: comment
+        },
+      ),
+    ),
+  )
+}
+export const actionAddFullComment = (postId,comment) => async(dispatch,getState) => {
+  let addComment = await dispatch(actionAddComment(postId,comment));
+  if(addComment){
+    await dispatch(actionOnePost(postId));
+  }
+}
 
+// export const actionAddlike = _id => 
+//             actionPromise("addLike", gql(`mutation AddLike($like:LikeInput){
+//               LikeUpsert(like:$like){
+//                 _id
+//               }
+//             }`,{
+//               like:{
+//                   "post":{
+//                       "_id": _id
+//                   }
+//               }
+//             }))
+
+export const actionAddLike = (postId) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'addLike',
+      gql(
+        `mutation AddLike($postId:ID){
+          LikeUpsert(like:{
+            post:{
+            _id: $postId
+          }
+          })
+          {
+            _id
+          }
+        }`,
+        {
+          postId:postId
+        }
+      ),
+    ),
+  )
+}
+export const actionAddFullLike = (postId) => async(dispatch,getState) => {
+  let like = await dispatch(actionAddLike(postId));
+  if(like)
+  {
+    await dispatch(actionOnePost(postId));
+  }
+}
+
+export const actionDeleteFullLike = (likeId) => async(dispatch,getState) => {
+  let unLike = await dispatch(actionDeleteLike(likeId));
+  if(unLike){
+    await dispatch(actionOnePost(unLike?.post?._id));
+  }
+}
+export const actionDeleteLike = (postId) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'deleteLike',
+      gql(
+        `mutation DeleteLike($postId:ID){
+          LikeDelete(like:{
+            _id
+            post:{
+            _id: $postId
+          }
+          })
+          {
+            _id
+          }
+        }`,
+        {
+          postId:postId
+        }
+      ),
+    ),
+  )
+}
 // query:"[{\"_id\": \"62068eaaad55d22f3e2fb250\"}]")
 export const actionSetAvatar = (file) => async (dispatch) => {
   let result = await dispatch(actionUploadFile(file))

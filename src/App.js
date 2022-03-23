@@ -171,7 +171,7 @@ console.log('POST FEED', postsFeed)
 return <> 
 <Link className="Feed" to={`/feed`}>
 
-<Button className="Feed" onClick={()=>console.log('click')}> Feed </Button>
+<Button className="Feed" size="large" onClick={()=>console.log('click')}> Feed </Button>
 </Link>
 </>}
 const Header = () => {
@@ -186,10 +186,10 @@ const Header = () => {
     <CUser />
   </section>
 }
-const Likes = () => <Button className="Likes"> Likes </Button>
+const Likes = () => <Button size="large" className="Likes"> Likes </Button>
 
 const Recommendations = () => (
-  <Button className="Recomendations"> Recommendations </Button>
+  <Button size="large" className="Recomendations"> Recommendations </Button>
 )
 
 const CBasic = connect(null, { onLoad: actionSetAvatar })(Basic)
