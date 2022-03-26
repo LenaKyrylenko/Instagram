@@ -131,18 +131,46 @@ export const MyCarousel = ({ images = [] }) => {
     </>
   )
 }
-export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
- const [comment, setComment]=useState('')
- const [like, setLike]=useState(false)
+const Comment =({addComment})=>{
+  const [comment, setComment]=useState('')
+  return (
+  <div class="Comments" style={{display: 'flex', flexDirection:'row'}}>
+      <Input size="large" placeholder='Add a comment...' 
+      value={comment} onChange={e=>{setComment(e.target.value)}}/>
 
- console.log('comment', comment)
+      <Button size="large" disabled={comment.length<1} type="primary" onClick={()=>
+        addComment(postId,comment)}> Publish </Button>
+  </div>
+  )
+
+}
+const Like=({addLike, deleteLike, likeId})=>{
+  const [like, setLike]=useState(false)
+  return(
+    <>
+     {
+        like === true
+        ?
+        // setLike(!like)&&
+       <HeartFilled  style={{ fontSize:'xx-large', color:'red'}} onClick={()=>{
+        deleteLike(likeId)&&setLike(!like)}}/>
+       :
+       <HeartOutlined  style={{ fontSize:'xx-large' }} 
+       onClick={()=>{addLike(postId)&&setLike(!like)}}/>
+       }
+    </>
+  )
+}
+export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
+
+ console.log('onePost ', onePost)
   return (
     <>
      <Row>
       <Col span={12}>
 {/* <div  style={{display: 'flex'}}> */}
     
-      <MyCarousel images={onePost?.images} />
+      <MyCarousel style={{position: 'absolute'}} images={onePost?.images} />
       <h3 style={{ textAlign: 'center', padding:'10%'}}>
             Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
         </h3>
@@ -168,49 +196,39 @@ export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { a
 
       <h2> Text: {onePost?.text || ''} </h2>
       <Divider>Comments</Divider>
-       {onePost?.comments.map(({text, createdAt, owner})=>
+      <div className="Scroll">
+      
+       {(onePost?.comments ||[]).map(({text, createdAt, owner})=>
       (
         <>
-        <div style={{display: 'flex', flexDirection:'row'}}>
-         
+        <div style={{display: 'flex', flexDirection:'row', padding:'5px', margin:'5px' }}>
          {owner?.avatar ? 
          <Avatar
-          style={{ width: '25px', height: '25px', marginLeft:'2%' }}
+          style={{ width: '25px', height: '25px', marginRight:'2%' }}
           src={ '/' + owner?.avatar?.url}
         /> : 
         <Avatar style={{ width: '25px', height: '25px', marginRight:'2%' }} src={user} />
       }
       
        {owner?.login ? (
-       <h3 style={{marginRight:'2%'}}> {owner?.login} </h3> 
+       <h3 style={{marginRight:'2%' , fontWeight: 'bold'}}> {owner?.login} </h3> 
       ) : (
         <h3 style={{marginRight:'2%', fontWeight: 'bold'}}> anon </h3>
-        
-      )
+          )
       }
         <h3 style={{marginRight:'2%'}}>  {text} </h3>
  </div>
-<p>            {new Intl.DateTimeFormat('en-GB').format(createdAt)}
+        <p style={{ paddingLeft:'10px'}}>     
+          {new Intl.DateTimeFormat('en-GB').format(createdAt)}
            </p>
         </>
 
         ))
       }
-       {
-        like=== true?
-        // setLike(!like)&&
-       <HeartFilled  style={{ fontSize:'xx-large', color:'red'}} onClick={()=>{deleteLike(postId)}}/>
-       :
-       <HeartOutlined  style={{ fontSize:'xx-large' }} onClick={()=>{addLike(postId)}}/>
-       }
+     </div>
+     <Like addLike={addLike} deleteLike={deleteLike} likeId={onePost?.likes?._id}/>
        {/* <HeartTwoTone twoToneColor="#eb2f96" /> */}
-      <div class="Comments" style={{display: 'flex', flexDirection:'row'}}>
-      <Input size="large" placeholder='Add a comment...' 
-      value={comment} onChange={e=>{setComment(e.target.value)}}/>
-
-      <Button size="large" disabled={comment.length<1} type="primary" onClick={()=>
-        addComment(postId,comment)}> Publish </Button>
-      </div>
+       <Comment addComment={addComment}/>
         </Col>
         </Row>
     </>
@@ -220,5 +238,6 @@ export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { a
 export const CPost = connect((state) => ({
   onePost: state.promise.onePost?.payload,
   aboutMe: state.promise?.aboutMe?.payload,
-}), {addComment:actionAddFullComment, addLike:actionAddFullLike,
-   deleteLike:actionDeleteFullLike})(PagePost)
+}), {addComment:actionAddFullComment, 
+    addLike:actionAddFullLike,
+    deleteLike:actionDeleteFullLike})(PagePost)
