@@ -88,6 +88,27 @@ main{
   // background-size: 100% 100%;
  
 }
+.MyCarousel{
+  display: block;
+  min-width: 80%;
+  min-height: 80%;
+  background: #c6cece87;
+  border-width: 5px;
+  border-color: rgb(179, 188, 188);
+  border-style: solid;
+  margin-bottom: 40px;
+  margin: 0 10%;
+  border-radius: 5px;
+}
+.PostFeed{
+  border-width: 20;
+  border-color: rgb(138, 138, 220);
+  background: #edf8f89e;
+  border-radius: 5px;
+
+  border-style: solid;
+  margin-bottom: 40px;
+}
 .PostImage{
   // display: flex;
   // align-items: 'center';
@@ -136,4 +157,8 @@ main{
   // padding: 1em;
   overflow-y: scroll;
   // text-align: center;
+}
+.SpoilerButton{
+  right: 30px;
+  margin:20px;
 }

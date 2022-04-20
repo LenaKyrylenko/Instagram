@@ -150,7 +150,7 @@ export const actionAboutMe = () => async (dispatch, getState) => {
   UserFindOne(query:$userId)
   {
     _id createdAt login nick avatar{_id url} 
-     followers{_id login nick} following{_id login nick}
+     followers{_id login nick avatar{_id url}} following{_id login nick avatar{_id url}}
   }
 }`,
         {
@@ -181,38 +181,41 @@ mutation PostUpsert($post:PostInput){
     ),
   )
 
-// export const actionAllPosts = () => async (dispatch, getState) => {
-//   await dispatch(
-//     actionPromise(
-//       'allPosts',
-//       gql(
-//         `query allPosts($userId:String!){
-//   PostFind(query:$userId){
-//            owner{_id} _id title text images{_id url}
-//     }
-// }`,
-//         {
-//           userId: JSON.stringify([
-//             { ___owner: getState().auth?.payload?.sub?.id },
+export const actionAllPosts = (userId) =>
+    actionPromise(
+      'allPosts',
+      gql(
+        `query allPosts($userId:String!){
+  PostFind(query:$userId){
+           owner{_id} _id title text images{_id url}
+    }
+}`,
+        {
+          userId: JSON.stringify([
+            { ___owner: userId},
 
-//             { sort: [{ _id: -1 }] },
-//           ]),
-//         },
-//       ),
-//     ),
-//   )
-// }
+            {
+              sort: [{ _id: -1 }],
+              skip: [0],
+              limit: [36]
+            },
 
+          ]),
+        },
+      ),
+    )
 
-export const actionAllPosts = () =>
-    actionPromise('allPosts', 
+export const actionAllPostsFeed = () =>
+    actionPromise('postsFeed', 
     gql(` query allPosts($_id:String){
                 PostFind(query:$_id){
-                  owner{_id} _id title text images{_id url}
+                  owner{_id login avatar{_id url}} _id title text images{_id url}
                 }
             }`, {
         _id: JSON.stringify([{}, {
-            sort: [{ _id: -1 }],
+          sort: [{ _id: -1 }],
+          skip: [0],
+              limit: [36]
         }])
     }))
 
@@ -225,14 +228,25 @@ export const actionOnePost = (_id) => async (dispatch) => {
          PostFindOne(query:$post){
         _id title text images{_id url}
         createdAt
-        comments{_id, createdAt, text 
+        comments{
+          _id, createdAt, text  owner{_id login avatar{_id url}}
+          answers{
+            _id, createdAt, text owner{_id login  avatar{_id url}}
+           
+          }
         owner{_id login avatar{_id url}}}
-        likes{ _id owner{login}}
-        likesCount
+        likes{
+          _id
+          owner{				
+             _id login avatar {url}
+            }
+      }
         }
       }`,
         {
-          post: JSON.stringify([{ _id }]),
+          post: JSON.stringify([{ _id },
+            
+          ]),
         },
       ),
     ),
@@ -275,30 +289,57 @@ export const actionAllFollowing = (_id) => async (dispatch) => {
     ),
   )
 }
-export const actionAddComment = (postId,comment) => async (dispatch) => {
+export const actionAddComment = (postId, text) => async (dispatch) => {
   await dispatch(
     actionPromise(
       'addComment',
       gql(
-        `mutation AddComment($text:String, $postId:ID){
-          CommentUpsert(comment:{
-            post:{
-            _id: $postId
-          } text:$text
-          })
+        `mutation AddComment($comment:CommentInput){
+          CommentUpsert(comment:$comment)
           {
             _id
             text 
             createdAt
           }
         }`,
-        {postId:postId,
-          text: comment
+        {
+          comment: {
+            post: {
+              _id: postId
+            },
+            text: text
+          },
+        }
+      ),
+    ))
+}
+export const actionAddSubComment = (commentId,comment) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'addSubComment',
+      gql(
+        `mutation AddComment($comment:CommentInput){
+          CommentUpsert(comment:$comment)
+          {
+            _id
+            text 
+            createdAt
+          }
+        }`,
+        {
+          comment: {
+      
+            answerTo: {
+              _id: commentId
+            },
+            text:comment
+          }
         },
       ),
     ),
   )
 }
+
 // export const actionAddFullComment = (postId,comment) => async(dispatch) => {
 //   let addComment = await dispatch(actionAddComment(postId,comment));
 //   if(addComment){
@@ -312,6 +353,21 @@ async(dispatch,getState) => {
   const {
     promise: {
       addComment: { status },
+    },
+} = getState();
+  if(status==="FULFILLED")
+  {
+    await dispatch(actionOnePost(postId));
+  }
+  // await dispatch(actionOnePost(postId));
+  }
+
+  export const actionAddSubFullComment = (postId,commentId,comment) => 
+async(dispatch,getState) => {
+  await dispatch(actionAddSubComment(commentId,comment))
+  const {
+    promise: {
+      addSubComment: { status },
     },
 } = getState();
   if(status==="FULFILLED")
@@ -338,22 +394,19 @@ export const actionAddLike = (postId) => async (dispatch) => {
     actionPromise(
       'addLike',
       gql(
-        `mutation AddLike($postId:ID){
-          LikeUpsert(like:{
-            post:{
-              _id:$postId
-            }
-            user:{
-              _id:"62361e6492c08631bc4b0e91"
-            }
-          })
+        `mutation AddLike($like:LikeInput){
+          LikeUpsert(like:$like)
           {
             _id owner{_id login}
-            post{_id title text}
           }
         }`,
         {
-          postId:postId
+          like: {
+            post: {
+              _id: postId
+            }
+          }
+          
         } 
       ),
     ),
@@ -374,6 +427,20 @@ async(dispatch,getState) => {
   //  await dispatch(actionOnePost(postId));
 }
 
+export const actionGetFindLiked = (_id) => async (dispatch) => {
+  await dispatch(
+    actionPromise('findLiked', gql(` query LikeFindPost($id:String!) {
+                                        LikeFind(query:$id){
+                                          owner { _id nick login
+                                                avatar{_id url}
+                                    }
+                }
+            } `, {
+      id: JSON.stringify([{ "post._id": _id }])
+    }
+    )))
+}
+
 
 // export const actionDeleteFullLike = (likeId) => async(dispatch,getState) => {
 //   let unLike = await dispatch(actionDeleteLike(likeId));
@@ -382,9 +449,9 @@ async(dispatch,getState) => {
 //   }
 // }
 
-export const actionDeleteFullLike = (likeId) => 
+export const actionDeleteFullLike = (likeId, postId) => 
 async(dispatch,getState) => {
- let unlike =  await dispatch(actionDeleteLike(likeId))
+ await dispatch(actionDeleteLike(likeId,postId))
   const {
     promise: {
       deleteLike: { status },
@@ -392,11 +459,11 @@ async(dispatch,getState) => {
 } = getState();
   if(status==="FULFILLED")
   {
-    await dispatch(actionOnePost(unlike?.post?._id));
+    await dispatch(actionOnePost(postId));
   }
   //  await dispatch(actionOnePost(postId));
 }
-export const actionDeleteLike = (likeId) => async (dispatch) => {
+export const actionDeleteLike = (likeId,postId) => async (dispatch) => {
   await dispatch(
     actionPromise(
       'deleteLike',
@@ -405,13 +472,16 @@ export const actionDeleteLike = (likeId) => async (dispatch) => {
           LikeDelete(like: $like)
           {
             _id, post{
-              _id owner{_id login}
+              _id owner{_id login avatar{_id url}}
             }
           }
         }`,
         {
           like:{
-            _id:likeId
+            _id: likeId,
+            post:{
+                _id: postId
+             }
           }
         }
       ),
@@ -446,7 +516,7 @@ export const actionPostsFeed = () => async (dispatch,getState) => {
             _id likesCount 
             likes{
                 owner{				
-                    login avatar {url}
+                    login avatar {_id url}
                   }
             }
       	}
@@ -458,7 +528,8 @@ export const actionPostsFeed = () => async (dispatch,getState) => {
             {
               sort: [{ _id: -1 }],
               skip: [0],
-               limit: [10],
+              limit: [36]
+              //  limit: [10],
             },
           ]),
         },
@@ -466,6 +537,21 @@ export const actionPostsFeed = () => async (dispatch,getState) => {
     ),
   )
 }
+
+export const actionGetAllPosts = (skip) =>
+    actionPromise('allGetPosts', gql(` query allPosts($id:String!){
+                PostFind(query:$id){
+                    _id   images{url _id }
+                }
+            }`, {
+        id: JSON.stringify([{}, {
+            sort: [{ _id: -1 }],
+            skip: [skip || 0],
+            limit: [36]
+        }])
+    }))
+
+    
 
 export const actionSearchUser =(userName)=> async (dispatch)=>{
 
@@ -522,3 +608,25 @@ export const actionUserUpdate =
         }
         await dispatch(actionAboutMe());
     };
+
+    export const actionFindSubComment = (findId) =>
+    actionPromise('subComments', gql(`query commentFindOne ($id:String!){
+        CommentFindOne(query:$id){
+       _id text answers { 
+                _id text
+                post {_id }
+                answers { _id}
+                createdAt
+                likes { _id owner {_id avatar{_id url} login nick } }
+                owner {
+                    _id login nick 
+                    avatar { _id url } 
+                    } 
+                }
+        } 
+    }`, {
+      id: JSON.stringify([{
+        _id: findId,
+      }
+      ])
+    }))

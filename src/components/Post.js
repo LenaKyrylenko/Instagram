@@ -1,29 +1,37 @@
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
-import {actionAllPosts,actionOnePost,actionAddFullComment, actionDeleteFullLike,actionAddFullLike,actionAddLike,actionDeleteLike} from '../actions'
+import {
+  actionAllPosts, actionOnePost, addEmoji, actionAddFullComment, actionGetFindLiked, actionFindSubComment,
+  actionAddSubFullComment, actionDeleteFullLike, actionAddFullLike, actionAddLike, actionDeleteLike
+} from '../actions'
 import photoNotFound from '../materials/photoNotFound.png'
 import { LeftCircleFilled, RightCircleFilled, HeartOutlined,HeartTwoTone,HeartFilled } from '@ant-design/icons'
-import { Carousel,Avatar } from 'antd'
+import { Carousel,Avatar,Tooltip } from 'antd'
 import user from '../materials/user.png'
 import { Provider, connect } from 'react-redux'
 import { Row, Col } from 'antd';
-import { Divider,Input,Button } from 'antd';
+import { Divider, Input, Button } from 'antd';
+import { EditOutlined } from '@ant-design/icons'
+import moment from 'moment';
+import {CComments, AddComment} from '../components/Post_Comment'
+
 import React, { useMemo, useState, useEffect } from 'react'
-const postId="62361ebb92c08631bc4b0e96"
+// const postId="625afa1d069dca48a822ffb0"
 export const Card = ({ post, onPost }) => (
   <>
-    <Link to={`/post/${postId}`} onClick={() => onPost(postId)}>
-    {/* <Link to={`/post/${post?._id}`} onClick={() => onPost(post?._id)}> */}
+    {/* <Link to={`/post/${postId}`} onClick={() => onPost(postId)}> */}
+    {/* {console.log('post id', post?._id)} */}
+    <Link to={`/post/${post?._id}`} onClick={() => onPost(post?._id)}>
       {post?.images && post?.images[0] && post.images[0]?.url ? (
         <img
           className="Card"
           src={ '/' + post.images[0].url}
-          style={{ maxWidth: '200px', maxHeight: '200px' }}
+          style={{minHeight:'150px', minWidth:'150px', maxWidth: '230px', maxHeight: '200px' }}
         />
       ) : (
         <img
           className="Card"
           src={photoNotFound}
-          style={{ maxWidth: '200px', maxHeight: '200px' }}
+          style={{ maxWidth: '230px', minHeight:'150px', minWidth:'150px' ,maxHeight: '200px' }}
         />
       )}
 
@@ -78,45 +86,40 @@ export const MyCarousel = ({ images = [] }) => {
   console.log('IMAGES', images)
   return (
     <>
-      <div style={{
-            display: 'block',
-            minWidth: '80%',
-            minHeight: '80%',
-            background: '#a0a0a0',
-            borderWidth:'10',
-            borderColor: '#000',
-            borderStyle: 'solid',
-            marginBottom: '40px',
-            margin: '0 10%'
-          }}>
+      <div className='MyCarousel'>
         <Carousel
           effect="fade"
           arrows
           nextArrow={<SampleNextArrow />}
           prevArrow={<SamplePrevArrow />}
         >
-          {images &&
-            images.map((i, index) =>
-              i?.url ? (
-                <div key={index}>
-                  <img
-                    className="PostImage"
-                    src={ '/' + i?.url}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      width: '50%',
-                      margin: '0 auto',
-                      maxWidth: '60%',
-                      height:'50%',
-                      minWidth: '40%',
-                      minHeight: '40%',
-                      maxHeight: '60%',
-                      marginBottom: '40px',
-                    }}
-                  />
-                </div>
-              ) : (
+          {
+            images
+              ?
+              (images.map((i, index) =>
+                i?.url && (
+                  <div key={index}>
+                    <img
+                      className="PostImage"
+                      src={'/' + i?.url}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '50%',
+                        margin: '0 auto',
+                        maxWidth: '60%',
+                        height: '50%',
+                        minWidth: '40%',
+                        minHeight: '40%',
+                        maxHeight: '60%',
+                        marginBottom: '40px',
+                      }}
+                    />
+                  </div>
+                )
+              ))
+              
+              : (
                 <div>
                   <img
                     className="PostImage"
@@ -124,44 +127,39 @@ export const MyCarousel = ({ images = [] }) => {
                     style={{ maxWidth: '400px', maxHeight: '400px' }}
                   />
                 </div>
-              ),
-            )}
+              )
+               }
         </Carousel>
       </div>
     </>
   )
 }
-const Comment =({addComment})=>{
-  const [comment, setComment]=useState('')
-  return (
-  <div class="Comments" style={{display: 'flex', flexDirection:'row'}}>
-      <Input size="large" placeholder='Add a comment...' 
-      value={comment} onChange={e=>{setComment(e.target.value)}}/>
-
-      <Button size="large" disabled={comment.length<1} type="primary" onClick={()=>
-        addComment(postId,comment)}> Publish </Button>
-  </div>
-  )
-
-}
-const Like=({addLike, deleteLike, likeId})=>{
-  const [like, setLike]=useState(false)
+const Like = ({ my_Id, findLikes, postId, addLike, deleteLike, likes=[] }) =>
+{
+  const [view, setView] = useState(false);
+  const likeId = likes.find(like => like?.owner?._id === my_Id)?._id
+  const changeLike = () => likeId ? deleteLike(likeId, postId) : addLike(postId)
+  console.log('likeId', likeId)
   return(
     <>
-     {
-        like === true
-        ?
-        // setLike(!like)&&
-       <HeartFilled  style={{ fontSize:'xx-large', color:'red'}} onClick={()=>{
-        deleteLike(likeId)&&setLike(!like)}}/>
-       :
-       <HeartOutlined  style={{ fontSize:'xx-large' }} 
-       onClick={()=>{addLike(postId)&&setLike(!like)}}/>
-       }
+      
+         <span onClick={changeLike}>
+            {likeId ? 
+            <HeartFilled  style={{ fontSize:'xx-large', color:'red'}} />:
+             <HeartOutlined  style={{ fontSize: 'xx-large' }} /> }
+        </span>
+       {likes.length ? 
+         <button style={{ paddingLeft: 8, cursor: 'auto' }} onClick={()=>setView(!view)}> {likes.length} likes
+           
+        </button>
+        :
+        '0 likes'}
+       {view}
     </>
   )
 }
-export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
+
+export const PagePost = ({my_Id, onePost,addComment,addCommentReply, addLike, findLikes, findSubComment, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
 
  console.log('onePost ', onePost)
   return (
@@ -175,7 +173,7 @@ export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { a
             Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
         </h3>
 {/* </div> */}
-</Col>
+    </Col>
 <Col span={12}>
 <div  style={{display: 'flex', flexDirection:'row'}}>
 
@@ -197,38 +195,17 @@ export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { a
       <h2> Text: {onePost?.text || ''} </h2>
       <Divider>Comments</Divider>
       <div className="Scroll">
-      
-       {(onePost?.comments ||[]).map(({text, createdAt, owner})=>
-      (
-        <>
-        <div style={{display: 'flex', flexDirection:'row', padding:'5px', margin:'5px' }}>
-         {owner?.avatar ? 
-         <Avatar
-          style={{ width: '25px', height: '25px', marginRight:'2%' }}
-          src={ '/' + owner?.avatar?.url}
-        /> : 
-        <Avatar style={{ width: '25px', height: '25px', marginRight:'2%' }} src={user} />
-      }
-      
-       {owner?.login ? (
-       <h3 style={{marginRight:'2%' , fontWeight: 'bold'}}> {owner?.login} </h3> 
-      ) : (
-        <h3 style={{marginRight:'2%', fontWeight: 'bold'}}> anon </h3>
-          )
-      }
-        <h3 style={{marginRight:'2%'}}>  {text} </h3>
- </div>
-        <p style={{ paddingLeft:'10px'}}>     
-          {new Intl.DateTimeFormat('en-GB').format(createdAt)}
-           </p>
-        </>
 
-        ))
-      }
+            <CComments comments={onePost?.comments || []}/>
      </div>
-     <Like addLike={addLike} deleteLike={deleteLike} likeId={onePost?.likes?._id}/>
+          <Like my_Id={my_Id} findLikes={findLikes} addLike={addLike} deleteLike={deleteLike} likes={onePost?.likes} postId={(onePost?._id)}>
+            {
+              <div>
+          my likes
+              </div>}
+          </Like>
        {/* <HeartTwoTone twoToneColor="#eb2f96" /> */}
-       <Comment addComment={addComment}/>
+          <AddComment addComment={addComment} onePost={onePost}/>
         </Col>
         </Row>
     </>
@@ -237,7 +214,15 @@ export const PagePost = ({ onePost,addComment, addLike, deleteLike, aboutMe: { a
 
 export const CPost = connect((state) => ({
   onePost: state.promise.onePost?.payload,
+  my_Id: state.auth.payload.sub.id || '',
   aboutMe: state.promise?.aboutMe?.payload,
-}), {addComment:actionAddFullComment, 
-    addLike:actionAddFullLike,
-    deleteLike:actionDeleteFullLike})(PagePost)
+  addComment: state.promise?.addComment?.payload,
+  addSubComment: state.promise?.addSubComment,
+
+}), {
+  addLike: actionAddFullLike,
+  findLikes: actionGetFindLiked,
+  deleteLike: actionDeleteFullLike,
+  addComment: actionAddFullComment, 
+  addCommentReply: actionAddSubFullComment,
+})(PagePost)
