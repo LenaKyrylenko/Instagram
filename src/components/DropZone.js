@@ -58,7 +58,7 @@ console.log('STATE PHOTO ', visible)
     <li>
       {/* <img   style={{ maxWidth: '200px', maxHeight: '200px' }} src={ '/' + url} /> */}
           <Image 
-           width={200}
+          //  width={200}
         
            style={{  maxWidth: '200px', maxHeight: '200px' }} src={ '/' + url} 
           //  style={{ display: 'none' }}

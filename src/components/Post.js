@@ -1,6 +1,6 @@
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
 import {
-  actionAllPosts, actionOnePost, addEmoji, actionAddFullComment, actionGetFindLiked, actionFindSubComment,
+  actionAllPosts, actionOnePost, actionFindLikes, actionAddFullComment, actionGetFindLiked, actionFindSubComment,
   actionAddSubFullComment, actionDeleteFullLike, actionAddFullLike, actionAddLike, actionDeleteLike
 } from '../actions'
 import photoNotFound from '../materials/photoNotFound.png'
@@ -9,7 +9,7 @@ import { Carousel,Avatar,Tooltip } from 'antd'
 import user from '../materials/user.png'
 import { Provider, connect } from 'react-redux'
 import { Row, Col } from 'antd';
-import { Divider, Input, Button } from 'antd';
+import { Divider, Input, Button, Modal } from 'antd';
 import { EditOutlined } from '@ant-design/icons'
 import moment from 'moment';
 import {CComments, AddComment} from '../components/Post_Comment'
@@ -134,47 +134,108 @@ export const MyCarousel = ({ images = [] }) => {
     </>
   )
 }
-const Like = ({ my_Id, findLikes, postId, addLike, deleteLike, likes=[] }) =>
+const Likes = ({ likes }) =>
 {
-  const [view, setView] = useState(false);
+  return (
+    <>
+    <div className='Modal'>
+        {
+          likes &&
+          likes?.map(({ owner:{_id, login, avatar} }) => (
+            // <div style={{ display: 'flex', flexDirection:'row' }}>
+          
+                
+            <Link to={`/profile/${_id}`}>
+              <Row>
+              <Col offset={1}>
+            <Avatar
+              style={{
+                width: '50px',
+                height: '50px',
+                // marginRight: '30px',
+                // position: 'absolute',
+              }}
+              src={'/' + avatar?.url || user}
+                  />
+                </Col>
+                <Col offset={2}>
+                    <h3 > {login}</h3>
+                 </Col>
+                 </Row>
+                </Link>
+          ))
+        }
+    </div>
+    </>
+  )
+  }
+const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
+{
+  
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   const likeId = likes.find(like => like?.owner?._id === my_Id)?._id
   const changeLike = () => likeId ? deleteLike(likeId, postId) : addLike(postId)
-  console.log('likeId', likeId)
+  // console.log('likeId', likeId)
   return(
     <>
-      
-         <span onClick={changeLike}>
+      <div style={{display:'flex'}}>
+         <h3 onClick={changeLike}>
             {likeId ? 
-            <HeartFilled  style={{ fontSize:'xx-large', color:'red'}} />:
-             <HeartOutlined  style={{ fontSize: 'xx-large' }} /> }
-        </span>
+            <HeartFilled  style={{cursor: 'pointer', fontSize:'xx-large', color:'red'}} />:
+             <HeartOutlined  style={{cursor: 'pointer', fontSize: 'xx-large' }} /> }
+        </h3>
        {likes.length ? 
-         <button style={{ paddingLeft: 8, cursor: 'auto' }} onClick={()=>setView(!view)}> {likes.length} likes
+        <h3 style={{cursor: 'pointer', paddingLeft: 8 }} onClick={showModal}> {likes.length} likes
            
-        </button>
+        </h3>
         :
         '0 likes'}
-       {view}
+      </div>
+      <Modal title="Likes" className="Modal"
+        visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <Likes likes={likes}/>
+      </Modal>
     </>
   )
 }
 
-export const PagePost = ({my_Id, onePost,addComment,addCommentReply, addLike, findLikes, findSubComment, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
+export const PagePost = ({my_Id, onePost,likes, addComment,addCommentReply, addLike, findSubComment, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
 
  console.log('onePost ', onePost)
   return (
     <>
      <Row>
-      <Col span={12}>
+      <Col span={14}>
 {/* <div  style={{display: 'flex'}}> */}
     
       <MyCarousel style={{position: 'absolute'}} images={onePost?.images} />
-      <h3 style={{ textAlign: 'center', padding:'10%'}}>
+      <h3 style={{ textAlign: 'center', padding:'30px'}}>
             Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
-        </h3>
+          </h3>
+          <div style={{marginLeft:'100px'}}>
+          {/* <Col span={3} offset={2}> */}
+          <Like my_Id={my_Id} addLike={addLike} deleteLike={deleteLike} likes={onePost?.likes} postId={onePost?._id}>
+            
+              <Likes likes={onePost?.likes} />
+            
+          </Like>
+              {/* </Col> */}
+           </div>
 {/* </div> */}
     </Col>
-<Col span={12}>
+<Col span={8}>
 <div  style={{display: 'flex', flexDirection:'row'}}>
 
       {avatar ? (
@@ -196,17 +257,14 @@ export const PagePost = ({my_Id, onePost,addComment,addCommentReply, addLike, fi
       <Divider>Comments</Divider>
       <div className="Scroll">
 
-            <CComments comments={onePost?.comments || []}/>
+            <CComments comments={onePost?.comments || []} />
+        
      </div>
-          <Like my_Id={my_Id} findLikes={findLikes} addLike={addLike} deleteLike={deleteLike} likes={onePost?.likes} postId={(onePost?._id)}>
-            {
-              <div>
-          my likes
-              </div>}
-          </Like>
+
        {/* <HeartTwoTone twoToneColor="#eb2f96" /> */}
-          <AddComment addComment={addComment} onePost={onePost}/>
+            <AddComment addComment={addComment} onePost={onePost} />
         </Col>
+     
         </Row>
     </>
   )
@@ -218,11 +276,12 @@ export const CPost = connect((state) => ({
   aboutMe: state.promise?.aboutMe?.payload,
   addComment: state.promise?.addComment?.payload,
   addSubComment: state.promise?.addSubComment,
-
+  
 }), {
   addLike: actionAddFullLike,
   findLikes: actionGetFindLiked,
   deleteLike: actionDeleteFullLike,
   addComment: actionAddFullComment, 
   addCommentReply: actionAddSubFullComment,
+  findLikes:actionFindLikes
 })(PagePost)

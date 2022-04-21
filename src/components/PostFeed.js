@@ -8,6 +8,7 @@ import { Upload, Button, DatePicker, Space } from 'antd'
 import user from '../materials/user.png'
 import { Avatar, Image, Divider, Radio } from 'antd'
 import { CPost, MyCarousel } from './Post'
+import { Row, Col } from 'antd';
 
 const MyPostFeed = ({ postsFeed, onPostsFeed }) => {
     useEffect(() => {
@@ -17,6 +18,9 @@ const MyPostFeed = ({ postsFeed, onPostsFeed }) => {
     return (
       <>
         <h2>Feed</h2>
+        <Row>
+
+        <Col span={12} offset={6}>
             <div>
                 {console.log('POSTFEED', postsFeed)}
           {
@@ -38,8 +42,9 @@ const MyPostFeed = ({ postsFeed, onPostsFeed }) => {
               </div>
             ))
           }
-        </div>
-  
+            </div>
+          </Col>
+    </Row>
         {/* </div> */}
   
         {/* <PagePost onePost={postsFeed}/> <MyCarousel images={postsFeed?.images} />*/}

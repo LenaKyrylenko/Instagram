@@ -1,7 +1,15 @@
 .App {
   // text-align: center;
+  @font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+  'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+  'Noto Color Emoji';
 }
+body{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
 @import '~antd/dist/antd.css';
+
 .Dropzone{
   flex: 1;
   display: flex;
@@ -53,8 +61,8 @@ li {
   list-style-type: none; /* Убираем маркеры */
  }
 main{
-  margin-left:200px;
-  margin-right: 200px;
+  // margin-left:200px;
+  // margin-right: 200px;
 }
 .Title{
   text-align: left;
@@ -100,6 +108,9 @@ main{
   margin: 0 10%;
   border-radius: 5px;
 }
+.Modal{
+  font-size: medium;
+}
 .PostFeed{
   border-width: 20;
   border-color: rgb(138, 138, 220);
@@ -135,12 +146,15 @@ main{
 .Comments{
 
     position: fixed;
-    left: 50%; bottom: 10%; 
-    padding: 10px;
+
     margin:20px;
+    width: 30%;
+  //  left: 50%; bottom: 10%; 
+  padding: 10px;
+   // margin:20px;
    
     // color: #fff; 
-     width: 30%; /* Ширина слоя */
+   //  width: 30%; /* Ширина слоя */
 }
 .active {
   background-color: red;
@@ -152,7 +166,7 @@ main{
   // align-items: center;
   // justify-content: center;
   flex-direction:column;
-  width: 100%;
+  // width: 100%;
   height: 300px;
   // padding: 1em;
   overflow-y: scroll;

@@ -1,5 +1,8 @@
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
-import {actionAllPosts,actionOnePost,actionAddFullComment,actionGetFindLiked, actionFindSubComment,actionAddSubFullComment,actionDeleteFullLike,actionAddFullLike,actionAddLike,actionDeleteLike} from '../actions'
+import {
+  actionAllPosts, actionOnePost, actionAddFullComment, actionGetFindLiked,
+  actionFindSubComment, actionAddSubFullComment, actionDeleteFullLike, actionAddFullLike, actionAddLike, actionDeleteLike
+} from '../actions'
 import photoNotFound from '../materials/photoNotFound.png'
 import { LeftCircleFilled, RightCircleFilled, HeartOutlined,HeartTwoTone,HeartFilled } from '@ant-design/icons'
 import { Carousel,Avatar,Tooltip } from 'antd'
@@ -17,37 +20,22 @@ import { NimblePicker, Emoji } from 'emoji-mart'
 // import InputEmoji from 'react-input-emoji'; 
 import reactStringReplace from 'react-string-replace'
 // const postId="625afa1d069dca48a822ffb0"
-export const AddComment =({addComment, onePost})=>{
+export const AddComment = ({ addComment, onePost }) => {
   const [text, setComment] = useState('')
-  const [showEmojiPicker, setShowEmojiPicker]=useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const addEmoji = ({ colons }) => {
     setComment((text + ' ' + colons).trim());
   };
 
   return (
-
-    // <div style={{ display: 'inline-block' }}>
-
-      <div className="Comments" style={{ display: 'flex',  margin: '0 5px' }}>
+    <>
+      {
+        showEmojiPicker && <Picker autoFocus={true}
+          style={{ color: '#ae65c5', position: 'absolute', bottom: '160px', right: '30px' }}
+          onSelect={emojiTag => addEmoji(emojiTag)} set="apple" />
+      }
       
-           {
-          showEmojiPicker&& <Picker onSelect={emojiTag => addEmoji(emojiTag)}  set="apple" />
-        }
- {/* <Button onClick={<Picker  set="apple" />}   // type="link"
-              // shape="circle"
-              // icon="smile"
-          //onSelect={emojiTag => addEmoji(emojiTag)}
-            > smile </Button>
- */}
-           {/* <InputEmoji style={{ display: 'inline-block' }}
-          value={text}
-          onChange={setComment}
-          cleanOnEnter
-          onEnter={()=>addComment(postId, text)}
-          placeholder="Type a message"
-        />   */}
-        
-
+      <div className="" style={{ display: 'flex',  margin: '100px 10px' }}>
          <Input style={{ display: 'inline-block' }} size="large" placeholder='Add a comment...' 
           value={text} onChange={e => { setComment(e.target.value) }}
         onPressEnter={e => { setComment(e.target.value) }}/> 
@@ -63,8 +51,10 @@ export const AddComment =({addComment, onePost})=>{
         
         </SmileOutlined>
        
-     </div>
+        </div>
+        </>
     )
+      
 }
 const SpoilerButton = ({text, close, children }) => {
     const [opened, setOpened] = useState(close)
@@ -123,7 +113,7 @@ const CommentForReply =({addCommentReply, commentId, onePost})=>{
       <div style={{width:'90%',display:'inline-block', background:'#c8c8c8'}}>
    <EditOutlined style={{float:'right',  fontSize: 'x-large' }}/>
         <h3 style={{display:'block'}}>  {reactStringReplace(text, /:(.+?):/g, (match, i) => (
-          <Emoji emoji={match} set='apple' size={20}/> ))}
+          <Emoji emoji={match}  set='apple' size={20}/> ))}
         </h3>
        
       </div>

@@ -39,6 +39,7 @@ import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
 import { Input, Select } from 'antd'
 import { PagePost } from './components/Post'
 import { CPostForFeed,Feed } from './components/PostFeed'
+import { CSearch } from './components/Search_Users'
 
 console.log(store.getState())
 store.subscribe(() => console.log(store.getState()))
@@ -121,51 +122,8 @@ const CUserFollowers = connect((state) => ({
   followers: state.promise.aboutMe?.payload?.followers,
 }))(UserFollowers)
 
-const ResultUserFind = ({ userFind }) => (
-  <div>
-    {userFind?.map(({ _id, login, avatar }) => (
-      <Link to={`/profile/${_id}`}>
-        <Avatar
-          style={{
-            width: '20px',
-            height: '20px',
-            marginRight: '30px',
-            position: 'absolute',
-          }}
-          src={'/' + avatar?.url || user}
-        />
 
-        <h3 style={{ marginLeft: '30px' }}> {login}</h3>
-      </Link>
-    ))}
-  </div>
-)
-const SearchUser = ({ onSearch, searchUser }) => {
-  // const [value, setValue]=useState('')
-  const onSearchUser = (value) => onSearch(value)
-  const { Search } = Input
-  return (
-    <>
-      <Popover
-        placement="bottom"
-        content={<ResultUserFind userFind={searchUser} />}
-        trigger="click"
-      >
-        <Search
-          placeholder="input search text"
-          allowClear
-          enterButton="Search"
-          size="large"
-          onSearch={onSearchUser}
-        />
-      </Popover>
-    </>
-  )
-}
-const CSearch = connect(
-  (state) => ({ searchUser: state.promise?.searchUser?.payload }),
-  { onSearch: actionSearchUser },
-)(SearchUser)
+
 const CUserEdit = connect((state) => ({}), {})(PageAboutUser)
 
 const Header = () => {

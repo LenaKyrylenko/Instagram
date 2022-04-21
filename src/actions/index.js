@@ -252,6 +252,32 @@ export const actionOnePost = (_id) => async (dispatch) => {
     ),
   )
 }
+
+export const actionFindLikes = (_id) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'onePost',
+      gql(
+        `query OneFind($post:String){
+         PostFindOne(query:$post){
+        likes{
+          _id
+          owner{				
+             _id login avatar {url}
+            }
+      }
+        }
+      }`,
+        {
+          post: JSON.stringify([{ _id },
+            
+          ]),
+        },
+      ),
+    ),
+  )
+}
+
 export const actionAllFollowers = (_id) => async (dispatch) => {
   await dispatch(
     actionPromise(

@@ -13,6 +13,7 @@ import { store } from '../reducers'
 import { useDropzone } from 'react-dropzone'
 import { Upload, Button, DatePicker, Space } from 'antd'
 import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
+import { Row, Col } from 'antd';
 
 export function Basic({ onLoad }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
@@ -123,9 +124,13 @@ export const PageAboutUser = ({
     // "62361ebb92c08631bc4b0e96")
   }, [])
   return (
+  
+    <>
+      <Row>
+      <Col span={12} offset={6}>
     <section className="AboutMe">
       <Avatar
-        style={{ marginRight: '20px', width: '170px', height: '150px' }}
+        style={{ marginRight: '20px', width: '150px', height: '150px' }}
         src={'/' + avatar?.url || user}
       />
       <div className="Info">
@@ -162,7 +167,14 @@ export const PageAboutUser = ({
             <p>Edit avatar</p>
             <CEditInfo />
           </div>
-        </EditAccount>
+                </EditAccount>
+                 </div>
+        </section>
+            
+        </Col>
+      </Row>
+      <Row>
+      <Col span={16} offset={6}>
         <div
           style={{
             display: 'flex',
@@ -174,10 +186,11 @@ export const PageAboutUser = ({
           {(allPosts || [])?.map((item) => (
             <Card post={item} onPost={onPost} />
           ))}
-        </div>
-    
-      </div>
-    </section>
+          </div>
+        </Col>
+        </Row>
+    </>
+     
   )
 }
 export const CPageAboutUser = connect(
