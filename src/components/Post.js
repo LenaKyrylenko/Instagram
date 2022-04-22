@@ -204,7 +204,9 @@ const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
         '0 likes'}
       </div>
       <Modal title="Likes" className="Modal"
-        visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        footer={null}
+        onCancel={handleCancel}
+        visible={isModalVisible}>
           <Likes likes={likes}/>
       </Modal>
     </>
@@ -273,7 +275,7 @@ export const PagePost = ({my_Id, onePost,likes, addComment,addCommentReply, addL
 export const CPost = connect((state) => ({
   onePost: state.promise.onePost?.payload,
   my_Id: state.auth.payload.sub.id || '',
-  aboutMe: state.promise?.aboutMe?.payload,
+  aboutMe: state.profileData?.aboutMe,
   addComment: state.promise?.addComment?.payload,
   addSubComment: state.promise?.addSubComment,
   

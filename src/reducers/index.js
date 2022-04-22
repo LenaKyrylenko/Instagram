@@ -1,6 +1,7 @@
 import thunk from 'redux-thunk';
-import { actionAuthLogin } from '../actions'
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import { actionAuthLogin, gql, actionPromise, actionAllPosts, actionAboutMe } from '../actions'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+
 function promiseReducer(state = {}, { type, name, status, payload, error }) {
     if (type === 'PROMISE') {
       return {
@@ -17,7 +18,36 @@ const jwtDecode = (token) => {
     } catch (e) {
       return null
     }
+}
+
+export const actionProfilePageDataType= (aboutMe, allPosts) =>
+  ({ type: 'PROFILE-PAGE', aboutMe, allPosts })
+
+
+export const actionFullProfilePage = (_id) =>
+  async dispatch => {
+    const aboutMe = await dispatch(actionAboutMe(_id))
+    const allPosts = await dispatch(actionAllPosts(_id))
+    if (aboutMe && allPosts) {
+      await dispatch(actionProfilePageDataType(aboutMe, allPosts))
+    }
   }
+
+export const profileReducer = (state = {}, { type, aboutMe,allPosts, newResult }) => {
+  const types = {
+      'PROFILE-PAGE': () => {
+          return {
+              ...state, aboutMe, allPosts
+          }
+      }
+
+  }
+  if (type in types) {
+      return types[type]()
+  }
+  return state
+}
+
   function authReducer(state, { type, token }) {
     if (state === undefined && localStorage.authToken) {
       token = localStorage.authToken
@@ -39,6 +69,8 @@ const jwtDecode = (token) => {
     combineReducers({
       promise: promiseReducer,
       auth: authReducer,
+      profileData:profileReducer
     }),
     applyMiddleware(thunk),
-  )
+)
+

@@ -110,6 +110,7 @@ export const CEditInfo = connect(
   },
 )(EditInfo)
 export const PageAboutUser = ({
+  my_Id,
   aboutMe: { _id, login, nick, createdAt, avatar, followers, following } = {},
   allPosts,
   onPosts,
@@ -123,6 +124,8 @@ export const PageAboutUser = ({
     // onePost(post?._id)
     // "62361ebb92c08631bc4b0e96")
   }, [])
+  const checkMyId = (_id === my_Id)
+
   return (
   
     <>
@@ -160,15 +163,20 @@ export const PageAboutUser = ({
 
           <h3 style={{ marginLeft: '20px' }}>{following?.length} following </h3>
         </div>
-        <h3> nick: {nick == null ? login : nick}</h3>
-        <EditAccount>
+              <h3> nick: {nick == null ? login : nick}</h3>
+              {
+                checkMyId ?
+                  <EditAccount>
           <div>
             <h2>Edit login</h2>
             <p>Edit avatar</p>
             <CEditInfo />
           </div>
                 </EditAccount>
-                 </div>
+                : null
+                  
+              }
+       </div>
         </section>
             
         </Col>
@@ -195,8 +203,9 @@ export const PageAboutUser = ({
 }
 export const CPageAboutUser = connect(
   (state) => ({
-    aboutMe: state.promise?.aboutMe?.payload,
-    allPosts: state.promise?.allPosts?.payload,
+    my_Id: state.auth.payload.sub.id || '',
+    aboutMe: state.profileData?.aboutMe,
+    allPosts: state.profileData?.allPosts,
     onePost: state.promise?.onePost?.payload,
     // post:state.promise?.onePost?.payload,
     // allPosts: state.promise?.allPosts?.payload,

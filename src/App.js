@@ -18,12 +18,14 @@ import {
   actionAllPostsFeed,
   actionAllPosts,
   actionSetAvatar,
+  aboutMeWorker,
   actionPostsFeed,
   actionAllFollowing,
   actionAllFollowers,
   actionPostsMyFollowing2,
   actionSearchUser,
 } from './actions'
+import { actionFullProfilePage } from './reducers'
 import { Upload, Button, DatePicker, Space } from 'antd'
 import moment from 'moment'
 import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
@@ -203,8 +205,11 @@ function App() {
   if (store.getState().auth?.token) {
     console.log('токенчик ', store.getState().auth?.payload?.sub?.id)
 
-    store.dispatch(actionAboutMe(store.getState().auth?.payload?.sub?.id))
-    store.dispatch(actionAllPosts(store.getState().auth?.payload?.sub?.id))
+    // store.dispatch(actionAboutMe(store.getState().auth?.payload?.sub?.id))
+    // store.dispatch(actionAllPosts(store.getState().auth?.payload?.sub?.id))
+    store.dispatch(actionFullProfilePage(store.getState().auth?.payload?.sub?.id))
+   // actionFullProfilePageData
+    // aboutMeWorker()
   }
   else {
     console.log('ошибочка')

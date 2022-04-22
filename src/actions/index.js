@@ -51,6 +51,23 @@ export const actionPromise = (name, promise) => async (dispatch) => {
     dispatch(actionRejected(name, error))
   }
 }
+  export const actionAboutMe = (_id) =>
+      actionPromise(
+      'aboutMe',
+        gql(
+          `query AboutMe($userId:String){
+            UserFindOne(query:$userId)
+            {
+              _id createdAt login nick avatar{_id url} 
+              followers{_id login nick avatar{_id url}} 
+              following{_id login nick avatar{_id url}}
+            }
+          }`,
+          {
+            userId: JSON.stringify([{ _id }]),
+          },
+        ),
+      )
 
 export const actionFullLogin = (login, password) => async (dispatch) => {
   let token = await dispatch(
@@ -141,25 +158,7 @@ export const actionAvatar = (imageId) => async (dispatch, getState) => {
 //     ),
 //   )
 // }
-export const actionAboutMe = () => async (dispatch, getState) => {
-  await dispatch(
-    actionPromise(
-    'aboutMe',
-      gql(
-        `query AboutMe($userId:String){
-  UserFindOne(query:$userId)
-  {
-    _id createdAt login nick avatar{_id url} 
-     followers{_id login nick avatar{_id url}} following{_id login nick avatar{_id url}}
-  }
-}`,
-        {
-          userId: JSON.stringify([{ _id: getState().auth?.payload?.sub?.id }]),
-        },
-      ),
-    ),
-  )
-}
+
 // export const actionAboutUser = actionAboutMe
 // :'aboutMe'
 export const actionPostUpsert = (post) =>
@@ -238,7 +237,7 @@ export const actionOnePost = (_id) => async (dispatch) => {
         likes{
           _id
           owner{				
-             _id login avatar {url}
+             _id login avatar {_id url}
             }
       }
         }
