@@ -20,24 +20,93 @@ const jwtDecode = (token) => {
     }
 }
 
-export const actionProfilePageDataType= (aboutMe, allPosts) =>
-  ({ type: 'PROFILE-PAGE', aboutMe, allPosts })
+export const actionProfilePageDataTypeUser= (aboutUser, allPosts) =>
+  ({ type: 'PROFILE-PAGE-USER', aboutUser, allPosts })
 
+  export const actionProfilePageDataType= (aboutMe) =>
+  ({ type: 'PROFILE-PAGE', aboutMe })
 
-export const actionFullProfilePage = (_id) =>
+  export const actionAboutUser = (_id) =>
+  actionPromise(
+  'aboutUser',
+    gql(
+      `query AboutMe($userId:String){
+        UserFindOne(query:$userId)
+        {
+          _id createdAt login nick avatar{_id url} 
+          followers{_id login nick avatar{_id url}} 
+          following{_id login nick avatar{_id url}}
+        }
+      }`,
+      {
+        userId: JSON.stringify([{ _id }]),
+      },
+    ),
+  )
+
+  export const actionAllPostsUser = (userId) =>
+  actionPromise(
+    'allPosts',
+    gql(
+      `query allPosts($userId:String!){
+PostFind(query:$userId){
+         owner{_id} _id title text images{_id url}
+  }
+}`,
+      {
+        userId: JSON.stringify([
+          { ___owner: userId},
+
+          {
+            sort: [{ _id: -1 }],
+            skip: [0],
+            limit: [36]
+          },
+
+        ]),
+      },
+    ),
+  )
+
+export const actionFullProfilePageUser = (_id) =>
   async dispatch => {
-    const aboutMe = await dispatch(actionAboutMe(_id))
-    const allPosts = await dispatch(actionAllPosts(_id))
-    if (aboutMe && allPosts) {
-      await dispatch(actionProfilePageDataType(aboutMe, allPosts))
+    const aboutUser = await dispatch(actionAboutUser(_id))
+    const allPosts = await dispatch(actionAllPostsUser(_id))
+    if (aboutUser && allPosts) {
+      await dispatch(actionProfilePageDataTypeUser(aboutUser, allPosts))
+    }
+  }
+  export const actionFullProfilePage = (_id) =>
+  async dispatch => {
+    const aboutMe= await dispatch(actionAboutMe(_id))
+    // const allPostsMe = await dispatch(actionAllPosts(_id))
+    if (aboutMe) {
+      await dispatch(actionProfilePageDataType(aboutMe))
     }
   }
 
-export const profileReducer = (state = {}, { type, aboutMe,allPosts, newResult }) => {
+export const profileUserReducer = (state = {}, { type, aboutUser, allPosts,
+  newResult }) => {
+    const types = {
+        'PROFILE-PAGE-USER': () => {
+            return {
+                ...state, aboutUser, allPosts
+            }
+        }
+  
+    }
+    if (type in types) {
+        return types[type]()
+    }
+    return state
+  }
+  
+
+export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
   const types = {
       'PROFILE-PAGE': () => {
           return {
-              ...state, aboutMe, allPosts
+              ...state, aboutMe
           }
       }
 
@@ -69,7 +138,9 @@ export const profileReducer = (state = {}, { type, aboutMe,allPosts, newResult }
     combineReducers({
       promise: promiseReducer,
       auth: authReducer,
-      profileData:profileReducer
+      profileData: profileReducer,
+      profilePage:profileUserReducer
+      
     }),
     applyMiddleware(thunk),
 )

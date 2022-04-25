@@ -182,7 +182,7 @@ mutation PostUpsert($post:PostInput){
 
 export const actionAllPosts = (userId) =>
     actionPromise(
-      'allPosts',
+      'allPostsMe',
       gql(
         `query allPosts($userId:String!){
   PostFind(query:$userId){
@@ -618,6 +618,24 @@ export const actionUserUpsert = (user) => async (dispatch, getState) => {
       )
   );
 };
+export const actionSubscribe = (_id) =>
+  actionPromise(
+    "subscribeTo", gql(
+      `mutation subscribe($_id:String!) {
+        UserUpsert(user: {following:{_id:$_id }}
+        ) {
+          _id following{_id login}
+          followers{
+            _id login
+          }
+        }
+      }
+      `,
+      {
+        _id: _id,
+      }
+    )
+  )
 
 export const actionUserUpdate =
     (user = {}) =>

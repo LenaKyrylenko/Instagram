@@ -1,15 +1,17 @@
 import {
   actionAllPosts, actionOnePost, actionAboutMe, actionUploadFile, actionUserUpsert,
   actionSetAvatar, actionAvatar} from '../actions'
-import user from '../materials/user.png'
+import user from '../materials/user1.png'
 import React, { useMemo, useState, useEffect } from 'react'
 import { Card } from '../components/Post'
 // import {Basic} from '../components/DropZone'
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
+import { ResultUserFind } from '../components/Search_Users'
+import { ConstructorModal} from '../helpers'
 
 import { Provider, connect } from 'react-redux'
 import { Avatar, Image, Divider, Radio } from 'antd'
-import { store } from '../reducers'
+import { actionAboutUser, store,actionAllPostsUser,actionFullProfilePageUser } from '../reducers'
 import { useDropzone } from 'react-dropzone'
 import { Upload, Button, DatePicker, Space } from 'antd'
 import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
@@ -109,14 +111,19 @@ export const CEditInfo = connect(
     onFileDrop: actionUploadFile,
   },
 )(EditInfo)
+
+
 export const PageAboutUser = ({
   my_Id,
-  aboutMe: { _id, login, nick, createdAt, avatar, followers, following } = {},
+  aboutUser: { _id, login, nick, createdAt, avatar, followers, following } = {},
   allPosts,
   onPosts,
   onPost,
   onePost,
   onAboutUser,
+  aboutUserFollowers={},
+  onPageData,
+  aboutUserFollowing={},
   post = {},
 }) => {
   useEffect(() => {
@@ -124,20 +131,42 @@ export const PageAboutUser = ({
     // onePost(post?._id)
     // "62361ebb92c08631bc4b0e96")
   }, [])
-  const checkMyId = (_id === my_Id)
+  const checkMyId =(_id === my_Id)
+
+  const [isModalVisibleFollowing, setIsModalVisibleFollowing] = useState(false);
+
+  const showModalFollowing = () => {
+    setIsModalVisibleFollowing(true);
+  };
+  const [isModalVisibleFollowers, setIsModalVisibleFollowers] = useState(false);
+
+  const showModalFollowers = () => {
+    setIsModalVisibleFollowers(true);
+  };
 
   return (
   
     <>
       <Row>
       <Col span={12} offset={6}>
-    <section className="AboutMe">
-      <Avatar
-        style={{ marginRight: '20px', width: '150px', height: '150px' }}
-        src={'/' + avatar?.url || user}
-      />
-      <div className="Info">
-        <h1> {login}</h1>
+          <section className="AboutMe">
+            {avatar?.url ?
+              <Avatar
+                style={{ marginRight: '20px', width: '150px', height: '150px' }}
+                src={'/' + avatar?.url} />
+              :
+              <Avatar
+                style={{ marginRight: '20px', width: '150px', height: '150px' }}
+                src={user} />
+            }
+            <div className="Info">
+              {login ?
+
+                <h1> {login}</h1>
+                :
+                <h1> {'Anon'}</h1>
+              }
+
         <h3>
           Created Account: {new Intl.DateTimeFormat('en-GB').format(createdAt)}
         </h3>
@@ -151,17 +180,26 @@ export const PageAboutUser = ({
           )}
 
           {followers?.length > 0 ? (
-            <Link to={`/followers`}>
-              {' '}
-              <h3 style={{ marginLeft: '20px' }}>
+         
+              
+                  <h3 style={{ cursor: 'pointer', marginLeft: '20px' }}
+                    onClick={showModalFollowers}>
                 {followers.length} followers{' '}
-              </h3>
-            </Link>
+                  </h3>
+          
           ) : (
             <h3 style={{ marginLeft: '20px' }}> 0 followers </h3>
-          )}
-
-          <h3 style={{ marginLeft: '20px' }}>{following?.length} following </h3>
+                )}
+                
+                {following?.length > 0 ? (
+                  <h3 style={{ cursor: 'pointer', marginLeft: '20px' }}
+                    onClick={showModalFollowing}>{following?.length} {' '}
+                    following </h3>)
+                  :
+                (<h3 style={{ marginLeft: '20px' }}> 0 following </h3>
+                )
+                }
+             
         </div>
               <h3> nick: {nick == null ? login : nick}</h3>
               {
@@ -173,9 +211,28 @@ export const PageAboutUser = ({
             <CEditInfo />
           </div>
                 </EditAccount>
-                : null
+                : <button> subscribe</button>
                   
               }
+              {/* <ConstructorModal>
+        <ResultUserFind my_Id={my_Id} size={'40px'} onPageData={onPageData}
+            userFind={aboutUserFollowing} />
+      </ConstructorModal> */}
+
+
+              <ConstructorModal isModalVisible={isModalVisibleFollowing}
+                setIsModalVisible={setIsModalVisibleFollowing}>
+         <ResultUserFind size={'40px'} onPageData={onPageData}
+                  userFind={aboutUserFollowing} />
+                
+              </ConstructorModal>
+              <ConstructorModal isModalVisible={isModalVisibleFollowers}
+                setIsModalVisible={setIsModalVisibleFollowers}>
+         <ResultUserFind size={'40px'} onPageData={onPageData}
+                  userFind={aboutUserFollowers} />
+                
+      </ConstructorModal>
+              
        </div>
         </section>
             
@@ -201,19 +258,24 @@ export const PageAboutUser = ({
      
   )
 }
+
 export const CPageAboutUser = connect(
   (state) => ({
     my_Id: state.auth.payload.sub.id || '',
-    aboutMe: state.profileData?.aboutMe,
-    allPosts: state.profileData?.allPosts,
+    aboutUser: state.profilePage?.aboutUser,
+    aboutUserFollowers: state.profilePage?.aboutUser?.followers,
+    aboutUserFollowing: state.profilePage?.aboutUser?.following,
+
+
+    allPosts: state.profilePage?.allPosts,
     onePost: state.promise?.onePost?.payload,
     // post:state.promise?.onePost?.payload,
     // allPosts: state.promise?.allPosts?.payload,
   }),
   {
-    onPosts: actionAllPosts,
-    onAboutUser: actionAboutMe,
+    onAboutUser: actionFullProfilePageUser,
     onLoad: actionUploadFile,
     onPost: actionOnePost,
+    onPageData: actionFullProfilePageUser,
   },
 )(PageAboutUser)

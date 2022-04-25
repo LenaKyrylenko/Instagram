@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Avatar, Input } from 'antd'
+import { Row, Col } from 'antd';
+import { Avatar, Input  } from 'antd'
 import { Carousel, Popover } from 'antd'
-import user from '../materials/user.png'
+import user from '../materials/user1.png'
 
 import {
     actionAboutMe,
@@ -12,36 +13,55 @@ import {
     actionPostsFeed,
     actionAllFollowing,
     actionAllFollowers,
-    actionPostsMyFollowing2,
+  actionPostsMyFollowing2,
+
   actionSearchUser,
  
 } from '../actions'
-  import {actionFullProfilePage} from '../reducers'
-export const ResultUserFind = ({ my_Id, userFind = [], onPageData }) => {
+  import {actionFullProfilePageUser, actionFullProfilePage} from '../reducers'
+export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size }) => {
   
-  const checkMyId = userFind.find(user => user?._id === my_Id)
-
-  checkMyId ? (console.log('да єто мой айди ти чо')) : console.log('ЦЕ НЕ МИЙ АЙДИ')
-  
+  //const checkMyId = userFind.find(user => user?._id === my_Id)
    return(<div>
      {
+
        userFind?.map(({ _id, login, avatar }) => (
-        
         <Link onClick={()=>onPageData(_id)} to={`/profile/${_id}`}>
+       
+              <Row>
+             <Col offset={1}>
+            {avatar?.url ?  <Avatar
+              style={{
+                width: '50px',
+                height: '50px',
+                marginBottom:'10px'
+                 }}
+                //  ('/' + avatar?.url) ||
+              src={ '/' + avatar?.url}
+               />
+                 :
+                 
+                 <Avatar
+                 style={{
+                   width: '50px',
+                   height: '50px',
+                   marginBottom:'10px'
+                    }}
+                   //  ('/' + avatar?.url) ||
+                 src={user}
+                  />
+              }
+           
+              
+                </Col>
+             <Col offset={1}>
+                 <h3 style={{ marginBottom:'20px'}}> {login || 'Anon'}</h3>
+      
+                 </Col>
+                 </Row>
+                </Link>
           
-          {console.log('Login: ', login, '  _id: ', _id)}
-          <Avatar
-            style={{
-              width: '20px',
-              height: '20px',
-              marginRight: '30px',
-              position: 'absolute',
-            }}
-            src={'/' + avatar?.url || user}
-          />
-  
-          <h3 style={{ marginLeft: '30px' }}> {login}</h3>
-        </Link>
+      
       ))}
 </div>)
 }
@@ -53,7 +73,8 @@ export const ResultUserFind = ({ my_Id, userFind = [], onPageData }) => {
       <>
         <Popover
           placement="bottom"
-          content={<ResultUserFind my_Id={my_Id} onPageData={onPageData} userFind={searchUser} />}
+          content={<ResultUserFind my_Id={my_Id} size={'20px'} onPageData={onPageData}
+            userFind={searchUser} />}
           trigger="click"
         >
           <Search
@@ -69,13 +90,13 @@ export const ResultUserFind = ({ my_Id, userFind = [], onPageData }) => {
   }
  export const CSearch = connect(
    (state) => ({
-    aboutMe: state.profileData?.aboutMe,
-     searchUser: state.promise?.searchUser?.payload,
-     my_Id: state.auth.payload.sub.id || '',
+    aboutUser: state.profilePage?.aboutUser,
+    searchUser: state.promise?.searchUser?.payload,
+    my_Id: state.auth.payload.sub.id || '',
    }),
 
    {
      onSearch: actionSearchUser,
-     onPageData:actionFullProfilePage
+     onPageData: actionFullProfilePageUser,
    },
   )(SearchUser)

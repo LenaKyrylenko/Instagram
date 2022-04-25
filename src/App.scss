@@ -176,3 +176,21 @@ main{
   right: 30px;
   margin:20px;
 }
+Link{
+  display: flex;
+  align-items: center;
+   justify-content: center;
+   text-decoration: none;
+   font-family: serif;
+   background-color: rgb(174, 172, 240);  
+   border: 2px solid rgb(37, 140, 184);
+   border-radius: 10px;
+   margin: 10px ;
+   padding: 10px;
+   font-weight: bold;
+   color: rgb(10, 9, 58);
+}
+Link:hover{
+  text-decoration: underline; 
+  background-color: rgb(123, 119, 228);  
+}

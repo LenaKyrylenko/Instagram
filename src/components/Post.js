@@ -13,7 +13,7 @@ import { Divider, Input, Button, Modal } from 'antd';
 import { EditOutlined } from '@ant-design/icons'
 import moment from 'moment';
 import {CComments, AddComment} from '../components/Post_Comment'
-
+import { ConstructorModal} from '../helpers'
 import React, { useMemo, useState, useEffect } from 'react'
 // const postId="625afa1d069dca48a822ffb0"
 export const Card = ({ post, onPost }) => (
@@ -159,7 +159,7 @@ const Likes = ({ likes }) =>
                   />
                 </Col>
                 <Col offset={2}>
-                    <h3 > {login}</h3>
+                    <h3 > {login || 'Anon'}</h3>
                  </Col>
                  </Row>
                 </Link>
@@ -171,23 +171,15 @@ const Likes = ({ likes }) =>
   }
 const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
 {
-  
+
+  const likeId = likes.find(like => like?.owner?._id === my_Id)?._id
+  const changeLike = () => likeId ? deleteLike(likeId, postId) : addLike(postId)
+  // console.log('likeId', likeId)
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
   };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-  const likeId = likes.find(like => like?.owner?._id === my_Id)?._id
-  const changeLike = () => likeId ? deleteLike(likeId, postId) : addLike(postId)
-  // console.log('likeId', likeId)
   return(
     <>
       <div style={{display:'flex'}}>
@@ -203,17 +195,15 @@ const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
         :
         '0 likes'}
       </div>
-      <Modal title="Likes" className="Modal"
-        footer={null}
-        onCancel={handleCancel}
-        visible={isModalVisible}>
+      <ConstructorModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible}>
           <Likes likes={likes}/>
-      </Modal>
+      </ConstructorModal>
     </>
   )
 }
 
-export const PagePost = ({my_Id, onePost,likes, addComment,addCommentReply, addLike, findSubComment, deleteLike, aboutMe: { avatar, login } = {}, onPost }) => {
+export const PagePost = ({ my_Id, onePost, likes, addComment,
+  addCommentReply, addLike, findSubComment, deleteLike, aboutUser: { _id, avatar, login } = {}, onPost }) => {
 
  console.log('onePost ', onePost)
   return (
@@ -221,7 +211,7 @@ export const PagePost = ({my_Id, onePost,likes, addComment,addCommentReply, addL
      <Row>
       <Col span={14}>
 {/* <div  style={{display: 'flex'}}> */}
-    
+
       <MyCarousel style={{position: 'absolute'}} images={onePost?.images} />
       <h3 style={{ textAlign: 'center', padding:'30px'}}>
             Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
@@ -275,7 +265,7 @@ export const PagePost = ({my_Id, onePost,likes, addComment,addCommentReply, addL
 export const CPost = connect((state) => ({
   onePost: state.promise.onePost?.payload,
   my_Id: state.auth.payload.sub.id || '',
-  aboutMe: state.profileData?.aboutMe,
+  aboutUser: state.profilePage?.aboutUser,
   addComment: state.promise?.addComment?.payload,
   addSubComment: state.promise?.addSubComment,
   

@@ -3,7 +3,7 @@ import { Provider, connect } from 'react-redux'
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
 import createHistory from 'history/createBrowserHistory'
 import React, { useMemo, useState, useEffect } from 'react'
-import { store } from './reducers'
+import { actionAboutUser, actionFullProfilePageUser, store } from './reducers'
 import { Basic } from './components/DropZone'
 import { CPageAboutUser, PageAboutUser } from './components/User'
 import { PageCreatePost, AddPost } from './components/NewPost'
@@ -32,14 +32,10 @@ import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
 import ImgCrop from 'antd-img-crop'
 import { Avatar, Image, Divider, Radio } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import user from './materials/user.png'
+import user from './materials/user1.png'
 import photoNotFound from './materials/photoNotFound.png'
 // import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 // import { Carousel } from 'react-responsive-carousel';
-import { Carousel, Popover } from 'antd'
-import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
-import { Input, Select } from 'antd'
-import { PagePost } from './components/Post'
 import { CPostForFeed,Feed } from './components/PostFeed'
 import { CSearch } from './components/Search_Users'
 
@@ -80,37 +76,12 @@ const Main = () => (
       <Route path="/post/:_id" component={CPost} />
       <Route path="/feed" component={CPostForFeed} />
       <Route path="/editProfile" component={CUserEdit} />
-      <Route path="/followers" component={CUserFollowers} />
 
       {/* <CBasic /> */}
     </Switch>
   </main>
 )
-const UserFollowers = ({ followers }) => {
-  console.log('followers ', followers)
-  return (
-    <div>
-      {/* {console.log('start')} */}
-      {(followers || [])?.map(({ _id, login, avatar }) => (
-        <Link to={`/profile/${_id}`}>
-          {console.log('doing something')}
-          <Avatar
-            style={{
-              width: '60px',
-              height: '60px',
-              marginRight: '30px',
-              position: 'absolute',
-            }}
-            src={'/' + avatar?.url || user}
-          />
-          {console.log('followers', login)}
 
-          <h1 style={{ marginLeft: '30px' }}> {login}</h1>
-        </Link>
-      ))}
-    </div>
-  )
-}
 
 {
   /* { console.log('end') } */
@@ -120,17 +91,13 @@ const UserFollowers = ({ followers }) => {
 //   <ResultUserFind userFind={followers} />
 //   {console.log('followers', followers)}
 // </div>
-const CUserFollowers = connect((state) => ({
-  followers: state.promise.aboutMe?.payload?.followers,
-}))(UserFollowers)
-
 
 
 const CUserEdit = connect((state) => ({}), {})(PageAboutUser)
 
 const Header = () => {
   const CFeed = connect((state) => ({
-    aboutMe: state.promise?.aboutMe?.payload,
+    aboutMe: state?.profileData?.aboutMe,
   }))(Feed)
   return (
     <section className="Header">
@@ -161,13 +128,29 @@ const Recommendations = () => (
 
 const CBasic = connect(null, { onLoad: actionSetAvatar })(Basic)
 // const CAddPost =connect(null,{actionPostUpsert})
-const User = ({ aboutMe: { _id, login, avatar } = {} }) => (
-  <Link className="User" to={`/profile/${_id}`}>
-    <Avatar src={'/' + avatar?.url || user} />
-  </Link>
-)
+const User = ({my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
+  return (
+    
+    <Link onClick={()=> onMyPage(_id)} className="User" to={`/profile/${_id}`}>
+      {
+        avatar?.url ? <Avatar src={'/' + avatar?.url} />
+          :
+          <Avatar src={user} />
+   }
+     
+      </Link>
+      
+
+  )
+}
 // backendURL
-const CUser = connect((state) => ({ aboutMe: state.promise.aboutMe?.payload }))(
+const CUser = connect((state) => ({
+  my_Id: state.auth.payload.sub.id || '',
+  aboutMe: state.profileData.aboutMe,
+
+}),
+  { onMyPage:actionFullProfilePageUser }
+)(
   User,
 )
 
@@ -208,7 +191,9 @@ function App() {
     // store.dispatch(actionAboutMe(store.getState().auth?.payload?.sub?.id))
     // store.dispatch(actionAllPosts(store.getState().auth?.payload?.sub?.id))
     store.dispatch(actionFullProfilePage(store.getState().auth?.payload?.sub?.id))
-   // actionFullProfilePageData
+    store.dispatch(actionFullProfilePageUser(store.getState().auth?.payload?.sub?.id))
+    
+    // actionFullProfilePageData
     // aboutMeWorker()
   }
   else {
