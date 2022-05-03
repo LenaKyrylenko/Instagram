@@ -6,7 +6,7 @@ import {
 import photoNotFound from '../materials/photoNotFound.png'
 import { LeftCircleFilled, RightCircleFilled, HeartOutlined,HeartTwoTone,HeartFilled } from '@ant-design/icons'
 import { Carousel,Avatar,Tooltip } from 'antd'
-import user from '../materials/user.png'
+import user from '../materials/user1.png'
 import { Provider, connect } from 'react-redux'
 import { Row, Col } from 'antd';
 import { Divider, Input, Button, Modal } from 'antd';
@@ -19,8 +19,12 @@ import React, { useMemo, useState, useEffect } from 'react'
 export const Card = ({ post, onPost }) => (
   <>
     {/* <Link to={`/post/${postId}`} onClick={() => onPost(postId)}> */}
-    {/* {console.log('post id', post?._id)} */}
-    <Link to={`/post/${post?._id}`} onClick={() => onPost(post?._id)}>
+    {/* {console.log('post id', post?._id)}
+    
+     onClick={() => onPost(post?._id)}
+    
+    */}
+    <Link  to={`/post/${post?._id}`}>
       {post?.images && post?.images[0] && post.images[0]?.url ? (
         <img
           className="Card"
@@ -83,7 +87,7 @@ const SamplePrevArrow = (props) => {
 }
 
 export const MyCarousel = ({ images = [] }) => {
-  console.log('IMAGES', images)
+ // console.log('IMAGES', images)
   return (
     <>
       <div className='MyCarousel'>
@@ -100,6 +104,7 @@ export const MyCarousel = ({ images = [] }) => {
                 i?.url && (
                   <div key={index}>
                     <img
+                       key={index}
                       className="PostImage"
                       src={'/' + i?.url}
                       style={{
@@ -195,7 +200,8 @@ const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
         :
         '0 likes'}
       </div>
-      <ConstructorModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible}>
+      <ConstructorModal title={'Likes'} isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}>
           <Likes likes={likes}/>
       </ConstructorModal>
     </>
@@ -203,15 +209,19 @@ const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
 }
 
 export const PagePost = ({ my_Id, onePost, likes, addComment,
-  addCommentReply, addLike, findSubComment, deleteLike, aboutUser: { _id, avatar, login } = {}, onPost }) => {
+  addCommentReply, addLike, findSubComment, deleteLike,
+  match: { params: { _id } },
+  aboutUser: { avatar, login } = {}, onPost }) => {
 
- console.log('onePost ', onePost)
+  useEffect(() => {
+    onPost(_id)
+    console.log('ONE POST _ID',onePost?._id)
+  }, [_id])
   return (
     <>
      <Row>
       <Col span={14}>
-{/* <div  style={{display: 'flex'}}> */}
-
+      {/* <div  style={{display: 'flex'}}> */}
       <MyCarousel style={{position: 'absolute'}} images={onePost?.images} />
       <h3 style={{ textAlign: 'center', padding:'30px'}}>
             Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
@@ -219,13 +229,10 @@ export const PagePost = ({ my_Id, onePost, likes, addComment,
           <div style={{marginLeft:'100px'}}>
           {/* <Col span={3} offset={2}> */}
           <Like my_Id={my_Id} addLike={addLike} deleteLike={deleteLike} likes={onePost?.likes} postId={onePost?._id}>
-            
               <Likes likes={onePost?.likes} />
-            
           </Like>
               {/* </Col> */}
            </div>
-{/* </div> */}
     </Col>
 <Col span={8}>
 <div  style={{display: 'flex', flexDirection:'row'}}>
@@ -275,5 +282,6 @@ export const CPost = connect((state) => ({
   deleteLike: actionDeleteFullLike,
   addComment: actionAddFullComment, 
   addCommentReply: actionAddSubFullComment,
-  findLikes:actionFindLikes
+  findLikes: actionFindLikes,
+  onPost:actionOnePost
 })(PagePost)

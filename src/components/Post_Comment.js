@@ -3,8 +3,12 @@ import {
   actionAllPosts, actionOnePost, actionAddFullComment, actionGetFindLiked,
   actionFindSubComment, actionAddSubFullComment, actionDeleteFullLike, actionAddFullLike, actionAddLike, actionDeleteLike
 } from '../actions'
+
 import photoNotFound from '../materials/photoNotFound.png'
-import { LeftCircleFilled, RightCircleFilled, HeartOutlined,HeartTwoTone,HeartFilled } from '@ant-design/icons'
+import {
+  LeftCircleFilled, RightCircleFilled,
+  HeartOutlined, HeartTwoTone, HeartFilled
+} from '@ant-design/icons'
 import { Carousel,Avatar,Tooltip } from 'antd'
 import user from '../materials/user.png'
 import { Provider, connect } from 'react-redux'

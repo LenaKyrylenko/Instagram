@@ -26,9 +26,13 @@ body{
 }
 .Header{
   display: flex;
-  padding: 10px;
-  margin: 10px;
   float: right;
+position: fixed;
+padding: 20px;
+ z-index: 4;
+  width: 100%; 
+ top: 0;
+ background-color: white;
 }
 .Recomendations{
   margin-left: 20px;
@@ -40,7 +44,7 @@ body{
   padding: 10px;
 }
 .Feed{
-  margin-right: 20px;
+  margin-right: 20px;  
 }
 .Post{
   max-width: 600px;
@@ -63,6 +67,7 @@ li {
 main{
   // margin-left:200px;
   // margin-right: 200px;
+  margin-top: 100px;
 }
 .Title{
   text-align: left;
@@ -76,7 +81,6 @@ main{
   display: flex;
   justify-content: center;
   //  float: left;
-  // margin:30px;
 }
 .Info{ 
   justify-content: center;
@@ -172,6 +176,9 @@ main{
   overflow-y: scroll;
   // text-align: center;
 }
+.Scrolling{
+  background-color: #7922CC;
+}
 .SpoilerButton{
   right: 30px;
   margin:20px;
@@ -193,4 +200,11 @@ Link{
 Link:hover{
   text-decoration: underline; 
   background-color: rgb(123, 119, 228);  
+}
+.ResultUserFind{
+  max-width: 500px;
+  min-width: 320px;
+  max-height: 500px;
+  padding: 15px 0;
+  overflow: auto;
 }

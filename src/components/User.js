@@ -1,5 +1,6 @@
 import {
-  actionAllPosts, actionOnePost, actionAboutMe, actionUploadFile, actionUserUpsert,
+  actionAllPosts, actionOnePost, actionAboutMe, actionUploadFile,actionFullUnSubscribe, actionUserUpsert,
+  actionAddFullSubscribe,actionFullSubscribe,actionPostsCount,
   actionSetAvatar, actionAvatar} from '../actions'
 import user from '../materials/user1.png'
 import React, { useMemo, useState, useEffect } from 'react'
@@ -11,11 +12,14 @@ import { ConstructorModal} from '../helpers'
 
 import { Provider, connect } from 'react-redux'
 import { Avatar, Image, Divider, Radio } from 'antd'
-import { actionAboutUser, store,actionAllPostsUser,actionFullProfilePageUser } from '../reducers'
+import { actionAboutUser, store,actionAllPostsUser,actionFullProfilePageUser,actionRemoveDataUser } from '../reducers'
 import { useDropzone } from 'react-dropzone'
 import { Upload, Button, DatePicker, Space } from 'antd'
 import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
 import { Row, Col } from 'antd';
+
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 export function Basic({ onLoad }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
@@ -113,24 +117,39 @@ export const CEditInfo = connect(
 )(EditInfo)
 
 
-export const PageAboutUser = ({
+export const PageAboutUser = ({ match: { params: { _id } },
   my_Id,
-  aboutUser: { _id, login, nick, createdAt, avatar, followers, following } = {},
+  aboutUser: { login, nick, createdAt, avatar, followers, following } = {},
   allPosts,
+  followId,
   onPosts,
   onPost,
+  userId,
+  addSubscribe,
+  deleteSubscribe,
   onePost,
   onAboutUser,
-  aboutUserFollowers={},
+  aboutUserFollowers=[],
   onPageData,
-  aboutUserFollowing={},
+  aboutUserFollowing = [],
+  clearDataProfile,
+  actionRemoveDataUser,
+  aboutMeFollowing,
+  countAllPostsUser,
+  actionPostsCount,
   post = {},
 }) => {
-  useEffect(() => {
-    onAboutUser(_id)
-    // onePost(post?._id)
-    // "62361ebb92c08631bc4b0e96")
-  }, [])
+  
+
+   useEffect(() => {
+     
+     onAboutUser(_id)
+     actionPostsCount(_id)
+         console.log('USER DATA ', login, _id)
+   }, [_id])
+  
+  
+  console.log('COUNT ', countAllPostsUser)
   const checkMyId =(_id === my_Id)
 
   const [isModalVisibleFollowing, setIsModalVisibleFollowing] = useState(false);
@@ -143,13 +162,20 @@ export const PageAboutUser = ({
   const showModalFollowers = () => {
     setIsModalVisibleFollowers(true);
   };
-
+  const handleCancelFollowing = () => {
+    setIsModalVisibleFollowing(false);
+  };
+  const handleCancelFollowers = () => {
+    setIsModalVisibleFollowers(false);
+  };
   return (
   
     <>
       <Row>
       <Col span={12} offset={6}>
           <section className="AboutMe">
+            <Row >
+           
             {avatar?.url ?
               <Avatar
                 style={{ marginRight: '20px', width: '150px', height: '150px' }}
@@ -171,9 +197,9 @@ export const PageAboutUser = ({
           Created Account: {new Intl.DateTimeFormat('en-GB').format(createdAt)}
         </h3>
         <div style={{ display: 'flex' }}>
-          {allPosts?.length > 0 ? (
+          {countAllPostsUser > 0 ? (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <h3> {allPosts?.length} posts </h3>
+              <h3> {countAllPostsUser} posts </h3>
             </div>
           ) : (
             <h3> 0 posts </h3>
@@ -211,7 +237,9 @@ export const PageAboutUser = ({
             <CEditInfo />
           </div>
                 </EditAccount>
-                : <button> subscribe</button>
+                    :
+                    <Subscribe my_Id={my_Id} deleteSubscribe={deleteSubscribe}
+                      followId={followId} addSubscribe={addSubscribe} aboutMeFollowing={aboutMeFollowing} />
                   
               }
               {/* <ConstructorModal>
@@ -220,20 +248,23 @@ export const PageAboutUser = ({
       </ConstructorModal> */}
 
 
-              <ConstructorModal isModalVisible={isModalVisibleFollowing}
+              <ConstructorModal title={'Following'}
+                isModalVisible={isModalVisibleFollowing}
                 setIsModalVisible={setIsModalVisibleFollowing}>
-         <ResultUserFind size={'40px'} onPageData={onPageData}
+                <ResultUserFind size={'40px'} handleCancel={handleCancelFollowing}
+                  onPageData={onPageData}
                   userFind={aboutUserFollowing} />
                 
               </ConstructorModal>
-              <ConstructorModal isModalVisible={isModalVisibleFollowers}
+              <ConstructorModal  title={'Followers'} isModalVisible={isModalVisibleFollowers}
                 setIsModalVisible={setIsModalVisibleFollowers}>
-         <ResultUserFind size={'40px'} onPageData={onPageData}
+         <ResultUserFind size={'40px'} onPageData={onPageData} handleCancel={handleCancelFollowers}
                   userFind={aboutUserFollowers} />
                 
       </ConstructorModal>
               
-       </div>
+              </div>
+              </Row>
         </section>
             
         </Col>
@@ -258,6 +289,74 @@ export const PageAboutUser = ({
      
   )
 }
+// const ProfileFollowButton = ({ myID, userId, followers, onSubsuscribe, onUnSubsuscribe }) => {
+//   const followCheck = followers.find(f => f._id === myID && true)
+//   return (
+//       <Col className='Profile__setting'>
+//           {!!followCheck ?
+//               <Button onClick={() => onUnSubsuscribe(userId)}>UnSubscribe</Button> :
+//               <Button onClick={() => onSubsuscribe(userId)} type="primary">Subscribe</Button>}
+//       </Col>
+//   )
+// }
+
+// export const CProfileFollowButton = connect(state => ({
+//   myID: state?.auth?.payload?.sub.id,
+//   followers: state?.post?.userData?.followers || []
+// }), { onSubsuscribe: actionSubscribe, onUnSubsuscribe: actionUnSubscribe })(ProfileFollowButton)
+
+
+const Subscribe = ({ my_Id, postId, addLike, deleteLike, following = [], deleteSubscribe,
+  aboutMeFollowing=[], aboutUserFollowing, addSubscribe, followId, children }) =>
+{
+
+ const checkFollowId =()=> aboutMeFollowing?.find(follower => follower?._id === followId)?._id
+
+ // console.log(' _id', aboutMeFollowing?.find(f => f._id === followId && true))
+  console.log('FOLLOWING ') 
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // const showModal = () => {
+  //   setIsModalVisible(true);
+  // };
+  return(
+    <>
+      <div style={{display:'flex'}}>
+         
+            {checkFollowId ?
+            
+          <Button size="large" primary onClick={()=>deleteSubscribe(my_Id, followId)} >
+               unsubscribe
+            </Button> 
+            :
+            <Button size="large" danger onClick={()=>addSubscribe(my_Id, followId)}>
+            subscribe
+          </Button>
+                } 
+    
+      </div>
+      
+      {/* {console.log('follow _id', followId)} */}
+      
+      {/* <button style={{ cursor: 'pointer', fontSize: 'xx-large', color: 'red' }}
+        onClick={() => addSubscribe(my_Id,followId)}>
+              subscribe
+            </button> */}
+    
+       {/* {likes.length ? 
+          <h3 style={{ cursor: 'pointer', paddingLeft: 8 }} onClick={showModal}>
+            {likes.length} likes
+           
+        </h3>
+        :
+        '0 likes'}
+      </div>
+      <ConstructorModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible}>
+          <Likes likes={likes}/>
+      </ConstructorModal> */}
+    </>
+  )
+}
 
 export const CPageAboutUser = connect(
   (state) => ({
@@ -265,8 +364,9 @@ export const CPageAboutUser = connect(
     aboutUser: state.profilePage?.aboutUser,
     aboutUserFollowers: state.profilePage?.aboutUser?.followers,
     aboutUserFollowing: state.profilePage?.aboutUser?.following,
-
-
+    followId:state.profilePage?.aboutUser?._id,
+    aboutMeFollowing: state.profileData?.aboutMe?.following,
+    countAllPostsUser:state.promise?.countAllPostsUser?.payload,
     allPosts: state.profilePage?.allPosts,
     onePost: state.promise?.onePost?.payload,
     // post:state.promise?.onePost?.payload,
@@ -274,8 +374,12 @@ export const CPageAboutUser = connect(
   }),
   {
     onAboutUser: actionFullProfilePageUser,
+    actionRemoveDataUser:actionRemoveDataUser,
     onLoad: actionUploadFile,
     onPost: actionOnePost,
     onPageData: actionFullProfilePageUser,
+    addSubscribe: actionFullSubscribe,
+    deleteSubscribe: actionFullUnSubscribe,
+    actionPostsCount:actionPostsCount
   },
 )(PageAboutUser)

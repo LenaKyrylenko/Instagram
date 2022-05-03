@@ -4,29 +4,18 @@ import { Row, Col } from 'antd';
 import { Avatar, Input  } from 'antd'
 import { Carousel, Popover } from 'antd'
 import user from '../materials/user1.png'
+import {actionSearchUser} from '../actions'
+import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
 
-import {
-    actionAboutMe,
-    actionAllPostsFeed,
-    actionAllPosts,
-    actionSetAvatar,
-    actionPostsFeed,
-    actionAllFollowing,
-    actionAllFollowers,
-  actionPostsMyFollowing2,
-
-  actionSearchUser,
- 
-} from '../actions'
   import {actionFullProfilePageUser, actionFullProfilePage} from '../reducers'
-export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size }) => {
+export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size,handleCancel }) => {
   
   //const checkMyId = userFind.find(user => user?._id === my_Id)
-   return(<div>
+   return(<div className='ResultUserFind' >
      {
 
        userFind?.map(({ _id, login, avatar }) => (
-        <Link onClick={()=>onPageData(_id)} to={`/profile/${_id}`}>
+        <Link to={`/profile/${_id}`} onClick={handleCancel} key={_id}>
        
               <Row>
              <Col offset={1}>
@@ -54,7 +43,7 @@ export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size }) => {
            
               
                 </Col>
-             <Col offset={1}>
+                <Col offset={1}>
                  <h3 style={{ marginBottom:'20px'}}> {login || 'Anon'}</h3>
       
                  </Col>
@@ -73,12 +62,13 @@ export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size }) => {
       <>
         <Popover
           placement="bottom"
+          destroyTooltipOnHide={true}
           content={<ResultUserFind my_Id={my_Id} size={'20px'} onPageData={onPageData}
             userFind={searchUser} />}
-          trigger="click"
+            trigger="focus"
         >
-          <Search
-            placeholder="input search text"
+          <Search 
+            placeholder="Input search user"
             allowClear
             enterButton="Search"
             size="large"
