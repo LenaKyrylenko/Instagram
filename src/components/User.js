@@ -1,6 +1,6 @@
 import {
-  actionAllPosts, actionOnePost, actionAboutMe, actionUploadFile,actionFullUnSubscribe, actionUserUpsert,
-  actionAddFullSubscribe,actionFullSubscribe,actionPostsCount,
+  actionAllPosts, actionOnePost, actionAboutMe, actionUploadFile,actionFullUnSubscribe,
+  actionAddFullSubscribe,actionFullSubscribe,actionPostsCount,actionUserUpsert,
   actionSetAvatar, actionAvatar} from '../actions'
 import user from '../materials/user1.png'
 import React, { useMemo, useState, useEffect } from 'react'
@@ -17,36 +17,10 @@ import { useDropzone } from 'react-dropzone'
 import { Upload, Button, DatePicker, Space } from 'antd'
 import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
 import { Row, Col } from 'antd';
-
+import { CEditInfo } from '../components/EditAvatar'
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
-export function Basic({ onLoad }) {
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
-  const files = acceptedFiles.map((file) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-    </li>
-  ))
-  console.log('acceptedFiles', acceptedFiles)
-  useEffect(() => {
-    acceptedFiles[0] && onLoad(acceptedFiles[0])
-  }, [acceptedFiles])
-  return (
-    <section className="container">
-      <div {...getRootProps({ className: 'Dropzone' })}>
-        <input {...getInputProps()} />
-        <Button icon={<UploadOutlined />}>
-          Drag 'n' drop some files here, or click to select files
-        </Button>
-      </div>
-      <aside>
-        <h4 style={{ color: 'black' }}>Files</h4>
-        <ul>{files}</ul>
-      </aside>
-    </section>
-  )
-}
 
 export const EditAccount = ({ open, children }) => {
   const [opened, setOpened] = useState(open)
@@ -54,9 +28,9 @@ export const EditAccount = ({ open, children }) => {
     <>
       {/* <Link to={`/editProfile`}> */}
       <button style={{ width: '100px' }}
-        onClick={() => {
+        onClick={
           setOpened(!opened)
-        }}
+        }
       >
         Edit account
       </button>
@@ -74,47 +48,7 @@ const Input = ({ state, onChangeText }) => (
     onChange={onChangeText}
   />
 )
-const EditInfo = ({ info = {}, onSave, onFileDrop, fileStatus }) => {
-  console.log('filestatus ', fileStatus)
-  const [state, setState] = useState(info)
-  useEffect(() => {
-    fileStatus?.status == 'FULFILLED' &&
-      setState({
-        ...state,
-        ...state.avatar,
-        ...fileStatus.payload,
-        // _id: fileStatus?.payload._id,
-        // url: fileStatus?.payload.url
-      })
-  }, [fileStatus])
 
-  const onChangeLogin = (event) =>
-    setState({
-      ...state,
-      login: event.target.value,
-    })
-  console.log('state my ', state)
-  return (
-    <section>
-      <Basic onLoad={onFileDrop} />
-      <Input state={state.login || ''} onChangeText={onChangeLogin} />
-      <h1 className="Title"> LOGIN </h1>
-      <button
-        disabled={state?.images?.length == 0}
-        onClick={() => onSave(state._id)}
-      >
-        Save
-      </button>
-    </section>
-  )
-}
-export const CEditInfo = connect(
-  (state) => ({ fileStatus: state.promise?.uploadFile }),
-  {
-    onSave: actionAvatar,
-    onFileDrop: actionUploadFile,
-  },
-)(EditInfo)
 
 
 export const PageAboutUser = ({ match: { params: { _id } },
@@ -157,6 +91,7 @@ export const PageAboutUser = ({ match: { params: { _id } },
   const showModalFollowing = () => {
     setIsModalVisibleFollowing(true);
   };
+
   const [isModalVisibleFollowers, setIsModalVisibleFollowers] = useState(false);
 
   const showModalFollowers = () => {
@@ -168,6 +103,13 @@ export const PageAboutUser = ({ match: { params: { _id } },
   const handleCancelFollowers = () => {
     setIsModalVisibleFollowers(false);
   };
+  const [isModalVisibleEdit, setIsModalVisibleEdit] = useState(false);
+
+  const showModalEdit = () => {
+    setIsModalVisibleEdit(true);
+  };
+
+
   return (
   
     <>
@@ -229,14 +171,12 @@ export const PageAboutUser = ({ match: { params: { _id } },
         </div>
               <h3> nick: {nick == null ? login : nick}</h3>
               {
-                checkMyId ?
-                  <EditAccount>
-          <div>
-            <h2>Edit login</h2>
-            <p>Edit avatar</p>
-            <CEditInfo />
-          </div>
-                </EditAccount>
+                  checkMyId ?
+                    <>
+                      <button onClick={showModalEdit}>
+                      EDIT
+                      </button>
+             </>
                     :
                     <Subscribe my_Id={my_Id} deleteSubscribe={deleteSubscribe}
                       followId={followId} addSubscribe={addSubscribe} aboutMeFollowing={aboutMeFollowing} />
@@ -263,6 +203,14 @@ export const PageAboutUser = ({ match: { params: { _id } },
                 
       </ConstructorModal>
               
+                
+      <ConstructorModal title={'Edit avatar'}
+                isModalVisible={isModalVisibleEdit}
+                setIsModalVisible={setIsModalVisibleEdit}>
+                          <CEditInfo />
+                </ConstructorModal>
+                
+
               </div>
               </Row>
         </section>
@@ -310,10 +258,10 @@ const Subscribe = ({ my_Id, postId, addLike, deleteLike, following = [], deleteS
   aboutMeFollowing=[], aboutUserFollowing, addSubscribe, followId, children }) =>
 {
 
- const checkFollowId =()=> aboutMeFollowing?.find(follower => follower?._id === followId)?._id
+ const checkFollowId = aboutMeFollowing?.find(follower => follower?._id === followId)?._id
 
  // console.log(' _id', aboutMeFollowing?.find(f => f._id === followId && true))
-  console.log('FOLLOWING ') 
+  console.log('FOLLOWING ', checkFollowId) 
   // const [isModalVisible, setIsModalVisible] = useState(false);
 
   // const showModal = () => {

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {  AddPost } from '../components/NewPost'
 import React, { useEffect } from 'react'
+import { CLoginForm,CRegisterForm,CLogout } from '../components/LoginRegisterLogout'
 
 export const Feed = ({ aboutMe, onAllFollowing, onPostsFeed, postsFeed }) => {
   console.log('POST FEED', postsFeed)
@@ -24,12 +25,7 @@ export const CFeed = connect((state) => ({
   aboutMe: state?.profileData?.aboutMe,
 }))(Feed)
 
-const Likes = () => (
-  <Button size="large" className="Likes">
-    {' '}
-    Likes{' '}
-  </Button>
-)
+
 
 const Recommendations = () => (
   <Button size="large" className="Recomendations">
@@ -41,14 +37,15 @@ const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
   useEffect(() => onMyPage(_id), [_id])
   return (
     <Link className="User" to={`/profile/${_id}`}>
-      {avatar?.url ? <Avatar src={'/' + avatar?.url} /> : <Avatar src={user} />}
+      {avatar?.url ? <Avatar src={'/' + avatar?.url} style={{ marginLeft: '20px',width:'45px', height:'45px'}} /> :
+        <Avatar src={user} style={{ marginLeft: '20px',width:'45px', height:'45px'}}/>}
     </Link>
   )
 }
 
 const CUser = connect(
   (state) => ({
-    my_Id: state.auth.payload.sub.id || '',
+    my_Id: state.auth.payload?.sub?.id || '',
     aboutMe: state.profileData.aboutMe,
   }),
   { onMyPage: actionFullProfilePageUser },
@@ -57,11 +54,13 @@ const CUser = connect(
 export const Header = () => {
   return (
     <section className="Header">
+        <CLogout className='Link'/>
+    <Link className='Link' to={`/login`}> Sign In </Link>
       <CSearch />
       <CFeed />
       <AddPost />
       <Recommendations />
-      <Likes />
+ 
       <CUser />
     </section>
   )

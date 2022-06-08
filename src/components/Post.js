@@ -12,10 +12,32 @@ import { Row, Col } from 'antd';
 import { Divider, Input, Button, Modal } from 'antd';
 import { EditOutlined } from '@ant-design/icons'
 import moment from 'moment';
-import {CComments, AddComment} from '../components/Post_Comment'
+import { CComments, AddComment } from '../components/Post_Comment'
+import { CPostEditor } from '../components/NewPost'
+
 import { ConstructorModal} from '../helpers'
 import React, { useMemo, useState, useEffect } from 'react'
 // const postId="625afa1d069dca48a822ffb0"
+const EditMyPost = ({ open, children }) =>{
+const [opened, setOpened] = useState(open)
+return (
+  <>
+    {/* <Link to={`/editProfile`}> */}
+    <button style={{ width: '100px' }}
+      onClick={() => {
+        setOpened(!opened)
+      }}
+    >
+      Edit Post
+    </button>
+    {opened && children}
+    {/* </Link> */}
+  </>
+)
+}
+  
+
+
 export const Card = ({ post, onPost }) => (
   <>
     {/* <Link to={`/post/${postId}`} onClick={() => onPost(postId)}> */}
@@ -211,22 +233,34 @@ const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
 export const PagePost = ({ my_Id, onePost, likes, addComment,
   addCommentReply, addLike, findSubComment, deleteLike,
   match: { params: { _id } },
-  aboutUser: { avatar, login } = {}, onPost }) => {
+  aboutUser = {}, onPost }) =>
+{
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
   useEffect(() => {
     onPost(_id)
     console.log('ONE POST _ID',onePost?._id)
   }, [_id])
+
   return (
     <>
+         
      <Row>
-      <Col span={14}>
+        <Col span={14}>
+        <ConstructorModal title={'Edit post'} isModalVisible={isModalVisible}
+                  setIsModalVisible={setIsModalVisible}>
+           <CPostEditor/>
+          </ConstructorModal>
+          
       {/* <div  style={{display: 'flex'}}> */}
       <MyCarousel style={{position: 'absolute'}} images={onePost?.images} />
       <h3 style={{ textAlign: 'center', padding:'30px'}}>
             Created Post: {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
           </h3>
-          <div style={{marginLeft:'100px'}}>
+          <div style={{ marginLeft: '100px' }}>
           {/* <Col span={3} offset={2}> */}
           <Like my_Id={my_Id} addLike={addLike} deleteLike={deleteLike} likes={onePost?.likes} postId={onePost?._id}>
               <Likes likes={onePost?.likes} />
@@ -236,19 +270,24 @@ export const PagePost = ({ my_Id, onePost, likes, addComment,
     </Col>
 <Col span={8}>
 <div  style={{display: 'flex', flexDirection:'row'}}>
-
-      {avatar ? (
+       
+      {aboutUser?.avatar ? (
         <Avatar
           style={{ width: '50px', height: '50px' }}
-          src={ '/' + avatar?.url}
+          src={ '/' + aboutUser?.avatar?.url}
         />
       ) : (
         <Avatar style={{ width: '50px', height: '50px' }} src={user} />
       )
       }
+            <h1 style={{ marginLeft: '20px' }}> {aboutUser?.login || 'Anon'}</h1>
+            <Row span={1}>
+              {my_Id === aboutUser?._id && <Link  to={`/edit/post/${_id}`}> Edit post </Link>
 
-      <h1 style={{ marginLeft:'20px'}}> {login}</h1>
-      </div>
+             }
+            </Row>
+          </div>
+  
       <Divider/>
       <h2> Title: {onePost?.title || ''} </h2>
 

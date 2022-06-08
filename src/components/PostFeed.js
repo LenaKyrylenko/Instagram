@@ -13,6 +13,7 @@ import user from '../materials/user.png'
 import { Avatar, Image, Divider, Radio } from 'antd'
 import { CPost, MyCarousel } from './Post'
 import { Row, Col } from 'antd';
+import LinkToUser from './LinkToUser'
 
 const MyPostFeed = ({ postsFeed = [], onPostsFeed, clearDataProfile }) => {
   const [checkScroll, setCheckScroll] = useState(true);
@@ -52,17 +53,7 @@ const MyPostFeed = ({ postsFeed = [], onPostsFeed, clearDataProfile }) => {
             {
               (postsFeed || []).map(({ images, title, text, owner }) => (
                 <div className='PostFeed'>
-                  <Link to={`/profile/${owner?._id}`} >
-                    {owner?.avatar ? (
-                      <Avatar
-                        style={{ width: '50px', height: '50px' }}
-                        src={'/' + owner?.avatar?.url}
-                      />
-                    ) : (
-                      <Avatar style={{ width: '50px', height: '50px' }} src={user} />
-                    )}
-                    <h1> {owner?.login || 'anon'}</h1>
-                  </Link>
+                <LinkToUser owner={owner} size='50px'/>
   
                   <MyCarousel images={images} style={{ marginTop: '60px' }} />
                   <h1> Title: {title || ''}</h1>

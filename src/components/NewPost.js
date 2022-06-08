@@ -2,15 +2,17 @@ import React, { useMemo, useState, useEffect } from 'react'
 import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { actionUploadFile, actionUploadFiles, actionPostUpsert,actionUserUpdate} from '../actions'
-import { Upload, Button, DatePicker, Space } from 'antd'
+import {actionClearPostsOneAC} from '../reducers'
+
+import { Upload, Button, DatePicker, Space,message  } from 'antd'
 import {Basic, SortableContainer, SortableItem , ImageDemo} from '../components/DropZone'
 import { arrayMove, arrayMoveImmutable, arrayMoveMutable } from 'array-move'
 import { ConsoleSqlOutlined } from '@ant-design/icons'
 import ReactDOM from 'react-dom';
-
+import { history } from '../App'
 const defaultPost = {
-  title: 'Bmw',
-  text: 'Bmw',
+  title: '',
+  text: '',
   images: [
     // {_id: '6231c4292be7e42fbc9096c4',
     //  url: 'images/d2438e8c6502eb5da60ecc8f7a6b8aff'}
@@ -41,7 +43,7 @@ export const AddPost = ({ children }) => {
   
     return (
       <>
-        <Link to={`/edit/post`}>
+        <Link to={`/edit/post/new`}>
           <Button onClick={() => setState(!state)}> + </Button>
           {!state && children}
         </Link>
@@ -67,16 +69,38 @@ export const AddPost = ({ children }) => {
 //   }
 
 
-const PostEditor = ({ post=defaultPost, onSave, onFileDrop, fileStatus, userUpdate }) => {
-    console.log('filestatus ', fileStatus)
-    const [state, setState] = useState(post)
+  // match: { params: { _id } }
+  // console.log('PARAMS ', match?.params?._id)
+  const PostEditor = ({myID,post={}, match: { params: { _id } },
+    onSave, onFileDrop, fileStatus, clearPostOne }) => {
+ 
+  console.log('PARAMS ', _id)
+  console.log('post ', post)
+
+  console.log('filestatus ', fileStatus)
+const [state, setState] = useState(post)
+//   useEffect(() => {
+//     if (_id === 'new') {
+//         clearPostOne()
+//       setState(defaultPost)
+//     }
+// }, [_id]);
+
+useEffect(() => {
+  if ( fileStatus?.status== 'FULFILLED') {
+      message.success(`post published, can create a new one`)
+      history.push(`/profile/${myID}`)
+  } else if (fileStatus?.status === "REJECTED") {
+      message.error('Error')
+  }
+}, [fileStatus?.status])  
     useEffect(() => {
       fileStatus?.status == 'FULFILLED' &&
         setState({
           ...state,
           images: [
-            ...state.images,
-            ...fileStatus.payload
+            ...state?.images,
+            ...fileStatus?.payload
           ],
         })
     }, [fileStatus])
@@ -108,7 +132,7 @@ const PostEditor = ({ post=defaultPost, onSave, onFileDrop, fileStatus, userUpda
       <section className="Post">
         <Basic onLoad={onFileDrop} />
         <SortableContainer onSortEnd={onSortEnd}>
-          {(state.images || []).map(({ _id, url }, index) => (
+          {(state?.images || []).map(({ _id, url }, index) => (
           <div >
           <SortableItem key={`item-${_id}`} index={index} url={url} /> 
               <button onClick={() => onRemoveImage(_id)}> x </button> 
@@ -130,9 +154,15 @@ const PostEditor = ({ post=defaultPost, onSave, onFileDrop, fileStatus, userUpda
     )
   }
  export const CPostEditor = connect(
-    (state) => ({ fileStatus: state.promise?.uploadFiles, }),
+   (state) => ({
+     fileStatus: state.promise?.uploadFiles,
+     post:state?.onePost?.payload,
+     myID: state?.aboutMe?._id,
+   
+   }),
     {
       onSave: actionPostUpsert,
-      onFileDrop: actionUploadFiles
+      onFileDrop: actionUploadFiles,
+      clearPostOne: actionClearPostsOneAC
     },
   )(PostEditor)

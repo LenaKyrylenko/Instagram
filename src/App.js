@@ -36,8 +36,11 @@ const Main = () => (
     <Switch>
       <Route path="/" exact component={PageMain} />
       <Route path="/profile/:_id" component={CPageAboutUser} />
-      <Route path="/edit/post" component={PageCreatePost} />
+      <Route path="/edit/post/:_id" component={PageCreatePost} />
+      <Route path="/edit/post/new" component={PageCreatePost} />
+
       <Route path="/post/:_id" component={CPost} />
+
       <Route path="/feed" component={CPostForFeed} />
       <Route path="/editProfile" component={CUserEdit} />
     </Switch>
@@ -76,7 +79,7 @@ const CProtectedRoute = connect((state) => ({
   auth: state.auth?.payload?.sub.acl,
 }))(ProtectedRoute)
 
-const history = createHistory()
+export const history = createHistory()
 
 function App() {
   if (store.getState().auth?.token) {
@@ -91,6 +94,8 @@ function App() {
 else {
     console.log("Скролла нет");
 }
+
+
   return (
     <Router history={history}>
       <Provider store={store}>
@@ -109,5 +114,4 @@ else {
     </Router>
   )
 }
-
 export default App

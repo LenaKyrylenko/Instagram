@@ -32,6 +32,11 @@ export const actionProfilePageData = (id) => ({ type: 'DATA_PROFILE', id })
   export const actionProfilePageDataType= (aboutMe) =>
   ({ type: 'PROFILE-PAGE', aboutMe })
 
+  export const actionAvatarUpdate= (aboutUser) =>
+  ({ type: 'CHANGE-AVATAR-USER', aboutUser })
+
+  
+
 export const actionFullProfilePageUser = (_id) =>
   async dispatch => {
     const aboutUser = await dispatch(actionAboutUser(_id))
@@ -42,13 +47,28 @@ export const actionFullProfilePageUser = (_id) =>
       await dispatch(actionProfilePageDataTypeUser(aboutUser, allPosts))
     }
   }
+
+  export const actionFullSetAvatar = (_id) =>
+  async dispatch => {
+    const aboutUser = await dispatch(actionAboutUser(_id))
+    console.log('ABOUTUSER ', aboutUser)
+    const allPosts = await dispatch(actionAllPostsUser(_id))
+    console.log('ALLPOSTS ', allPosts )
+    if (aboutUser && allPosts) {
+      await dispatch(actionProfilePageDataTypeUser(aboutUser, allPosts))
+    }
+  }
+
   export const actionFullProfilePage = (_id) =>
   async dispatch => {
-    const aboutMe= await dispatch(actionAboutMe(_id))
+    const aboutMe = await dispatch(actionAboutMe(_id))
+    console.log('actionFullProfilePage ', actionFullProfilePage)
     // const allPostsMe = await dispatch(actionAllPosts(_id))
     if (aboutMe) {
       await dispatch(actionProfilePageDataType(aboutMe))
     }
+
+
   }
   export const actionRemoveDataUser= () =>
   ({ type: 'REMOVE-DATA' })
@@ -62,9 +82,13 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts }) =>
     },
     'REMOVE-DATA': () => {
       return {
-        ...state={},
-        aboutUser:{},
-        allPosts:[]
+        ...state = {},
+        aboutUser: {},
+        allPosts: []
+      }
+    },
+      'CHANGE-AVATAR-USER': () => { return {
+        ...state, aboutUser
       }
   }
   
@@ -85,20 +109,6 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts }) =>
     console.log('postsFeed ', postsFeed)
     const postsFeedCount = await dispatch(actionPostsFeedCount(getState))
     console.log('postsFeedCount ', postsFeedCount)
-
-    // const allPosts = await dispatch(actionAllPostsUser(_id))
-    // console.log('ALLPOSTS ', allPosts )
-
-    // if (postsFeed?.length !== (postsFeedCount ? postsFeedCount : 1)) {
-    //   const postsFeedNew = await dispatch(actionPostsFeed(_id))
-    //   console.log('postsFeedNew ', postsFeedNew)
-    //   const postsFeedCountNew = await dispatch(actionPostsFeedCount(_id))
-    //   console.log('postsFeedCountNew ', postsFeedCountNew)
-   
-   
-        // if (postsFeed && postsFeedCount)
-        // await dispatch(actionFeedType(postsFeed, postsFeedCount))
-      
       if (skip < postsFeedCount)
       {
         console.log('SKIIIP ', skip)
@@ -112,13 +122,31 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts }) =>
         }
      
     }
+    export const actionOnePost= (onePost) =>
+    ({ type: 'ONE-POST', onePost })
+  
   export const actionClearFeedPosts = () => ({ type: 'DELETE-POSTS' });
 
   export const actionFullClearFeedPosts = () => (dispatch) => {
     return dispatch(actionClearFeedPosts())
   }
+  export const actionFullOnePost = () =>
+    async (dispatch, getState) => {
   
-  
+  const onePost = await dispatch(actionOnePost(getState))
+    //  const skip = postsFeed.length
+    // console.log('postsFeed ', postsFeed)
+    // const postsFeedCount = await dispatch(actionPostsFeedCount(getState))
+    // console.log('postsFeedCount ', postsFeedCount)
+      // if (skip < postsFeedCount)
+      // {
+      //   console.log('SKIIIP ', skip)
+      //   const newPosts = await dispatch(actionPostsFeed(getState, skip))
+        if (onePost) {
+          dispatch(actionOnePost(onePost));
+          console.log('onePost ', onePost)
+        }
+      }
 export const feedReducer = (state = {}, {skip, type, newPosts=[], postsFeed,postsFeedCount }) => {
   const types = {
     'ADD-POSTS': () => {
@@ -140,6 +168,27 @@ export const feedReducer = (state = {}, {skip, type, newPosts=[], postsFeed,post
     }
     return state
   }
+  export const postReducer = (state = {}, {skip, type, newPosts=[], postsFeed,postsFeedCount }) => {
+    const types = {
+      'ADD-POSTS': () => {
+        return {
+          ...state,
+         onePost: state?.onePost
+        }
+      },
+      'CLEAR-POST-ONE': () => {
+        return {
+          ...state,
+          onePost: {}
+        }
+    }
+    
+      }
+      if (type in types) {
+          return types[type]()
+      }
+      return state
+    }
 
 export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
   const types = {
@@ -155,6 +204,7 @@ export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
   }
   return state
 }
+
 
   function authReducer(state, { type, token }) {
     if (state === undefined && localStorage.authToken) {
@@ -173,13 +223,16 @@ export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
     }
     return state || {}
   }
+  export const actionClearPostsOneAC = () => ({ type: 'CLEAR-POST-ONE' })
+
  export const store = createStore(
     combineReducers({
       promise: promiseReducer,
       auth: authReducer,
       profileData: profileReducer,
       profilePage: profileUserReducer,
-      feed:feedReducer
+      feed:feedReducer,
+      post:postReducer
       
     }),
     applyMiddleware(thunk),

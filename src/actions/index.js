@@ -1,4 +1,4 @@
-import { actionFullProfilePageUser, actionFullProfilePage,actionFeedType,actionClearFeedPosts } from '../reducers'
+import { actionFullProfilePageUser,actionProfilePageDataTypeUser, actionFullProfilePage,actionFeedType,actionClearFeedPosts } from '../reducers'
 
 export const actionAuthLogin = (token) => ({ type: 'AUTH_LOGIN', token })
 export const actionAuthLogout = () => ({ type: 'AUTH_LOGOUT' })
@@ -89,7 +89,7 @@ export const actionRegister = (login, password) =>
     'register',
     gql(
       `mutation register($login: String!, $password: String!) {
-                UserUpsert(user: {login: $login, password: $password, nick: $login}) {
+        createUser (login: $login, password: $password) {
                   _id login
                 }
               }`,
@@ -123,23 +123,21 @@ export const actionUploadFiles = (files) =>
     Promise.all(files.map((file) => uploadFile(file))),
   )
 
-export const actionAvatar = (imageId) => async (dispatch, getState) => {
-  await dispatch(
-    actionPromise(
-      'setAvatar',
-      gql(
-        `mutation setAvatar($imageId:ID, $userId:String){
+export const actionAvatar = (imageId, myId) =>
+  actionPromise(
+    'setAvatar',
+    gql(
+      `mutation setAvatar($imageId:ID, $userId:String){
     UserUpsert(user:{_id: $userId, avatar: {_id: $imageId}}){
     _id, avatar{
         _id
     }
     }
     }`,
-        { imageId, userId: getState().auth?.payload?.sub?.id },
-      ),
+      { imageId, userId:  myId  },
     ),
-  )
-}
+      )
+
 
 // export const actionChangeLogin = (imageId) => async (dispatch, getState) => {
 //   await dispatch(
@@ -388,6 +386,7 @@ export const actionAddSubComment = (commentId, comment) => async (dispatch) => {
 //   }
 // }
 
+
 export const actionAddFullComment = (postId, comment) => async (
   dispatch,
   getState,
@@ -540,15 +539,16 @@ export const actionDeleteLike = (likeId, postId) => async (dispatch) => {
 //   _id: $postId
 // }
 // query:"[{\"_id\": \"62068eaaad55d22f3e2fb250\"}]")
-export const actionSetAvatar = (file) => async (dispatch) => {
-  let result = await dispatch(actionUploadFile(file))
-  if (result) {
-    await dispatch(actionAvatar(result._id))
-    // await dispatch(actionAvatar(result._id))
 
-    await dispatch(actionAboutMe())
-  }
+export const actionSetAvatar = (file, myId)  => async (dispatch) => {
+   const avatar = await dispatch(actionAvatar(file, myId));
+  console.log('AVATAR', avatar)
+  if(avatar)
+  await dispatch(actionFullProfilePage(myId))
+  
+  
 }
+
 // let following =  getState().promise.aboutUser?.payload?.following
 // let result =  await dispatch (actionAboutMe())
 export const actionPostsFeed = (myFollowing,skip) => 
@@ -589,11 +589,14 @@ export const actionPostsFeed = (myFollowing,skip) =>
       const {
         feed: { postsFeed = [] },
       } = getState();
-      const myFollowing =  getState().promise.aboutMe?.payload?.following.map(
-        ({ _id }) => _id,
-      )
-      
-      let postsUsers = await dispatch(actionPostsFeed(myFollowing,postsFeed?.length));
+      const myFollowing =
+        getState().promise.aboutMe?.payload?.following.map(
+        ({ _id }) => _id
+        )
+
+      const myId = getState().profileData?.aboutMe?._id;
+          console.log('MY ID FOR FEED ', myId)
+      let postsUsers = await dispatch(actionPostsFeed([...myFollowing, myId], postsFeed?.length));
       if (postsUsers) {
         dispatch(actionFeedType(postsUsers));
       }
@@ -672,8 +675,7 @@ export const actionSearchUser = (userName) => async (dispatch) => {
   )
 }
 
-export const actionUserUpsert = (user) => async (dispatch, getState) => {
-  await dispatch(
+export const actionUserUpsert = (user) => 
     actionPromise(
       'userUpsert',
       gql(
@@ -684,14 +686,12 @@ export const actionUserUpsert = (user) => async (dispatch, getState) => {
               }`,
         {
           user: {
-            ...user,
-            _id: JSON.stringify([{ _id: getState().auth?.payload?.sub?.id }]),
-          },
+            ...user
+          }
         },
       ),
-    ),
-  )
-}
+    )
+
 
 export const actionAboutUser = (_id) =>
   actionPromise(
@@ -823,6 +823,7 @@ export const actionUserUpdate = (user = {}) => async (dispatch, getState) => {
   }
   await dispatch(actionAboutMe())
 }
+
 
 export const actionFindSubComment = (findId) =>
   actionPromise(

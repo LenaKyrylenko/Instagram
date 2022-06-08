@@ -67,7 +67,7 @@ export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size,handleCa
             userFind={searchUser} />}
             trigger="focus"
         >
-          <Search 
+          <Search style={{width:'30%'} }
             placeholder="Input search user"
             allowClear
             enterButton="Search"
