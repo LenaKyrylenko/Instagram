@@ -2,18 +2,22 @@ import user from '../materials/user.png'
 import { Link} from 'react-router-dom'
 import { Avatar, Col} from 'antd'
 
-export const LinkToUser = (owner, size) => {
-    return <Col className="gutter-row" span={6}>
-        <Link to={`/profile/${owner?._id}`} style={{ display: 'flex', flexDirection: 'row' }}>
+export const LinkToUser = ({ owner, size,sizePadding='20px' }) => {
+    return <Col className="gutter-row" style={{padding:sizePadding}}>
+        <Link to={`/profile/${owner?._id}`} style={{
+            display: 'flex',
+            padding: '10px', flexDirection: 'row'
+        }}>
         {owner?.avatar ? (
             <Avatar
                size={size}
-                src={'/' + owner?.avatar?.url}
+                    src={'/' + owner?.avatar?.url}
+                    style={{marginRight:'5px'}}
             />
         ) : (
-            <Avatar size={size} src={user} />
+            <Avatar size={size} src={user}  style={{marginRight:'5px'}} />
         )}
-        <h1> {owner?.login || 'Anon'}</h1>
+        <h2> {owner?.login || 'Anon'}</h2>
         </Link>
     </Col>
 }

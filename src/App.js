@@ -19,6 +19,7 @@ import ImgCrop from 'antd-img-crop'
 import { UserOutlined } from '@ant-design/icons'
 import user from './materials/user1.png'
 import photoNotFound from './materials/photoNotFound.png'
+import {CExplorePosts} from './components/Expore'
 // import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 // import { Carousel } from 'react-responsive-carousel';
 import { CPostForFeed, Feed } from './components/PostFeed'
@@ -37,9 +38,9 @@ const Main = () => (
     <Switch>
       <Route path="/" exact component={PageMain} />
       <Route path="/profile/:_id" component={CPageAboutUser} />
+      <Route path="/explore" component={CExplorePosts} />
 
       <Route path="/edit/post/:_id" component={CPostEditor} />
-      
 
       <Route path="/post/:_id" component={CPost} />
 

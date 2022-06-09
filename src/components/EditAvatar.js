@@ -8,6 +8,7 @@ import { Basic } from '../helpers'
 import user from '../materials/user1.png'
 import { ConstructorModal } from '../helpers'
 import { Image, Divider, Radio } from 'antd'
+import { history } from '../App'
 
 export const propsUploadFile = {
   name: 'photo',
@@ -21,26 +22,29 @@ export const propsUploadFile = {
       : {},
 }
 const EditInfo = ({ info, onSave, onFileDrop, fileStatus, myId }) => {
-  console.log('info ', info)
   const [state, setState] = useState(info)
-  console.log('БЛЯХА ТУТ ЖЕ МОЙ АЙДИ  ', myId)
 
-  // if (fileStatus?.status === 'FULFILLED') {
-  //     message.success(`${fileStatus.name} file uploaded successfully`);
-  // } else if (fileStatus?.status=== 'REJECTED') {
-  //     message.error(`${fileStatus.name} file upload failed.`);
-  // }
+  const [isModalVisibleEdit, setIsModalVisibleEdit] = useState(false);
+
+  const showModalEdit = () => {
+    setIsModalVisibleEdit(true);
+  };
+  const handleCancelEdit = () => {
+    setIsModalVisibleEdit(false)
+  }
 
   console.log('state my ', state)
   useEffect(() => {
     fileStatus?.status == 'FULFILLED' &&
-      message.success(` file uploaded successfully`) &&
+      message.success(`File success uploaded!`) &&
       setState({
         ...state,
         ...state?.avatar,
         ...fileStatus?.payload
       })
   }, [fileStatus])
+  const saveAvatar = () => onSave(state?._id, myId)
+    && message.success(`Avatar success changed!`)&&setIsModalVisibleEdit(false)
 
   // const onChangeLogin = (event) =>
   //   setState({
@@ -48,10 +52,16 @@ const EditInfo = ({ info, onSave, onFileDrop, fileStatus, myId }) => {
   //     login: event.target.value,
   //   })
 
-  if (fileStatus?.status == 'FULFILLED') console.log('fullfilled', fileStatus)
 
   return (
     <>
+      <button onClick={showModalEdit}>EDIT</button>
+      
+        <ConstructorModal title={'Edit avatar'}
+                isModalVisible={isModalVisibleEdit}
+        setIsModalVisible={setIsModalVisibleEdit}
+        handleCancel={handleCancelEdit}
+      >  
       <Basic onLoad={onFileDrop}/>
       {fileStatus?.payload?.url && (
         <Image
@@ -62,9 +72,11 @@ const EditInfo = ({ info, onSave, onFileDrop, fileStatus, myId }) => {
         <br/>
       <Button style={{}}
         disabled={state?.images?.length == 0}
-        onClick={() => onSave(state?._id,myId)}>
+        onClick={saveAvatar}>
         Save
-      </Button>
+        </Button>
+      
+      </ConstructorModal>
     </>
   )
 }

@@ -111,7 +111,7 @@ const PostEditor = ({ match: { params: { _id } }, myID, post,
     })
     const disabledBtn = state.images && state.title && state.text ? false : true
   
-  const savePost = () => onSave(state) && message.success(`post published, can create a new one`)
+  const savePost = () => onSave(state) && message.success(`Post published success!`)
   &&history.push(`/profile/${myID}`)
   return (
     <section className="Post">

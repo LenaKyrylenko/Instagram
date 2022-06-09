@@ -15,7 +15,7 @@ import moment from 'moment';
 import { CComments, AddComment } from '../components/Post_Comment'
 import { CPostEditor } from '../components/NewPost'
 import { actionFullOnePost} from '../reducers'
-
+import { Like, Likes } from './Like'
 import { ConstructorModal} from '../helpers'
 import React, { useMemo, useState, useEffect } from 'react'
 // const postId="625afa1d069dca48a822ffb0"
@@ -41,12 +41,6 @@ return (
 
 export const Card = ({ post, onPost }) => (
   <>
-    {/* <Link to={`/post/${postId}`} onClick={() => onPost(postId)}> */}
-    {/* {console.log('post id', post?._id)}
-    
-     onClick={() => onPost(post?._id)}
-    
-    */}
     <Link  to={`/post/${post?._id}`}>
       {post?.images && post?.images[0] && post.images[0]?.url ? (
         <img
@@ -61,8 +55,6 @@ export const Card = ({ post, onPost }) => (
           style={{ maxWidth: '230px', minHeight:'150px', minWidth:'150px' ,maxHeight: '200px' }}
         />
       )}
-
-      {/* {console.log(post?._id)} */}
     </Link>
   </>
 )
@@ -162,76 +154,9 @@ export const MyCarousel = ({ images = [] }) => {
     </>
   )
 }
-const Likes = ({ likes }) =>
-{
-  return (
-    <>
-    <div className='Modal'>
-        {
-          likes &&
-          likes?.map(({ owner:{_id, login, avatar} }) => (
-            // <div style={{ display: 'flex', flexDirection:'row' }}>
-          
-                
-            <Link to={`/profile/${_id}`}>
-              <Row>
-              <Col offset={1}>
-            <Avatar
-              style={{
-                width: '50px',
-                height: '50px',
-                // marginRight: '30px',
-                // position: 'absolute',
-              }}
-              src={'/' + avatar?.url || user}
-                  />
-                </Col>
-                <Col offset={2}>
-                    <h3 > {login || 'Anon'}</h3>
-                 </Col>
-                 </Row>
-                </Link>
-          ))
-        }
-    </div>
-    </>
-  )
-  }
-const Like = ({ my_Id, postId, addLike, deleteLike, likes=[], children }) =>
-{
 
-  const likeId = likes.find(like => like?.owner?._id === my_Id)?._id
-  const changeLike = () => likeId ? deleteLike(likeId, postId) : addLike(postId)
-  // console.log('likeId', likeId)
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-  return(
-    <>
-      <div style={{display:'flex'}}>
-         <h3 onClick={changeLike}>
-            {likeId ? 
-            <HeartFilled  style={{cursor: 'pointer', fontSize:'xx-large', color:'red'}} />:
-             <HeartOutlined  style={{cursor: 'pointer', fontSize: 'xx-large' }} /> }
-        </h3>
-       {likes.length ? 
-        <h3 style={{cursor: 'pointer', paddingLeft: 8 }} onClick={showModal}> {likes.length} likes
-           
-        </h3>
-        :
-        '0 likes'}
-      </div>
-      <ConstructorModal title={'Likes'} isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}>
-          <Likes likes={likes}/>
-      </ConstructorModal>
-    </>
-  )
-}
-
-export const PagePost = ({ my_Id, onePost, likes, addComment,
+export const PagePost = ({ my_Id, onePost, addComment,
   addCommentReply, addLike, findSubComment, deleteLike,
   match: { params: { _id } },
   aboutUser = {}, onPost }) =>
@@ -263,9 +188,7 @@ export const PagePost = ({ my_Id, onePost, likes, addComment,
           </h3>
           <div style={{ marginLeft: '100px' }}>
           {/* <Col span={3} offset={2}> */}
-          <Like my_Id={my_Id} addLike={addLike} deleteLike={deleteLike} likes={onePost?.likes} postId={onePost?._id}>
-              <Likes likes={onePost?.likes} />
-          </Like>
+          <CLike likes={onePost?.likes} postId={onePost?._id}/>
               {/* </Col> */}
            </div>
     </Col>
@@ -296,12 +219,14 @@ export const PagePost = ({ my_Id, onePost, likes, addComment,
       <Divider>Comments</Divider>
       <div className="Scroll">
 
-            <CComments comments={onePost?.comments || []} />
+            <CComments postId={onePost?._id} comments={onePost?.comments || []} />
         
      </div>
 
-       {/* <HeartTwoTone twoToneColor="#eb2f96" /> */}
-            <AddComment addComment={addComment} onePost={onePost} />
+          {/* <HeartTwoTone twoToneColor="#eb2f96" /> */}
+          <div style={{ display: 'flex',  margin: '100px 10px' }}>
+            <AddComment addComment={addComment} postId={onePost?._id} />
+            </div>
         </Col>
      
         </Row>
@@ -310,18 +235,27 @@ export const PagePost = ({ my_Id, onePost, likes, addComment,
 }
 
 export const CPost = connect((state) => ({
-  onePost: state.post.onePost,
+  onePost: state.promise?.onePost?.payload,
   my_Id: state.auth.payload.sub.id || '',
   aboutUser: state.profilePage?.aboutUser,
   addComment: state.promise?.addComment?.payload,
-  addSubComment: state.promise?.addSubComment,
   
 }), {
-  addLike: actionAddFullLike,
-  findLikes: actionGetFindLiked,
-  deleteLike: actionDeleteFullLike,
+
   addComment: actionAddFullComment, 
   addCommentReply: actionAddSubFullComment,
-  findLikes: actionFindLikes,
   onPost:actionFullOnePost
 })(PagePost)
+
+const AllLikeComp = ({ my_Id, addLike, deleteLike, likes, postId }) =>
+<Like my_Id={my_Id} addLike={addLike} deleteLike={deleteLike} likes={likes} postId={postId}>
+<Likes likes={likes} />
+</Like>
+export const CLike = connect((state) => ({
+  my_Id: state.auth.payload.sub.id || ''
+}), {
+  addLike: actionAddFullLike,
+  // findLikes: actionGetFindLiked,
+  deleteLike: actionDeleteFullLike,
+  // findLikes: actionFindLikes
+})(AllLikeComp)

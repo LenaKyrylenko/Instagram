@@ -21,10 +21,11 @@ import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import data from 'emoji-mart/data/google.json'
 import { NimblePicker, Emoji } from 'emoji-mart'
+import {LinkToUser} from './LinkToUser'
 // import InputEmoji from 'react-input-emoji'; 
 import reactStringReplace from 'react-string-replace'
 // const postId="625afa1d069dca48a822ffb0"
-export const AddComment = ({ addComment, onePost }) => {
+export const AddComment = ({ addComment, postId }) => {
   const [text, setComment] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const addEmoji = ({ colons }) => {
@@ -35,27 +36,21 @@ export const AddComment = ({ addComment, onePost }) => {
     <>
       {
         showEmojiPicker && <Picker autoFocus={true}
-          style={{ color: '#ae65c5', position: 'absolute', bottom: '160px', right: '30px' }}
+          style={{ color: '#ae65c5', bottom: '160px', marginRight:'440px' }}
           onSelect={emojiTag => addEmoji(emojiTag)} set="apple" />
       }
-      
-      <div className="" style={{ display: 'flex',  margin: '100px 10px' }}>
-         <Input style={{ display: 'inline-block' }} size="large" placeholder='Add a comment...' 
+      <Input style={{ display:'flex',width:'60%',marginLeft:'20px', marginRight:'20px' }} size="large" placeholder='Add a comment...' 
           value={text} onChange={e => { setComment(e.target.value) }}
         onPressEnter={e => { setComment(e.target.value) }}/> 
-        
-        <Button size="large" disabled={text.length < 1} type="primary"
-          onClick={(e) => addComment(onePost?._id, text)&&setComment(e.target.value="")}> Publish </Button>
-      {console.log('comment ', text )}
-     
-      <SmileOutlined className='smile-btn' style={{ fontSize: 'xx-large' }} 
+         <SmileOutlined className='smile-btn' style={{ fontSize: 'xx-large', marginRight:'30px' }} 
           onClick={() => {
             setShowEmojiPicker(!showEmojiPicker)
-          }}>
-        
-        </SmileOutlined>
-       
-        </div>
+          }}/>
+      <Button 
+        size="large" disabled={text.length < 1} type="primary"
+          onClick={(e) => addComment(postId, text)&&setComment(e.target.value="")}> Publish </Button>
+      {console.log('comment ', text )}
+     
         </>
     )
       
@@ -77,7 +72,9 @@ const SpoilerButton = ({text, close, children }) => {
   const CommentAuthor = ({owner}) =>
   <>
       <div style={{ display: 'flex', flexDirection: 'row', padding: '5px', margin: '5px' }}>
-          {owner?.avatar ?
+        
+        <LinkToUser owner={owner} size={'10px'} sizePadding={'0px' }/>
+        {/* {owner?.avatar ?
             <Avatar
               style={{ width: '25px', height: '25px',marginRight: '2%'}}
               src={'/' + owner?.avatar?.url}
@@ -89,12 +86,12 @@ const SpoilerButton = ({text, close, children }) => {
           ) : (
             <h3 style={{ marginRight: '2%', fontWeight: 'bold' }}> anon </h3>
           )
-      }
+      } */}
       </div>
   </>
 
 
-const CommentForReply =({addCommentReply, commentId, onePost})=>{
+const CommentForReply =({addCommentReply, commentId, postId})=>{
     const [comment, setComment]=useState('')
     return (
      <>
@@ -103,7 +100,7 @@ const CommentForReply =({addCommentReply, commentId, onePost})=>{
         <Input  placeholder='Add a comment...' 
             value={comment} onChange={e => { setComment(e.target.value) }} />
         <Button  disabled={comment.length<1} type="primary" onClick={()=>
-            addCommentReply(onePost?._id, commentId, comment)
+            addCommentReply(postId, commentId, comment)
           
           }> Publish </Button>
           </div>
@@ -112,10 +109,10 @@ const CommentForReply =({addCommentReply, commentId, onePost})=>{
   }
   
   const CommentText = ({ text,close }) => {
-    const [edit, setEdited] = useState(close)
+    // const [edit, setEdited] = useState(close)
     return (
       <div style={{width:'90%',display:'inline-block', background:'#c8c8c8'}}>
-   <EditOutlined style={{float:'right',  fontSize: 'x-large' }}/>
+   {/* <EditOutlined style={{float:'right',  fontSize: 'x-large' }}/> */}
         <h3 style={{display:'block'}}>  {reactStringReplace(text, /:(.+?):/g, (match, i) => (
           <Emoji emoji={match}  set='apple' size={20}/> ))}
         </h3>
@@ -130,7 +127,7 @@ const CommentForReply =({addCommentReply, commentId, onePost})=>{
 }
   
 
-  const Comments = ({ comments,onePost, addCommentReply, commentId,children,close,findSubComment }) => {
+ export const Comments = ({ comments,postId, addCommentReply, commentId,children,close,findSubComment }) => {
     const [opened, setOpened] = useState(close)
    
     return (
@@ -157,7 +154,7 @@ const CommentForReply =({addCommentReply, commentId, onePost})=>{
                <button> send </button> */}
                   
                      
-                  <CommentForReply addCommentReply={addCommentReply} commentId={comment._id} onePost={onePost}/>
+                  <CommentForReply addCommentReply={addCommentReply} commentId={comment._id} postId={postId}/>
                      
               </SpoilerButton>
             </div> 
@@ -174,13 +171,6 @@ const CommentForReply =({addCommentReply, commentId, onePost})=>{
                       : null
             }
           </div>
-        {/* //   <button onClick={() => {
-        //     setOpened(!opened)
-        //   }}>
-        //   More Comments
-        // </button> && opened && children */}
-        
-          {/* <h3> {answers.map(({ text }) => text)}</h3> */}
         </>
       ) : null
   }
@@ -189,10 +179,9 @@ const CommentForReply =({addCommentReply, commentId, onePost})=>{
 }
 
 export const CComments = connect((state) => ({
-    onePost: state.promise.onePost?.payload,
+    postId: state.promise.onePost?.payload?._id,
     addComment: state.promise?.addComment?.payload,
     addSubComment: state.promise?.addSubComment,
-  
 }),
     {
         addComment: actionAddFullComment, 

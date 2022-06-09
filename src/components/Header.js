@@ -28,10 +28,13 @@ export const CFeed = connect((state) => ({
 
 
 const Recommendations = () => (
+  <Link className="Feed" to={`/explore`}>
   <Button size="large" className="Recomendations">
     {' '}
-    Recommendations{' '}
-  </Button>
+      Explore
+      {' '}
+    </Button>
+    </Link>
 )
 const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
   useEffect(() => onMyPage(_id), [_id])
@@ -55,7 +58,7 @@ export const Header = () => {
   return (
     <section className="Header">
         <CLogout className='Link'/>
-    <Link className='Link' to={`/login`}> Sign In </Link>
+    {/* <Link className='Link' to={`/login`}> Sign In </Link> */}
       <CSearch />
       <CFeed />
       <AddPost />
