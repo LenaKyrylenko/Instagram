@@ -21,7 +21,8 @@ import user from './materials/user1.png'
 import photoNotFound from './materials/photoNotFound.png'
 // import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 // import { Carousel } from 'react-responsive-carousel';
-import { CPostForFeed,Feed } from './components/PostFeed'
+import { CPostForFeed, Feed } from './components/PostFeed'
+import {CPostEditor } from './components/NewPost'
 
 import { Header } from './components/Header'
 
@@ -36,8 +37,9 @@ const Main = () => (
     <Switch>
       <Route path="/" exact component={PageMain} />
       <Route path="/profile/:_id" component={CPageAboutUser} />
-      <Route path="/edit/post/:_id" component={PageCreatePost} />
-      <Route path="/edit/post/new" component={PageCreatePost} />
+
+      <Route path="/edit/post/:_id" component={CPostEditor} />
+      
 
       <Route path="/post/:_id" component={CPost} />
 
@@ -82,6 +84,7 @@ const CProtectedRoute = connect((state) => ({
 export const history = createHistory()
 
 function App() {
+
   if (store.getState().auth?.token) {
     console.log('токен', store.getState().auth?.payload?.sub?.id)
     store.dispatch(actionFullProfilePage(store.getState().auth?.payload?.sub?.id))

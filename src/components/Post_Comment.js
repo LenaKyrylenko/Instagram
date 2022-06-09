@@ -45,7 +45,7 @@ export const AddComment = ({ addComment, onePost }) => {
         onPressEnter={e => { setComment(e.target.value) }}/> 
         
         <Button size="large" disabled={text.length < 1} type="primary"
-          onClick={() => addComment(onePost?._id, text)}> Publish </Button>
+          onClick={(e) => addComment(onePost?._id, text)&&setComment(e.target.value="")}> Publish </Button>
       {console.log('comment ', text )}
      
       <SmileOutlined className='smile-btn' style={{ fontSize: 'xx-large' }} 

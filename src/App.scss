@@ -19,19 +19,22 @@ body{
   border-width: 2px;
   border-radius: 2px;
   border-style: dashed;
-  background-color: #fafafa;
-  color: #bdbdbd;
+  background-color: #ccb2eb;
+  color: #1d5b78;
   outline: none;
   transition: border .24s ease-in-out;
+  font-size: medium;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 .Header{
   display: flex;
 position: fixed;
-margin: 40px;
+align-items: center;
+justify-content: center;
 padding: 20px;
-//  z-index: 4;
-  width: 60%; 
-  right:0;
+ z-index: 4;
+  width: 100%; 
+
  top: 0;
  background-color: white;
 }
@@ -49,11 +52,15 @@ padding: 20px;
 }
 .Post{
   max-width: 600px;
-  display: block; margin: 0 auto;
+  // display: block;
+   margin: 0 auto;
   background-color: #faf6fd;
   border: 6px solid #7922CC;
   padding: 10px;
   border-radius: 25px;
+ display:'flex';
+   align-items: 'center';
+    justify-content: 'center'
 }
 ul{
   margin: 0; 
@@ -75,9 +82,18 @@ main{
 }
 .Input{ 
 
-  // display: flex;
-  width: 50%;
+  display: flex;
+  width: 90%;
+  padding: 5px;
+  margin:20px;
+  border-radius: 10px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 20px;
 
+}
+.container{
+  padding: 20px;
+  margin: 20px;
 }
 .AboutMe{
   
@@ -200,7 +216,21 @@ Link{
    font-weight: bold;
    color: rgb(10, 9, 58);
 }
-Link:hover{
+.Link{
+  display: flex;
+  align-items: center;
+   justify-content: center;
+   text-decoration: none;
+   font-family: serif;
+   background-color: rgb(174, 172, 240);  
+   border: 2px solid rgb(37, 140, 184);
+   border-radius: 10px;
+   margin: 10px ;
+   padding: 10px;
+   font-weight: bold;
+   color: rgb(10, 9, 58);
+}
+.Link:hover{
   text-decoration: underline; 
   background-color: rgb(123, 119, 228);  
 }

@@ -14,6 +14,7 @@ import { EditOutlined } from '@ant-design/icons'
 import moment from 'moment';
 import { CComments, AddComment } from '../components/Post_Comment'
 import { CPostEditor } from '../components/NewPost'
+import { actionFullOnePost} from '../reducers'
 
 import { ConstructorModal} from '../helpers'
 import React, { useMemo, useState, useEffect } from 'react'
@@ -309,7 +310,7 @@ export const PagePost = ({ my_Id, onePost, likes, addComment,
 }
 
 export const CPost = connect((state) => ({
-  onePost: state.promise.onePost?.payload,
+  onePost: state.post.onePost,
   my_Id: state.auth.payload.sub.id || '',
   aboutUser: state.profilePage?.aboutUser,
   addComment: state.promise?.addComment?.payload,
@@ -322,5 +323,5 @@ export const CPost = connect((state) => ({
   addComment: actionAddFullComment, 
   addCommentReply: actionAddSubFullComment,
   findLikes: actionFindLikes,
-  onPost:actionOnePost
+  onPost:actionFullOnePost
 })(PagePost)

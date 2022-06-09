@@ -2,7 +2,7 @@ import thunk from 'redux-thunk';
 import {
   actionAuthLogin, gql, actionPromise,
   actionAllPosts, actionAboutMe, actionAllPostsUser, actionAboutUser,
-  actionPostsFeed,actionPostsFeedCount,
+  actionPostsFeed,actionPostsFeedCount,actionOnePost
 } from '../actions'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 
@@ -114,7 +114,7 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts }) =>
         console.log('SKIIIP ', skip)
         const newPosts = await dispatch(actionPostsFeed(getState, skip))
         if (newPosts) {
-          dispatch(actionFeedType(newPosts));
+          await dispatch(actionFeedType(newPosts));
           const postsFeedCount = await dispatch(actionPostsFeedCount(getState))
           console.log('postsFeedCount ', postsFeedCount)
         }
@@ -122,7 +122,7 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts }) =>
         }
      
     }
-    export const actionOnePost= (onePost) =>
+    export const actionOnePostType= (onePost) =>
     ({ type: 'ONE-POST', onePost })
   
   export const actionClearFeedPosts = () => ({ type: 'DELETE-POSTS' });
@@ -130,10 +130,12 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts }) =>
   export const actionFullClearFeedPosts = () => (dispatch) => {
     return dispatch(actionClearFeedPosts())
   }
-  export const actionFullOnePost = () =>
-    async (dispatch, getState) => {
-  
-  const onePost = await dispatch(actionOnePost(getState))
+  export const actionFullOnePost = (_id) =>
+    async (dispatch) => {
+      console.log('ID POST ', _id)
+      const onePost = await dispatch(actionOnePost(_id))
+      console.log(' one post ', onePost)
+      
     //  const skip = postsFeed.length
     // console.log('postsFeed ', postsFeed)
     // const postsFeedCount = await dispatch(actionPostsFeedCount(getState))
@@ -142,8 +144,9 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts }) =>
       // {
       //   console.log('SKIIIP ', skip)
       //   const newPosts = await dispatch(actionPostsFeed(getState, skip))
-        if (onePost) {
-          dispatch(actionOnePost(onePost));
+      if (onePost) {
+        console.log('УСПЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕХ')
+         await dispatch(actionOnePostType(onePost));
           console.log('onePost ', onePost)
         }
       }
@@ -168,12 +171,11 @@ export const feedReducer = (state = {}, {skip, type, newPosts=[], postsFeed,post
     }
     return state
   }
-  export const postReducer = (state = {}, {skip, type, newPosts=[], postsFeed,postsFeedCount }) => {
+  export const postReducer = (state = {}, {skip, type, newPosts=[],onePost, postsFeed,postsFeedCount }) => {
     const types = {
-      'ADD-POSTS': () => {
+      'ONE-POST': () => {
         return {
-          ...state,
-         onePost: state?.onePost
+          ...state,onePost
         }
       },
       'CLEAR-POST-ONE': () => {
@@ -223,7 +225,7 @@ export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
     }
     return state || {}
   }
-  export const actionClearPostsOneAC = () => ({ type: 'CLEAR-POST-ONE' })
+  export const actionClearPostsOne = () => ({ type: 'CLEAR-POST-ONE' })
 
  export const store = createStore(
     combineReducers({

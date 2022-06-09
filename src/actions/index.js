@@ -114,14 +114,17 @@ export const uploadFile = (file) => {
     body: myForm,
   }).then((result) => result.json())
 }
-export const actionUploadFile = (file) =>
-  actionPromise('uploadFile', uploadFile(file))
+export const actionUploadFile = (file) => 
+    actionPromise('uploadFile', uploadFile(file))
 
-export const actionUploadFiles = (files) =>
-  actionPromise(
-    'uploadFiles',
-    Promise.all(files.map((file) => uploadFile(file))),
-  )
+
+export const actionUploadFiles = (files) => 
+
+    actionPromise(
+      'uploadFiles',
+      Promise.all(files.map((file) => uploadFile(file))),
+    )
+
 
 export const actionAvatar = (imageId, myId) =>
   actionPromise(
@@ -159,24 +162,25 @@ export const actionAvatar = (imageId, myId) =>
 
 // export const actionAboutUser = actionAboutMe
 // :'aboutMe'
-export const actionPostUpsert = (post) =>
-  actionPromise(
-    'postUpsert',
-    gql(
-      `
+export const actionPostUpsert = (post) => async (dispatch) => {
+  await dispatch(
+    actionPromise(
+      'postUpsert',
+      gql(
+        `
 mutation PostUpsert($post:PostInput){
   PostUpsert(post:$post){
     _id title text images{_id url}
   }
 }`,
-      {
-        post: {
-          ...post,
-          images: post.images.map(({ _id }) => ({ _id })),
+        {
+          post: {
+            ...post,
+            images: post.images.map(({ _id }) => ({ _id })),
+          },
         },
-      },
-    ),
-  )
+      ),
+    ))}
 
 export const actionAllPosts = (userId) =>
   actionPromise(
@@ -236,42 +240,43 @@ export const actionAllPostsFeed = () =>
     ),
   )
 
-export const actionOnePost = (_id) => async (dispatch) => {
-  await dispatch(
-    actionPromise(
-      'onePost',
-      gql(
-        `query OneFind($post:String){
-         PostFindOne(query:$post){
-        _id title text images{_id url}
-        createdAt
-        comments{
-          _id, createdAt, text  owner{_id login avatar{_id url}}
-          answers{
-            _id, createdAt, text owner{_id login  avatar{_id url}}
-           
-          }
-        owner{_id login avatar{_id url}}}
-        likes{
-          _id
-          owner{				
-             _id login avatar {_id url}
-            }
-      }
-        }
-      }`,
-        {
-          post: JSON.stringify([{ _id }]),
-        },
-      ),
-    ),
+export const actionOnePost = (_id) => 
+  actionPromise(
+    'onePost',
+    gql(
+      `query OneFind($post:String){
+        PostFindOne(query:$post){
+       _id title text images{_id url}
+       createdAt
+       comments{
+         _id, createdAt, text  owner{_id login avatar{_id url}}
+         answers{
+           _id, createdAt, text owner{_id login  avatar{_id url}}
+          
+         }
+       owner{_id login avatar{_id url}}}
+       likes{
+         _id
+         owner{				
+            _id login avatar {_id url}
+           }
+     }
+       
+ }
+     }
+
+      `,
+      {
+        post: JSON.stringify([{ _id }]),
+      },
+    )
   )
-}
+
 
 export const actionFindLikes = (_id) => async (dispatch) => {
   await dispatch(
     actionPromise(
-      'onePost',
+      'onePostFindLike',
       gql(
         `query OneFind($post:String){
          PostFindOne(query:$post){
