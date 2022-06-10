@@ -66,7 +66,7 @@ export const actionProfilePageData = (id) => ({ type: 'DATA_PROFILE', id })
   export const actionFullProfilePage = (_id) =>
   async dispatch => {
     const aboutMe = await dispatch(actionAboutMe(_id))
-    console.log('aboutMe ', aboutMe)
+    console.log('попало ли в запрос на єбоут ми ', aboutMe)
     // const allPostsMe = await dispatch(actionAllPosts(_id))
     if (aboutMe) {
       await dispatch(actionProfilePageDataType(aboutMe))

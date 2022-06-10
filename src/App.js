@@ -62,17 +62,17 @@ const Main = ({ _id }) => {
       //   actionClearDataUserType() 
    <Switch>
       <Route path='/login'
-            component={CLoginForm} exact  />
-          {/* <Route path='/input'
-            component={InputForm} /> */}
+            component={CLoginForm}  />
+          <Route path='/input'
+            component={InputForm} />
             <Route path='/register'
             component={CRegisterForm}   />
-            <CProtectedRoute
+            {/* <CProtectedRoute
             roles={['anon']}
             fallback="/input"
             path="/*"
             component={InputForm}
-          />
+          /> */}
           {/* <Redirect from='/*' to='/input' /> */}
        </Switch >  
           // }  
@@ -85,12 +85,12 @@ const Main = ({ _id }) => {
     <Route path="/edit/post/:_id" component={CPostEditor}   />
     <Route path="/post/:_id" component={CPost}   />
     <Route path="/feed" component={CPostForFeed}   />
-    <CProtectedRoute
+    {/* <CProtectedRoute
             roles={['user']}
             fallback="/feed"
             path="/*"
             component={CPostForFeed}
-          />
+          /> */}
 
 </Switch>
     )
@@ -134,9 +134,12 @@ function App() {
 
   if (store.getState().auth?.token) {
     history.push('/feed')
+    store.dispatch(actionRemoveDataUser())
+    // store.dispatch(actionClearUserData())
+    store.dispatch(actionClearDataUserType())
     console.log('токен', store.getState().auth?.payload?.sub?.id)
     store.dispatch(actionFullProfilePage(store.getState().auth?.payload?.sub?.id))
-    store.dispatch(actionFullProfilePageUser(store.getState().auth?.payload?.sub?.id))
+    store.dispatch(actionFullProfilePageUser(store.getState().auth.payload.sub?.id))
     localStorage.authToken = store.getState().auth?.token;
   }else {
     history.push('/input')
@@ -145,13 +148,13 @@ function App() {
     store.dispatch(actionClearDataUserType())
   }
 
-  store.getState().auth.payload?.sub?.id ? <Redirect to="/"/> : <Redirect to="/input"/>
+  // store.getState().auth.payload?.sub?.id ? <Redirect to="/"/> : <Redirect to="/input"/>
   return (
     <Router history={history}>
       <Provider store={store}>
         <div className="App">
           <Divider />
-          <OldMain />
+          <CMain />
 {/*          
           <CProtectedRoute
             roles={['anon']}

@@ -262,7 +262,7 @@ const Subscribe = ({
 
 export const CPageAboutUser = connect(
   (state) => ({
-    my_Id: state.auth.payload.sub.id || '',
+    my_Id: state.auth.payload.sub.id,
     aboutUser: state.profilePage?.aboutUser,
     aboutUserFollowers: state.profilePage?.aboutUser?.followers,
     aboutUserFollowing: state.profilePage?.aboutUser?.following,
