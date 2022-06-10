@@ -3,7 +3,7 @@ import {
   actionAuthLogin, gql, actionPromise,
   actionAllPosts, actionAboutMe, actionAllPostsUser, actionAboutUser,
   actionPostsFeed, actionPostsFeedCount, actionOnePost, actionAddComment,
-  actionAddLike,actionDeleteLike,actionPostsCount
+  actionAddLike,actionDeleteLike,actionPostsCount,actionAuthLogout
 } from '../actions'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 
@@ -47,22 +47,34 @@ export const actionProfilePageData = (id) => ({ type: 'DATA_PROFILE', id })
       await dispatch(actionProfilePageDataTypeUser(aboutUser, allPosts))
     }
   }
+  export const actionClearDataUserType= () =>
+  ({ type: 'CLEAR-DATA' })
 
+  export const actionClearUserData = () =>
+  async dispatch => {
+    const logOut = await dispatch(actionAuthLogout())
+    console.log('logOut ', logOut)
+  
+   
+    if (logOut) {
+      const clearData = await dispatch(actionClearDataUserType())
+       console.log('clearData ', clearData )
+      // await dispatch(actionClearDataUserType())
+    }
+  }
 
   export const actionFullProfilePage = (_id) =>
   async dispatch => {
     const aboutMe = await dispatch(actionAboutMe(_id))
-    console.log('actionFullProfilePage ', actionFullProfilePage)
+    console.log('aboutMe ', aboutMe)
     // const allPostsMe = await dispatch(actionAllPosts(_id))
     if (aboutMe) {
       await dispatch(actionProfilePageDataType(aboutMe))
     }
-
-
   }
+
   export const actionRemoveDataUser= () =>
   ({ type: 'REMOVE-DATA' })
-
 export const profileUserReducer = (state = {}, { type, aboutUser, allPosts,newPosts }) => {
   const types = {
     'PROFILE-PAGE-USER': () => {
@@ -70,7 +82,7 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts,newPo
         ...state, aboutUser, allPosts
       }
     },
-    'REMOVE-DATA': () => {
+    'CLEAR-DATA': () => {
       return {
         ...state = {},
         aboutUser: {},
@@ -84,8 +96,6 @@ export const profileUserReducer = (state = {}, { type, aboutUser, allPosts,newPo
     }
   
     ,
-
-
   }
 
     if (type in types) {
@@ -266,7 +276,13 @@ export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
           return {
               ...state, aboutMe
           }
+    },
+    'REMOVE-DATA': () => {
+      return {
+        ...state = {},
+        aboutMe: {}
       }
+    }
 
   }
   if (type in types) {

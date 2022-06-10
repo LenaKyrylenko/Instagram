@@ -17,7 +17,7 @@ export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size,handleCa
        userFind?.map(({ _id, login, avatar }) => (
         <Link to={`/profile/${_id}`} onClick={handleCancel} key={_id}>
        
-              <Row>
+            <Row>
              <Col offset={1}>
             {avatar?.url ?  <Avatar
               style={{
@@ -82,7 +82,7 @@ export const ResultUserFind = ({ my_Id, userFind = [], onPageData, size,handleCa
    (state) => ({
     aboutUser: state.profilePage?.aboutUser,
     searchUser: state.promise?.searchUser?.payload,
-    my_Id: state.auth.payload.sub.id || '',
+    my_Id: state.auth?.payload?.sub?.id || '',
    }),
 
    {

@@ -87,10 +87,13 @@ export const actionFullLogin = (login, password) => async (dispatch) => {
       ),
     ),
   )
+  console.log('localStorage.getItem: ', localStorage.getItem("authToken"))
+  console.log('AUTH TOKEN IN ACTION ', token)
   if (token) {
-    dispatch(actionAuthLogin(token))
+    await dispatch(actionAuthLogin(token))
   }
 }
+
 export const actionRegister = (login, password) =>
   actionPromise(
     'register',
@@ -105,9 +108,9 @@ export const actionRegister = (login, password) =>
   )
 export const actionFullRegister = (login, password) => async (dispatch) => {
   let tokenCheck = await dispatch(actionRegister(login, password))
-
+  console.log('TOKEN CHECK', tokenCheck)
   if (tokenCheck?.login === login) {
-    dispatch(actionFullLogin(login, password))
+   await dispatch(actionFullLogin(login, password))
   }
 }
 export const uploadFile = (file) => {

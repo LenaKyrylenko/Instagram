@@ -80,30 +80,6 @@ export const PageAboutUser = ({
   aboutMeFollowing,
   countAllPostsUser,
 }) => {
-  const [checkScroll, setCheckScroll] = useState(true);
-
-  useEffect(() => {
-    if (checkScroll) {
-      actionFullProfilePageUser(_id);
-      setCheckScroll(false);
-    }
-  }, [checkScroll]);
-
-  useEffect(() => {
-    document.addEventListener('scroll', scrollHandler);
-    return () => {
-      document.removeEventListener('scroll', scrollHandler);
-      // clearDataProfile()
-    }
-  }, [allPosts]);
-
-  const scrollHandler = (e) => {
-    if(e.target.documentElement.scrollHeight - e.target.documentElement.scrollTop - e.target.documentElement.clientHeight <20)
-    // if (e.target.documentElement.scrollHeight -
-    //   (e.target.documentElement.scrollTop + window.innerHeight) < 20)
-    { setCheckScroll(true) }
-  };
-
 
   useEffect(() => {
     onAboutUser(_id)
@@ -246,18 +222,18 @@ const Subscribe = ({
         {checkFollowId ? (
           <Button
             size="large"
-            primary
+             danger
             onClick={() => deleteSubscribe(my_Id, followId)}
           >
-            unsubscribe
+            Unsubscribe
           </Button>
         ) : (
           <Button
             size="large"
-            danger
+           primary
             onClick={() => addSubscribe(my_Id, followId)}
           >
-            subscribe
+            Subscribe
           </Button>
         )}
       </div>

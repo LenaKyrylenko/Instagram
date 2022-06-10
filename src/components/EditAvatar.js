@@ -36,7 +36,6 @@ const EditInfo = ({ info, onSave, onFileDrop, fileStatus, myId }) => {
   console.log('state my ', state)
   useEffect(() => {
     fileStatus?.status == 'FULFILLED' &&
-      message.success(`File success uploaded!`) &&
       setState({
         ...state,
         ...state?.avatar,

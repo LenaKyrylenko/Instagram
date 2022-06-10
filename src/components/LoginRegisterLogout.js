@@ -10,15 +10,14 @@ import {
     EyeOutlined,EyeInvisibleOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom'
-  
-
-
-
+import {actionClearUserData} from '../reducers'
 const LoginForm = ({ onLogin, children }) => {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
-const [checked, setChecked] = useState(false)
-  console.log('checked ', checked)
+  const [checked, setChecked] = useState(false)
+  console.log('LOGIN ', login)
+  console.log('PASSWORD ', password)
+  
     return (
       <>
         <Form size="large"
@@ -31,9 +30,11 @@ const [checked, setChecked] = useState(false)
               <h1 style={{marginLeft:'400px'}}> {children} </h1>
       <Form.Item
         label="Login"
-        name="login" size="large"
-        rules={[{ required: true, message: 'Please input login!' }]}>
-                  <Input value={login} size="large" onChange={(e) => setLogin(e.target.value)} />
+            name="login" size="large"
+           
+            rules={[{ required: true, message: 'Please input login!' }]}>
+            
+          <Input value={login} size="large" onChange={(e) => setLogin(e.target.value)} />
                   
       </Form.Item>
 
@@ -119,33 +120,21 @@ export const CRegisterForm = connect(
 export const CLogout = connect(
   (state) => ({
     children: `Logout (${state.auth.payload?.sub?.login || 'Anon'})`,
+    // _id: state.auth.payload.sub.id
   }),
-  { onClick: actionAuthLogout },
+  { onClick: actionClearUserData },
 )('a')
 
-// export const InputForm = ({}) =>
+export const InputForm = ({ }) => {
 
-//         <div>
-//             если есть акк выберите сигн ин, если нету регистр
-//         {console.log('шото есть сук')}
-//             <Button> Sign In </Button>
-//             <Button> Register </Button>
-
-//         </div>
- 
-// // CForm
-
-export const InputForm = ({ onLogin, children }) => {
-    const [login, setLogin] = useState('')
-    const [password, setPassword] = useState('')
-  const [checked, setChecked] = useState(false)
-    console.log('checked ', checked)
       return (
           <>
               {/* display:'flex', flexDirection:'row', */}
-           <div style={{ background:'cyan', top:'0',position:'fixed'}}>
-          <h1>  если есть акк выберите сигн ин, если нету регистр</h1>
-         {console.log('шото есть сук')}
+           <div style={{ background:'cyan', display:'flex',alignItems: 'center'}}>
+            <h1>  If you have account, click on SignIn</h1>
+          <h1>  If no, click on Register</h1>
+            
+       
                       <Link className='Link' to={`/login`}> Sign In </Link>  
             
                       <Link className='Link' to={`/register`}> Register </Link> 

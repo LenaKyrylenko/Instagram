@@ -48,7 +48,7 @@ const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
 
 const CUser = connect(
   (state) => ({
-    my_Id: state.auth.payload?.sub?.id || '',
+    my_Id: state.auth?.payload?.sub?.id,
     aboutMe: state.profileData.aboutMe,
   }),
   { onMyPage: actionFullProfilePageUser },

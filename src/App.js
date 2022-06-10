@@ -24,37 +24,83 @@ import {CExplorePosts} from './components/Expore'
 // import { Carousel } from 'react-responsive-carousel';
 import { CPostForFeed, Feed } from './components/PostFeed'
 import {CPostEditor } from './components/NewPost'
-
+import { CLoginForm,CRegisterForm,InputForm } from './components/LoginRegisterLogout'
 import { Header } from './components/Header'
-
+import {actionRemoveDataUser,actionClearDataUserType,actionClearUserData}  from './reducers'
 console.log(store.getState())
 store.subscribe(() => console.log(store.getState()))
 console.log('ABOUT ME', store.getState().auth?.payload?.sub?.id)
+const OldMain = () =>
 
+  <Switch>
+  <Header />
+<Route path="/" exact component={PageMain}  />
+<Route path="/profile/:_id" component={CPageAboutUser}  />
+<Route path="/explore" component={CExplorePosts}   />
+<Route path="/edit/post/:_id" component={CPostEditor}   />
+<Route path="/post/:_id" component={CPost}   />
+<Route path="/feed" component={CPostForFeed}   />
+<CProtectedRoute
+     roles={['user']}
+     fallback="/feed"
+     path="/*"
+     component={CPostForFeed}
+   />
+
+</Switch>
+  
 const PageMain = () => <div className="PageMain">ГЛАВНАЯ</div>
-const CUserEdit = connect((state) => ({}), {})(PageAboutUser)
-const Main = () => (
-  <main>
-    <Switch>
-      <Route path="/" exact component={PageMain} />
-      <Route path="/profile/:_id" component={CPageAboutUser} />
-      <Route path="/explore" component={CExplorePosts} />
+const Main = ({ _id }) => {
+  console.log('_id token in app: ', _id)
+  
+  // console.log('TOKEN ', _id)
+  console.log('localStorage.getItem: ', localStorage.getItem("authToken"))
+  return (
+    (!localStorage.getItem("authToken")&&!_id)
+      ?  
+      // {
+      //   actionClearDataUserType() 
+   <Switch>
+      <Route path='/login'
+            component={CLoginForm} exact  />
+          {/* <Route path='/input'
+            component={InputForm} /> */}
+            <Route path='/register'
+            component={CRegisterForm}   />
+            <CProtectedRoute
+            roles={['anon']}
+            fallback="/input"
+            path="/*"
+            component={InputForm}
+          />
+          {/* <Redirect from='/*' to='/input' /> */}
+       </Switch >  
+          // }  
+      :
+      <Switch>
+         <Header />
+    <Route path="/" exact component={PageMain}  />
+    <Route path="/profile/:_id" component={CPageAboutUser}  />
+    <Route path="/explore" component={CExplorePosts}   />
+    <Route path="/edit/post/:_id" component={CPostEditor}   />
+    <Route path="/post/:_id" component={CPost}   />
+    <Route path="/feed" component={CPostForFeed}   />
+    <CProtectedRoute
+            roles={['user']}
+            fallback="/feed"
+            path="/*"
+            component={CPostForFeed}
+          />
 
-      <Route path="/edit/post/:_id" component={CPostEditor} />
-
-      <Route path="/post/:_id" component={CPost} />
-
-      <Route path="/feed" component={CPostForFeed} />
-      <Route path="/editProfile" component={CUserEdit} />
-    </Switch>
-  </main>
-)
+</Switch>
+    )
+}
 
 
 
-const CBasic = connect(null, { onLoad: actionSetAvatar })(Basic)
-
-
+const CMain =  connect((state) => ({
+  _id: state.auth?.payload?.sub?.id
+}))(Main)
 
 const ProtectedRoute = ({
   roles = [],
@@ -79,7 +125,7 @@ const PageRegister = () => {
   return <div>REGISTER</div>
 }
 const CProtectedRoute = connect((state) => ({
-  auth: state.auth?.payload?.sub.acl,
+  auth: state.auth?.payload?.sub?.acl,
 }))(ProtectedRoute)
 
 export const history = createHistory()
@@ -87,32 +133,38 @@ export const history = createHistory()
 function App() {
 
   if (store.getState().auth?.token) {
+    history.push('/feed')
     console.log('токен', store.getState().auth?.payload?.sub?.id)
     store.dispatch(actionFullProfilePage(store.getState().auth?.payload?.sub?.id))
+    store.dispatch(actionFullProfilePageUser(store.getState().auth?.payload?.sub?.id))
+    localStorage.authToken = store.getState().auth?.token;
+  }else {
+    history.push('/input')
+    store.dispatch(actionRemoveDataUser())
+    store.dispatch(actionClearUserData())
+    store.dispatch(actionClearDataUserType())
   }
-  else {
-    console.log('ошибочка')
-  }
-  if (document.body.offsetHeight > document.documentElement.clientHeight) 
-    console.log("Скролл есть");
-else {
-    console.log("Скролла нет");
-}
 
-
+  store.getState().auth.payload?.sub?.id ? <Redirect to="/"/> : <Redirect to="/input"/>
   return (
     <Router history={history}>
       <Provider store={store}>
         <div className="App">
-          <Header />
           <Divider />
-          <Main />
+          <OldMain />
+{/*          
           <CProtectedRoute
             roles={['anon']}
-            fallback="/dashboard"
-            path="/register"
-            component={PageRegister}
+            fallback="/input"
+            path="/*"
+            component={InputForm}
           />
+          <CProtectedRoute
+            roles={['user']}
+            fallback="/feed"
+            path="/*"
+            component={CPostForFeed}
+          /> */}
         </div>
       </Provider>
     </Router>
