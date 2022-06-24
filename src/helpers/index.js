@@ -1,30 +1,33 @@
-import { Modal } from 'antd';
-// import React, { useState } from 'react'
+import { Modal,Button } from 'antd'
 import { useDropzone } from 'react-dropzone'
-import { Upload, Button, DatePicker, Space } from 'antd'
-import React, { useMemo, useState, useEffect } from 'react'
-import { UploadOutlined, SearchOutlined } from '@ant-design/icons'
+import React, {useEffect } from 'react'
+import { UploadOutlined } from '@ant-design/icons'
 
-export const ConstructorModal = ({title, children, isModalVisible, setIsModalVisible }) =>
-{
-
+export const ConstructorModal = ({
+  title,
+  children,
+  isModalVisible,
+  setIsModalVisible,
+}) => {
   const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+    setIsModalVisible(false)
+  }
 
   return (
     <>
-        <Modal title={title} centered className="Modal"
+      <Modal
+        title={title}
+        centered
+        className="Modal"
         footer={null}
         onCancel={handleCancel}
-        visible={isModalVisible}>
-
+        visible={isModalVisible}
+      >
         {children}
-        </Modal>
+      </Modal>
     </>
   )
 }
-
 
 export function Basic({ onLoad }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
@@ -41,15 +44,10 @@ export function Basic({ onLoad }) {
     <section className="container">
       <div {...getRootProps({ className: 'Dropzone' })}>
         <input {...getInputProps()} />
-        <Button icon={<UploadOutlined />}>
+        <Button type="default" size="medium" icon={<UploadOutlined />}>
           Drag 'n' drop some files here, or click to select files
         </Button>
       </div>
-      <aside>
-        <h4 style={{ color: 'black' }}>File</h4>
-        <ul>{files}</ul>
-        {/* <img src={files.}/> */}
-      </aside>
     </section>
   )
 }

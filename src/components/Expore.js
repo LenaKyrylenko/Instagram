@@ -1,11 +1,10 @@
-// explorePosts
 import {
     actionOnePost, actionExplorePosts
 } from '../actions'
 import { Row, Col } from 'antd'
 import { Card } from './Post'
-import React, { useMemo, useState, useEffect } from 'react'
-import { Provider, connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
   
 const ExplorePosts = ({explorePosts,onPost,onExlorePosts }) => {
     useEffect(() => {
@@ -36,7 +35,7 @@ const ExplorePosts = ({explorePosts,onPost,onExlorePosts }) => {
 }
 export const CExplorePosts = connect(
     (state) => ({
-      my_Id: state.auth.payload.sub.id || '',
+      my_Id: state.auth?.payload?.sub?.id || '',
       countAllPostsUser: state.promise?.countAllPostsUser?.payload,
       explorePosts: state.promise?.explorePosts?.payload
     }),

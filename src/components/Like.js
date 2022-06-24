@@ -1,10 +1,9 @@
 import { Avatar, Col, Row } from 'antd'
 import { ConstructorModal } from '../helpers'
-import { ResultUserFind } from '../components/Search_Users'
-import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import user from '../materials/user.png'
 import { HeartOutlined, HeartFilled } from '@ant-design/icons'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 export const Likes = ({ likes }) => {
   return (
@@ -13,17 +12,17 @@ export const Likes = ({ likes }) => {
         {likes &&
           likes?.map(({ owner: { _id, login, avatar } }) => (
             <Link to={`/profile/${_id}`}>
-              <Row>
+              <Row style={{margin:'10px'}}>
                 <Col offset={1}>
-                  <Avatar
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      // marginRight: '30px',
-                      // position: 'absolute',
-                    }}
-                    src={'/' + avatar?.url || user}
-                  />
+                {avatar?.url ? (
+              <Avatar
+                style={{ width: '50px', height: '50px' }}
+                src={'/' + avatar?.url}
+              />
+            ) : (
+              <Avatar style={{ width: '50px', height: '50px' }} src={user} />
+            )}
+
                 </Col>
                 <Col offset={2}>
                   <h3> {login || 'Anon'}</h3>
@@ -46,7 +45,7 @@ export const Like = ({
   const likeId = likes.find((like) => like?.owner?._id === my_Id)?._id
   const changeLike = () =>
     likeId ? deleteLike(likeId, postId) : addLike(postId)
-  // console.log('likeId', likeId)
+
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const showModal = () => {
@@ -72,10 +71,7 @@ export const Like = ({
             {likes.length} likes
           </h3>
         ) : (
-          <h3 style={{ cursor: 'pointer', paddingLeft: 8 }}>
-            {' '}
-             0 likes
-          </h3>
+          <h3 style={{ cursor: 'pointer', paddingLeft: 8 }}> 0 likes</h3>
         )}
       </div>
       <ConstructorModal

@@ -1,25 +1,24 @@
-
-import { Avatar, Col} from 'antd'
+import { Avatar, Col } from 'antd'
 import { ConstructorModal } from '../helpers'
 import { ResultUserFind } from '../components/Search_Users'
+import React, { useState } from 'react'
 
-import React, { useMemo, useState, useEffect } from 'react'
-
-export const ListFollowing = ({aboutUserFollowing,following,onPageData }) => {
-    
-    const [isModalVisibleFollowing, setIsModalVisibleFollowing] =
-        useState(false)
+export const ListFollowing = ({
+  aboutUserFollowing,
+  following,
+  onPageData,
+}) => {
+  const [isModalVisibleFollowing, setIsModalVisibleFollowing] = useState(false)
 
   const showModalFollowing = () => {
     setIsModalVisibleFollowing(true)
   }
-    const handleCancelFollowing = () => {
-        setIsModalVisibleFollowing(false)
-      }
-    return (
+  const handleCancelFollowing = () => {
+    setIsModalVisibleFollowing(false)
+  }
+  return (
     <>
-    {
-        following?.length > 0 ? (
+      {following?.length > 0 ? (
         <h3
           style={{ cursor: 'pointer', marginLeft: '20px' }}
           onClick={showModalFollowing}
@@ -29,20 +28,20 @@ export const ListFollowing = ({aboutUserFollowing,following,onPageData }) => {
       ) : (
         <h3 style={{ marginLeft: '20px' }}> 0 following </h3>
       )}
-    
-    <ConstructorModal
-    title={'Following'}
-    isModalVisible={isModalVisibleFollowing}
-    setIsModalVisible={setIsModalVisibleFollowing}
-  >
-    <ResultUserFind
-      size={'40px'}
-      onPageData={onPageData}
-      handleCancel={handleCancelFollowing}
-      userFind={aboutUserFollowing}
-    />
-            </ConstructorModal>
-        </>
-    )
+
+      <ConstructorModal
+        title={'Following'}
+        isModalVisible={isModalVisibleFollowing}
+        setIsModalVisible={setIsModalVisibleFollowing}
+      >
+        <ResultUserFind
+          size={'40px'}
+          onPageData={onPageData}
+          handleCancel={handleCancelFollowing}
+          userFind={aboutUserFollowing}
+        />
+      </ConstructorModal>
+    </>
+  )
 }
 export default ListFollowing

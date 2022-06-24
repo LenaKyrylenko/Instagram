@@ -1,47 +1,40 @@
-import user from '../materials/user1.png'
+import user from '../materials/user.png'
 import { actionFullProfilePageUser } from '../reducers'
 import { Avatar, Button } from 'antd'
-import { CSearch } from '../components/Search_Users'
+import { CSearch } from './Search_Users'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {  AddPost } from '../components/NewPost'
+import { AddPost } from './NewPost'
 import React, { useEffect } from 'react'
-import { CLoginForm,CRegisterForm,CLogout } from '../components/LoginRegisterLogout'
+import { CLogout } from './LoginRegisterLogout'
 
-export const Feed = ({ aboutMe, onAllFollowing, onPostsFeed, postsFeed }) => {
-  console.log('POST FEED', postsFeed)
+export const Feed = () => {
   return (
     <>
-      <Link className="Feed" to={`/feed`}>
-        <Button className="Feed" size="large">
-          {' '}
-          Feed{' '}
-        </Button>
+      <Link to={`/feed`}>
+        <a className="button"> Feed </a>
       </Link>
     </>
   )
 }
-export const CFeed = connect((state) => ({
-  aboutMe: state?.profileData?.aboutMe,
-}))(Feed)
-
-
 
 const Recommendations = () => (
-  <Link className="Feed" to={`/explore`}>
-  <Button size="large" className="Recomendations">
-    {' '}
-      Explore
+  <Link to={`/explore`}>
+    <a size="large" className="button">
       {' '}
-    </Button>
-    </Link>
+      Explore{' '}
+    </a>
+  </Link>
 )
 const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
   useEffect(() => onMyPage(_id), [_id])
   return (
-    <Link className="User" to={`/profile/${_id}`}>
-      {avatar?.url ? <Avatar src={'/' + avatar?.url} style={{ marginLeft: '20px',width:'45px', height:'45px'}} /> :
-        <Avatar src={user} style={{ marginLeft: '20px',width:'45px', height:'45px'}}/>}
+    <Link to={`/profile/${_id}`}>
+      {avatar?.url ? (
+        <Avatar src={'/' + avatar?.url} size={60} className="Avatar" />
+      ) : (
+        <Avatar src={user} size={60} className="Avatar" />
+      )}
     </Link>
   )
 }
@@ -57,13 +50,12 @@ const CUser = connect(
 export const Header = () => {
   return (
     <section className="Header">
-        <CLogout className='Link'/>
-    {/* <Link className='Link' to={`/login`}> Sign In </Link> */}
+      <CLogout className="button" />
       <CSearch />
-      <CFeed />
+      <Feed />
       <AddPost />
       <Recommendations />
- 
+
       <CUser />
     </section>
   )

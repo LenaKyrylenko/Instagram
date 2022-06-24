@@ -1,29 +1,11 @@
-import { EditOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
-import { Upload, message, Avatar, Button } from 'antd'
-import { actionAvatar, actionUploadFile,actionSetAvatar } from '../actions'
-import ImgCrop from 'antd-img-crop'
-import React, { useMemo, useState, useEffect } from 'react'
-import { Basic } from '../helpers'
-import user from '../materials/user1.png'
-import { ConstructorModal } from '../helpers'
-import { Image, Divider, Radio } from 'antd'
-import { history } from '../App'
+import { message, Image, Button } from 'antd'
+import { actionUploadFile,actionSetAvatar } from '../actions'
+import React, { useState, useEffect } from 'react'
+import { Basic,ConstructorModal } from '../helpers'
 
-export const propsUploadFile = {
-  name: 'photo',
-  action: `/upload`,
-  headers:
-    localStorage.authToken || sessionStorage.authToken
-      ? {
-          Authorization:
-            'Bearer ' + (localStorage.authToken || sessionStorage.authToken),
-        }
-      : {},
-}
 const EditInfo = ({ info, onSave, onFileDrop, fileStatus, myId }) => {
   const [state, setState] = useState(info)
-
   const [isModalVisibleEdit, setIsModalVisibleEdit] = useState(false);
 
   const showModalEdit = () => {
@@ -45,36 +27,49 @@ const EditInfo = ({ info, onSave, onFileDrop, fileStatus, myId }) => {
   const saveAvatar = () => onSave(state?._id, myId)
     && message.success(`Avatar success changed!`)&&setIsModalVisibleEdit(false)
 
-  // const onChangeLogin = (event) =>
-  //   setState({
-  //     ...state,
-  //     login: event.target.value,
-  //   })
-
-
   return (
     <>
-      <button onClick={showModalEdit}>EDIT</button>
+      <Button
+        type="primary" style={{
+          fontWeight: '600',
+          fontSize:'15px',
+          transition: ".3s",
+          boxShadow: "0 5px 15px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)",
+        }}
+        
+        onClick={showModalEdit}>Edit avatar</Button>
       
         <ConstructorModal title={'Edit avatar'}
                 isModalVisible={isModalVisibleEdit}
         setIsModalVisible={setIsModalVisibleEdit}
         handleCancel={handleCancelEdit}
       >  
-      <Basic onLoad={onFileDrop}/>
+        <Basic onLoad={onFileDrop} />
+        <center>
       {fileStatus?.payload?.url && (
         <Image
-          style={{ marginRight: '20px', maxWidth: '200px', maxHeight: '200px' }}
+              style={{
+                marginBottom: '30px', width: '200px',
+                objectFit: 'cover',
+                height: '150px'
+              }}
           src={'/' + fileStatus?.payload?.url}
         />
-      )}
-        <br/>
-      <Button style={{}}
-        disabled={state?.images?.length == 0}
-        onClick={saveAvatar}>
+          )}
+          </center>
+        <br />
+        <center>
+
+       
+      <Button style={{width:"200px"}}
+        disabled={state ? false : true}
+          onClick={saveAvatar}
+          size="large"
+          type="primary"
+        >
         Save
         </Button>
-      
+       </center>
       </ConstructorModal>
     </>
   )

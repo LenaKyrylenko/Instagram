@@ -1,30 +1,21 @@
-import { Router, Route, Link, Redirect, Switch } from 'react-router-dom'
 import {
-  actionAllPosts, actionOnePost, actionAddFullComment, actionGetFindLiked,
-  actionFindSubComment, actionAddSubFullComment, actionDeleteFullLike, actionAddFullLike, actionAddLike, actionDeleteLike
+ actionAddFullComment,
+  actionFindSubComment, actionAddSubFullComment
 } from '../actions'
+import { Tooltip } from 'antd'
+import { connect } from 'react-redux'
 
-import photoNotFound from '../materials/photoNotFound.png'
-import {
-  LeftCircleFilled, RightCircleFilled,
-  HeartOutlined, HeartTwoTone, HeartFilled
-} from '@ant-design/icons'
-import { Carousel,Avatar,Tooltip } from 'antd'
-import user from '../materials/user.png'
-import { Provider, connect } from 'react-redux'
-import { Row, Col } from 'antd';
-import { Divider, Input, Button } from 'antd';
-import { EditOutlined, SmileOutlined} from '@ant-design/icons'
+import { Input, Button } from 'antd';
+import {SmileOutlined} from '@ant-design/icons'
 import moment from 'moment';
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import data from 'emoji-mart/data/google.json'
 import { NimblePicker, Emoji } from 'emoji-mart'
-import {LinkToUser} from './LinkToUser'
-// import InputEmoji from 'react-input-emoji'; 
+import {LinkToUser} from './LinkToUser'; 
 import reactStringReplace from 'react-string-replace'
-// const postId="625afa1d069dca48a822ffb0"
+
 export const AddComment = ({ addComment, postId }) => {
   const [text, setComment] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -36,10 +27,10 @@ export const AddComment = ({ addComment, postId }) => {
     <>
       {
         showEmojiPicker && <Picker autoFocus={true}
-          style={{ color: '#ae65c5', bottom: '160px', marginRight:'440px' }}
+          style={{ color: '#74d2e7',position: 'absolute', bottom: '160px', right: '30px' }}
           onSelect={emojiTag => addEmoji(emojiTag)} set="apple" />
       }
-      <Input style={{ display:'flex',width:'60%',marginLeft:'20px', marginRight:'20px' }} size="large" placeholder='Add a comment...' 
+      <Input style={{ display:'flex',width:'40%',marginLeft:'10px', marginRight:'10px' }} size="large" placeholder='Add a comment...' 
           value={text} onChange={e => { setComment(e.target.value) }}
         onPressEnter={e => { setComment(e.target.value) }}/> 
          <SmileOutlined className='smile-btn' style={{ fontSize: 'xx-large', marginRight:'30px' }} 
@@ -49,8 +40,6 @@ export const AddComment = ({ addComment, postId }) => {
       <Button 
         size="large" disabled={text.length < 1} type="primary"
           onClick={(e) => addComment(postId, text)&&setComment(e.target.value="")}> Publish </Button>
-      {console.log('comment ', text )}
-     
         </>
     )
       
@@ -74,19 +63,7 @@ const SpoilerButton = ({text, close, children }) => {
       <div style={{ display: 'flex', flexDirection: 'row', padding: '5px', margin: '5px' }}>
         
         <LinkToUser owner={owner} size={'10px'} sizePadding={'0px' }/>
-        {/* {owner?.avatar ?
-            <Avatar
-              style={{ width: '25px', height: '25px',marginRight: '2%'}}
-              src={'/' + owner?.avatar?.url}
-            /> :
-            <Avatar style={{ width: '25px', height: '25px',marginRight: '2%' }} src={user} />
-          }
-          {owner?.login ? (
-            <h3 style={{ marginRight: '2%', fontWeight: 'bold' }}> {owner?.login} </h3>
-          ) : (
-            <h3 style={{ marginRight: '2%', fontWeight: 'bold' }}> anon </h3>
-          )
-      } */}
+  
       </div>
   </>
 
@@ -111,7 +88,16 @@ const CommentForReply =({addCommentReply, commentId, postId})=>{
   const CommentText = ({ text,close }) => {
     // const [edit, setEdited] = useState(close)
     return (
-      <div style={{width:'90%',display:'inline-block', background:'#c8c8c8'}}>
+      <div style={{
+        width: '90%',
+        margin: "20px",
+        paddingLeft:'5px',
+        display: "flex",
+        alignItems: "left",
+justifyContent: "left",
+transition: ".3s",
+boxShadow: "0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)"
+      }}>
    {/* <EditOutlined style={{float:'right',  fontSize: 'x-large' }}/> */}
         <h3 style={{display:'block'}}>  {reactStringReplace(text, /:(.+?):/g, (match, i) => (
           <Emoji emoji={match}  set='apple' size={20}/> ))}
