@@ -1,24 +1,18 @@
-import thunk from 'redux-thunk'
-import {
-  actionAboutMe,
-  actionAllPostsUser,
-  actionAboutUser,
-  actionPostsFeed,
-  actionPostsFeedCount,
-  actionOnePost,
-  actionAddComment,
-  actionAddLike,
-  actionDeleteLike,
-  actionPostsCount,
-  actionAuthLogout,
-} from '../actions'
+
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { history } from '../App'
+import thunk from 'redux-thunk'
 function promiseReducer(state = {}, { type, name, status, payload, error }) {
+ 
   if (type === 'PROMISE') {
     return {
       ...state,
       [name]: { status, payload, error },
+    }
+  }
+  if (type === 'PROMISE_CLEAR') {
+    return {
+      ...state,
+      [name]: null,
     }
   }
   return state
@@ -32,50 +26,6 @@ const jwtDecode = (token) => {
   }
 }
 
-export const actionProfilePageDataTypeUser = (aboutUser, allPosts) => ({
-  type: 'PROFILE-PAGE-USER',
-  aboutUser,
-  allPosts,
-})
-
-export const actionProfilePageData = (id) => ({ type: 'DATA_PROFILE', id })
-
-export const actionProfilePageDataType = (aboutMe) => ({
-  type: 'PROFILE-PAGE',
-  aboutMe,
-})
-
-export const actionAvatarUpdate = (aboutUser) => ({
-  type: 'CHANGE-AVATAR-USER',
-  aboutUser,
-})
-
-export const actionFullProfilePageUser = (_id) => async (dispatch) => {
-  const aboutUser = await dispatch(actionAboutUser(_id))
-  const allPosts = await dispatch(actionAllPostsUser(_id))
-  await dispatch(actionPostsCount(_id))
-  if (aboutUser && allPosts) {
-    await dispatch(actionProfilePageDataTypeUser(aboutUser, allPosts))
-  }
-}
-export const actionClearDataUserType = () => ({ type: 'CLEAR-DATA' })
-
-export const actionClearUserData = () => async (dispatch) => {
-  const logOut = await dispatch(actionAuthLogout())
-  if (logOut) {
-    history.push('/input')
-     await dispatch(actionClearDataUserType())
-  }
-}
-
-export const actionFullProfilePage = (_id) => async (dispatch) => {
-  const aboutMe = await dispatch(actionAboutMe(_id))
-  if (aboutMe) {
-    await dispatch(actionProfilePageDataType(aboutMe))
-  }
-}
-
-export const actionRemoveDataUser = () => ({ type: 'REMOVE-DATA' })
 export const profileUserReducer = (
   state = {},
   { type, aboutUser, allPosts, newPosts },
@@ -108,91 +58,7 @@ export const profileUserReducer = (
   }
   return state
 }
-export const actionFeedType = (newPosts) => ({ type: 'ADD-POSTS', newPosts })
 
-export const actionAddCommentPostInTape = (postId, newResult) => ({
-  type: 'ADD-COMMENT-POSTS',
-  postId,
-  newResult,
-})
-
-export const actionAddFullCommentFeed = (postId, newResult) => async (
-  dispatch,
-  getState,
-) => {
-  await dispatch(actionAddComment(postId, newResult))
-  const {
-    promise: {
-      addComment: { status },
-    },
-  } = getState()
-  if (status === 'FULFILLED') {
-    const onePost = await dispatch(actionOnePost(postId))
-    if (onePost) await dispatch(actionAddCommentPostInTape(postId, newResult))
-  }
-  // await dispatch(actionOnePost(postId));
-}
-const actionAddLikePostInTape = (postId) => ({ type: 'ADD-LIKE-POSTS', postId })
-
-export const actionAddFullLikeFeed = (postId) => async (dispatch, getState) => {
-  await dispatch(actionAddLike(postId))
-  const {
-    promise: {
-      addLike: { status },
-    },
-  } = getState()
-  if (status === 'FULFILLED') {
-    const onePost = await dispatch(actionOnePost(postId))
-    if (onePost) await dispatch(actionAddLikePostInTape(postId))
-  }
-}
-const actionDeleteLikePostInTape = (likeId, postId) => ({
-  type: 'DELETE-LIKE-POSTS',
-  likeId,
-  postId,
-})
-export const actionDeleteFullLikeFeed = (likeId, postId) => async (
-  dispatch,
-  getState,
-) => {
-  await dispatch(actionDeleteLike(likeId, postId))
-  const {
-    promise: {
-      deleteLike: { status },
-    },
-  } = getState()
-  if (status === 'FULFILLED') {
-    const onePost = await dispatch(actionOnePost(postId))
-    if (onePost) await dispatch(actionDeleteLikePostInTape(likeId, postId))
-  }
-}
-
-export const actionFullFeed = () => async (dispatch, getState) => {
-  const postsFeed = await dispatch(actionPostsFeed(getState))
-  const skip = postsFeed.length
-  const postsFeedCount = await dispatch(actionPostsFeedCount(getState))
-  if (skip < postsFeedCount) {
-    const newPosts = await dispatch(actionPostsFeed(getState, skip))
-    if (newPosts) {
-      await dispatch(actionFeedType(newPosts))
-    }
-  }
-}
-export const actionOnePostType = (onePost) => ({ type: 'ONE-POST', onePost })
-
-export const actionClearFeedPosts = () => ({ type: 'DELETE-POSTS' })
-
-export const actionFullClearFeedPosts = () => (dispatch) => {
-  return dispatch(actionClearFeedPosts())
-}
-export const actionFullOnePost = (_id) => async (dispatch) => {
-  const onePost = await dispatch(actionOnePost(_id))
-  if (onePost) {
-    await dispatch(actionOnePostType(onePost))
-    // await dispatch(actionClearDataUserType())
-  }
-
-}
 export const feedReducer = (
   state = {},
   { skip, type, newPosts = [], postId, postsFeed, postsFeedCount, newResult },
@@ -201,15 +67,29 @@ export const feedReducer = (
     'ADD-POSTS': () => {
       return {
         ...state,
-        postsFeed: postsFeed ? [...postsFeed, ...newPosts] : [...newPosts],
+        postsFeed: [...postsFeed || [], ...newPosts],
+        postsFeedCount: postsFeedCount ? postsFeedCount : state.postsFeedCount
+            
+       // postsFeed: postsFeed ? [...postsFeed, ...newPosts] : [...newPosts],
       }
     },
-    'DELETE-POSTS': () => {
+    'COUNT': () => {
       return {
         ...state,
-        postsFeed: [],
+        postsFeedCount: postsFeedCount,
       }
     },
+    'POSTS': () => {
+      return {
+        ...state,
+        postsFeed: postsFeed ,
+      }
+    },
+    'CLEAR-POSTS': () => ({
+      ...state,
+      postsFeed: [],
+      postsFeedCount: 0,
+  }),
 
     'ADD-LIKE-POSTS': () => ({
       ...state,
@@ -298,7 +178,6 @@ function authReducer(state, { type, token }) {
   }
   return state || {}
 }
-export const actionClearPostsOne = () => ({ type: 'CLEAR-POST-ONE' })
 
 export const store = createStore(
   combineReducers({

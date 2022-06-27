@@ -118,7 +118,7 @@ boxShadow: "0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)"
    
     return (
       <>
-        {console.log('длина ', comments?.length)}
+        {/* {console.log('длина ', comments?.length)} */}
        
         {
         

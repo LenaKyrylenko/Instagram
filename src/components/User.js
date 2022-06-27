@@ -15,7 +15,7 @@ import { Avatar, Button} from 'antd'
 import {
   actionFullProfilePageUser,
   actionRemoveDataUser,
-} from '../reducers'
+} from '../actionReducers'
 import { Row, Col } from 'antd'
 import { CEditInfo } from '../components/EditAvatar'
 

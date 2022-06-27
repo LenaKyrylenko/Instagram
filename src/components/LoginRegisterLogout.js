@@ -1,9 +1,10 @@
-import { actionFullLogin, actionFullRegister } from '../actions'
+import { actionFullLogin, actionFullRegister }
+ from '../actions'
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Input, Checkbox, Form } from 'antd'
 import { Link } from 'react-router-dom'
-import { actionClearUserData } from '../reducers'
+import { actionClearUserData } from '../actionReducers'
 import { message } from 'antd'
 import { useEffect } from 'react'
 
@@ -16,7 +17,6 @@ const LoginForm = ({ onLogin, children, auth }) => {
     if (auth?.status === 'FULFILLED' && auth?.payload === null) {
       message.error({
         content: 'You entered wrong login or password',
-        className: 'custom-class',
         style: {
           marginTop: '80px',
         },

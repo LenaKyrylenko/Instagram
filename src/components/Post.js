@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
 import { CComments, AddComment } from '../components/Post_Comment'
 import { CPostEditor } from '../components/NewPost'
-import { actionFullOnePost } from '../reducers'
+import { actionFullOnePost } from '../actionReducers'
 import { Like, Likes } from './Like'
 import { ConstructorModal } from '../helpers'
 import React, { useState, useEffect } from 'react'
@@ -23,8 +23,8 @@ import {
   actionAddFullCommentFeed,
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
-} from '../reducers'
-
+} from '../actionReducers'
+import {LinkToUser} from './LinkToUser'
 const EditMyPost = ({ _id }) => {
   return (
     <>
@@ -42,7 +42,7 @@ const EditMyPost = ({ _id }) => {
 }
 export const Card = ({ post }) => (
   <>
-    <Link to={`/post/${post?._id}`}>
+    <Link key={post?._id} to={`/post/${post?._id}`}>
       {post?.images && post?.images[0] && post.images[0]?.url ? (
         <img
           className="Card"
@@ -112,7 +112,7 @@ export const MyCarousel = ({ images = [] }) => {
   return (
     <>
       <div className="MyCarousel">
-        <Carousel
+        <Carousel 
           effect="fade"
           arrows
           nextArrow={<SampleNextArrow />}
@@ -128,7 +128,7 @@ export const MyCarousel = ({ images = [] }) => {
                 ),
             )
           ) : (
-            <div>
+            <div >
               <img className="PostImage" src={photoNotFound} />
             </div>
           )}
@@ -166,7 +166,7 @@ export const PagePost = ({
             <CPostEditor />
           </ConstructorModal>
 
-          <MyCarousel
+          <MyCarousel key={onePost?._id}
             style={{ position: 'absolute' }}
             images={onePost?.images}
           />
@@ -177,7 +177,8 @@ export const PagePost = ({
         </Col>
         <Col span={8}>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
-            {onePost?.owner?.avatar ? (
+            <LinkToUser owner={onePost?.owner} size={'50px'}/>
+            {/* {onePost?.owner?.avatar ? (
               <Avatar
                 style={{ width: '50px', height: '50px' }}
                 src={'/' + onePost?.owner?.avatar?.url}
@@ -188,7 +189,7 @@ export const PagePost = ({
             <h1 style={{ marginLeft: '20px' }}>
               {' '}
               {onePost?.owner?.login || 'Anon'}
-            </h1>
+            </h1> */}
             <Row span={1}>
               {my_Id === onePost?.owner?._id && <EditMyPost _id={_id} />}
             </Row>

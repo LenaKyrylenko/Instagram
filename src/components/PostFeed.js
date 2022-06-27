@@ -18,7 +18,7 @@ import {
   actionAddFullCommentFeed,
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
-} from '../reducers'
+} from '../actionReducers'
 
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
@@ -32,38 +32,39 @@ import { AddComment, Comments } from './Post_Comment'
 import { Like, Likes } from './Like'
 
 const MyPostFeed = ({
-  my_Id,
+  profileData,
   postsFeed = [],
   onPostsFeed,
   addComment,
+  onClearFeed
 }) => {
-  const [checkScroll, setCheckScroll] = useState(true)
-
+  const [checkScroll, setScroll] = useState(true)
+  console.log('my_Id?.following?.length ',profileData.following?.length)
   useEffect(() => {
-    if (checkScroll) {
+    if (checkScroll && profileData.following?.length!=0 ) {
       onPostsFeed()
-      setCheckScroll(false)
+      setScroll(false)
     }
-  }, [checkScroll])
+  }, [checkScroll,profileData.following])
 
   useEffect(() => {
+    
     document.addEventListener('scroll', scrollHandler)
     return () => {
       document.removeEventListener('scroll', scrollHandler)
+    onClearFeed()
     }
-  }, [postsFeed])
+  }, [])
 
   const scrollHandler = (e) => {
-    if (
-      e.target.documentElement.scrollHeight - e.target.documentElement.scrollTop - e.target.documentElement.clientHeight <20
-    ) {
-      setCheckScroll(true)
+    if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
+      setScroll(true)
     }
   }
 
   return (
     <>
-      <div className="PostsFeed">
+      <div className="PostsFeed" >
         
         <Row>
           <Col span={12} offset={6}>
@@ -81,7 +82,7 @@ const MyPostFeed = ({
               )}
               {(postsFeed || []).map(
                 ({ _id, images, title, text, owner, comments, likes }) => (
-                  <div className="PostFeed">
+                  <div className="PostFeed" key={_id}>
                     <LinkToUser owner={owner} size="70px" />
                     <MyCarousel images={images} style={{ marginTop: '60px' }} />
                     <h1 className='Title'> Title: {title || ''}</h1>
@@ -126,16 +127,17 @@ const CCommentsForFeed = connect(
 
 export const CPostForFeed = connect(
   (state) => ({
-    my_Id: state.auth?.payload?.sub?.id || '',
+    profileData:  state?.profileData.aboutMe || '',
     postsFeed: state.feed?.postsFeed,
     addComment: state.promise?.addComment?.payload,
   }),
   {
     onPostsFeed: actionFullAllGetPosts,
-    clearDataProfile: actionClearFeedPosts,
+    onClearFeed: actionClearFeedPosts,
     addComment: actionAddFullCommentFeed,
     addCommentReply: actionAddSubFullComment,
     addLike: actionAddFullLikeForFeed,
+
   },
 )(MyPostFeed)
 
@@ -152,7 +154,7 @@ const AllLikeComp = ({ my_Id, addLike, deleteLike, likes, postId }) => (
 )
 export const CLikeForFeed = connect(
   (state) => ({
-    my_Id: state.auth.payload?.sub?.id || '',
+    my_Id: state.auth?.payload?.sub?.id || '',
     addLike: state.promise?.addLike?.payload,
     deleteLike: state.promise?.deleteLike?.payload,
   }),
