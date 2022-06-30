@@ -617,12 +617,13 @@ export const actionPostsFeed = (myFollowing, skip) =>
 
 export const actionFullAllGetPosts = () => async (dispatch, getState) => {
   const {
-    feed: { postsFeed = [],
+    feed: {postsFeed,
       postsFeedCount
     },
     profileData: {
       aboutMe
-    }
+    },
+    promise
   } = getState()
   const myFollowing =aboutMe?.following&& aboutMe?.following?.map(
     ({ _id }) => _id,
@@ -632,20 +633,47 @@ export const actionFullAllGetPosts = () => async (dispatch, getState) => {
   console.log('myId ', myId)
   
   const skip = postsFeed?.length
-  console.log('skip ', skip)
-  console.log('postsFeedCount ', postsFeedCount)
+  // console.log('skip ', skip)
+  console.log('postsFeed', postsFeed)
+  // if(postsFeed?.status=='PENDING')
+  // await dispatch(actionClearPromiseForName('postsFeed'))
   
-  console.log('result ', skip !==postsFeedCount && skip<postsFeedCount)
   if (skip !==(postsFeedCount ? postsFeedCount:1)) {
       
+    // const newPostsFeedCount = await dispatch(actionPostsFeedCount([...myFollowing || [], myId]))
+   
+    // if(postsFeed) 
+    const newPosts = await dispatch(actionPostsFeed([...myFollowing || [], myId],skip))
+  console.log('newPosts', newPosts)
+   
     const newPostsFeedCount = await dispatch(actionPostsFeedCount([...myFollowing || [], myId]))
-    const newPostsFeed = await dispatch(actionPostsFeed([...myFollowing || [], myId], skip))
-    if (newPostsFeedCount && newPostsFeed) {
-      await dispatch(actionFeedTypeCount(newPostsFeedCount))
-      await dispatch(actionFeedType(newPostsFeed))
-    }
+ 
+   if(newPosts&&newPostsFeedCount)
+{
+  console.log('newPosts', newPosts)
+
+      await dispatch(actionFeedType(newPosts,newPostsFeedCount))
+      if(promise?.postsFeed?.status=='PENDING')
+      await dispatch(actionClearFeedPosts())
+       // await dispatch(actionClearPromiseForName('postsFeed'))
+      
+      // await dispatch(actionFeedTypeCount(postsFeedCount))
+      // await dispatch(actionClearPromiseForName('postsFeed'))
+   
+    // await dispatch(actionFeedType(newPosts))
   }
+
+  console.log('newPosts', newPosts)
+
+    // if (newPosts) {
+    //   // await dispatch(actionFeedTypeCount(newPostsFeedCount))
+    //   await dispatch(actionFeedType(newPosts))
+     
+    
+    }
 }
+  // }
+// }
 
 // export const actionFullAllGetPosts = () => async (dispatch, getState) => {
    

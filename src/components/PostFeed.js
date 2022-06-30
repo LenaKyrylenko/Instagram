@@ -39,17 +39,17 @@ const MyPostFeed = ({
   onClearFeed
 }) => {
   const [checkScroll, setScroll] = useState(true)
-  console.log('my_Id?.following?.length ',profileData.following?.length)
   useEffect(() => {
-    if (checkScroll && profileData.following?.length!=0 ) {
+    if (checkScroll && profileData.following?.length ) {
       onPostsFeed()
       setScroll(false)
     }
-  }, [checkScroll,profileData.following])
+  }, [checkScroll])
 
   useEffect(() => {
     
     document.addEventListener('scroll', scrollHandler)
+
     return () => {
       document.removeEventListener('scroll', scrollHandler)
     onClearFeed()
@@ -59,6 +59,7 @@ const MyPostFeed = ({
   const scrollHandler = (e) => {
     if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
       setScroll(true)
+      
     }
   }
 

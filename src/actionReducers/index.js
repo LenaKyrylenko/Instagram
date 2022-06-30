@@ -10,6 +10,7 @@ import {
   actionDeleteLike,
   actionPostsCount,
   actionAuthLogout,
+  actionClearPromiseForName
 } from '../actions'
 import { history } from '../App'
 //user
@@ -64,8 +65,8 @@ export const actionRemoveDataUser = () =>
 
 //feed
 //type
-export const actionFeedType = (newPosts) => 
-  ({ type: 'ADD-POSTS', newPosts })
+export const actionFeedType = (newPosts,newPostsFeedCount) => 
+  ({ type: 'ADD-POSTS', newPosts,newPostsFeedCount })
   export const actionFeedTypeCount = (postsFeedCount) => 
   ({ type: 'COUNT', postsFeedCount })
 
@@ -73,16 +74,19 @@ export const actionFeedType = (newPosts) =>
 // ({ type: 'POSTS', postsFeed })
 
 
-export const actionFullFeed = () => async (dispatch, getState) => {
-  const postsFeed = await dispatch(actionPostsFeed(getState))
-  const skip = postsFeed.length
-  const postsFeedCount = await dispatch(actionPostsFeedCount(getState))
-  if (skip < postsFeedCount) {
-    const newPosts = await dispatch(actionPostsFeed(getState, skip))
-    if (newPosts) {
-      await dispatch(actionFeedType(newPosts))
+export const actionFullFeed = (myFollowing, myId,skip=0) => async (dispatch) => {
+
+
+  // const postsFeed = await dispatch(actionPostsFeed([...myFollowing, myId], skip))
+  const postsFeedCount = await dispatch(actionPostsFeedCount([...myFollowing || [], myId]))
+
+    const newPosts = await dispatch(actionPostsFeed([...myFollowing || [], myId], skip))
+    if (newPosts&&postsFeedCount) {
+      await dispatch(actionFeedType(...newPosts))
+      await dispatch(actionFeedTypeCount(postsFeedCount))
+      // await dispatch(actionClearPromiseForName('postsFeed'))
     }
-  }
+  
 }
 
 // export const actionFullFeed = (myFollowing) => async (dispatch) => {

@@ -61,14 +61,15 @@ export const profileUserReducer = (
 
 export const feedReducer = (
   state = {},
-  { skip, type, newPosts = [], postId, postsFeed, postsFeedCount, newResult },
+  { skip, type, newPosts = [], postId, postsFeed, postsFeedCount,newPostsFeedCount, newResult },
 ) => {
   const types = {
     'ADD-POSTS': () => {
       return {
         ...state,
-        postsFeed: [...postsFeed || [], ...newPosts],
-        postsFeedCount: postsFeedCount ? postsFeedCount : state.postsFeedCount
+        postsFeed: state?.postsFeed ? [...state.postsFeed, ...newPosts] : [...newPosts],
+        // postsFeed: [...postsFeed || [], ...newPosts],
+        postsFeedCount: postsFeedCount ? postsFeedCount : newPostsFeedCount
             
        // postsFeed: postsFeed ? [...postsFeed, ...newPosts] : [...newPosts],
       }
