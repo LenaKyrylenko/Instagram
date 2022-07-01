@@ -2,10 +2,15 @@ import { ConsoleSqlOutlined } from '@ant-design/icons'
 import {
   actionFullProfilePageUser,
   actionFullProfilePage,
-  actionFeedType,
-  actionClearFeedPosts,
-  actionFullFeed,actionFeedTypeStop, actionFeedTypeCount
-} from '../actionReducers'
+
+} from '../redux/thunk'
+import { actionFeedTypeCount } from '../redux/reducers/feed/feedReducer'
+import { actionFeedType } from '../redux/reducers/feed/feedReducer'
+import { actionExploreTypeCount } from '../redux/reducers/explore/exploreReducer'
+import { actionClearExplorePosts } from '../redux/reducers/explore/exploreReducer'
+import { actionExploreType } from '../redux/reducers/explore/exploreReducer'
+import { actionClearFeedPosts } from '../redux/reducers/feed/feedReducer'
+
 import { history } from '../App'
 export const actionAuthLogin = (token) => ({ type: 'AUTH_LOGIN', token })
 export const actionAuthLogout = () => ({ type: 'AUTH_LOGOUT' })
@@ -125,11 +130,13 @@ export const uploadFile = (file) => {
 export const actionUploadFile = (file) =>
   actionPromise('uploadFile', uploadFile(file))
 
-  export const actionClearPromise = (name) => (dispatch) => {
-    return dispatch(actionClearPromiseForName(name));
-};
-export const actionClearPromiseForName = (name) =>
-  ({ type: 'PROMISE_CLEAR', name });
+export const actionClearPromise = (name) => (dispatch) => {
+  return dispatch(actionClearPromiseForName(name))
+}
+export const actionClearPromiseForName = (name) => ({
+  type: 'PROMISE_CLEAR',
+  name,
+})
 
 export const actionUploadFiles = (files) =>
   actionPromise(
@@ -170,7 +177,9 @@ mutation PostUpsert($post:PostInput){
           },
         },
       ),
-    ))}
+    ),
+  )
+}
 
 export const actionAllPosts = (userId) =>
   actionPromise(
@@ -208,42 +217,42 @@ export const actionPostsCount = (_id) =>
     ),
   )
 
-export const actionAllPostsFeed = () =>
-  actionPromise(
-    'postsAllFeed',
-    gql(
-      ` query allPosts($_id:String){
-                PostFind(query:$_id){
-                  owner{_id login avatar{_id url}}
-                   _id title text images{_id url}
-                   likes{
-                    _id
-                    owner{				
-                       _id login avatar {_id url}
-                      }
-                }
-                comments{
-                  _id, createdAt, text  owner{_id login avatar{_id url}}
-                  answers{
-                    _id, createdAt, text owner{_id login  avatar{_id url}}
-                   
-                  }
+// export const actionAllPostsFeed = () =>
+//   actionPromise(
+//     'postsAllFeed',
+//     gql(
+//       ` query allPosts($_id:String){
+//                 PostFind(query:$_id){
+//                   owner{_id login avatar{_id url}}
+//                    _id title text images{_id url}
+//                    likes{
+//                     _id
+//                     owner{
+//                        _id login avatar {_id url}
+//                       }
+//                 }
+//                 comments{
+//                   _id, createdAt, text  owner{_id login avatar{_id url}}
+//                   answers{
+//                     _id, createdAt, text owner{_id login  avatar{_id url}}
 
-                }
-              }
-            }`,
-      {
-        _id: JSON.stringify([
-          {},
-          {
-            sort: [{ _id: -1 }],
-            skip: [0],
-            limit: [10],
-          },
-        ]),
-      },
-    ),
-  )
+//                   }
+
+//                 }
+//               }
+//             }`,
+//       {
+//         _id: JSON.stringify([
+//           {},
+//           {
+//             sort: [{ _id: -1 }],
+//             skip: [0],
+//             limit: [10],
+//           },
+//         ]),
+//       },
+//     ),
+//   )
 
 export const actionOnePost = (_id) =>
   actionPromise(
@@ -441,24 +450,24 @@ export const actionAddSubFullComment = (postId, commentId, comment) => async (
 //             }))
 
 export const actionAddLike = (postId) =>
-    actionPromise(
-      'addLike',
-      gql(
-        `mutation AddLike($like:LikeInput){
+  actionPromise(
+    'addLike',
+    gql(
+      `mutation AddLike($like:LikeInput){
           LikeUpsert(like:$like)
           {
             _id owner{_id login}
           }
         }`,
-        {
-          like: {
-            post: {
-              _id: postId,
-            },
+      {
+        like: {
+          post: {
+            _id: postId,
           },
         },
-      ),
-    )
+      },
+    ),
+  )
 
 export const actionGetFindLiked = (_id) => async (dispatch) => {
   await dispatch(
@@ -503,10 +512,10 @@ export const actionDeleteFullLike = (likeId, postId) => async (
   //  await dispatch(actionOnePost(postId));
 }
 export const actionDeleteLike = (likeId, postId) =>
-    actionPromise(
-      'deleteLike',
-      gql(
-        `mutation DeleteLike($like:LikeInput){
+  actionPromise(
+    'deleteLike',
+    gql(
+      `mutation DeleteLike($like:LikeInput){
           LikeDelete(like: $like)
           {
             _id, post{
@@ -514,16 +523,16 @@ export const actionDeleteLike = (likeId, postId) =>
             }
           }
         }`,
-        {
-          like: {
-            _id: likeId,
-            post: {
-              _id: postId,
-            },
+      {
+        like: {
+          _id: likeId,
+          post: {
+            _id: postId,
           },
         },
-      ),
-    )
+      },
+    ),
+  )
 
 export const actionSetAvatar = (file, myId) => async (dispatch) => {
   const avatar = await dispatch(actionAvatar(file, myId))
@@ -532,9 +541,7 @@ export const actionSetAvatar = (file, myId) => async (dispatch) => {
     await dispatch(actionFullProfilePage(myId))
     await dispatch(actionClearPromise('setAvatar'))
     await dispatch(actionClearPromise('uploadFile'))
-
   }
-
 }
 
 export const actionPostsFeed = (myFollowing, skip) =>
@@ -546,7 +553,6 @@ export const actionPostsFeed = (myFollowing, skip) =>
           owner{_id login avatar{url}}
           images{_id url} title text
           _id likesCount 
-
             likes{
                   _id
                   owner{				
@@ -579,140 +585,65 @@ export const actionPostsFeed = (myFollowing, skip) =>
     ),
   )
 
-// export const actionFullAllGetPosts = () => async (dispatch, getState) => {
-//   const {
-//     feed: { postsFeed = [] },
-//   } = getState()
-//   const myFollowing = getState().promise.aboutMe?.payload?.following?.map(
-//     ({ _id }) => _id,
-//   )
-//   const myId = getState().profileData?.aboutMe?._id
-//   console.log('my following ', myFollowing)
- 
-// console.log('getstate', getState())
-//   // let newPosts = await dispatch(
-//   //   actionPostsFeed([...myFollowing, myId], postsFeed?.length),
-//   // )
- 
-//   const postsFeedCount = await dispatch(actionPostsFeedCount([...myFollowing, myId]))
- 
-//   const skip = postsFeed.length
-// // await dispatch(actionPostsFeed([...myFollowing, myId]))
-//   console.log('скип', skip)
-//   // if (newPosts) {
-//   //   dispatch(actionFeedType(newPosts))
-//   // }
-//   let postsUsers = await dispatch(
-//     actionPostsFeed([...myFollowing, myId], postsFeed?.length),
-//   )
-//   if (skip < postsFeedCount && postsUsers) {
-//     let newPosts = await dispatch(
-//       actionPostsFeed([...myFollowing, myId], skip))
-//     if (newPosts) {
-//       console.log('newPosts ', newPosts)
-//       await dispatch(actionFeedType(newPosts))
-//     }
-//   }
-// }
-
 export const actionFullAllGetPosts = () => async (dispatch, getState) => {
   const {
-    feed: {postsFeed,
-      postsFeedCount
-    },
-    profileData: {
-      aboutMe
-    },
-    promise
+    feed: { postsFeed, postsFeedCount },
+    profileData: { aboutMe },
+    promise,
   } = getState()
-  const myFollowing =aboutMe?.following&& aboutMe?.following?.map(
-    ({ _id }) => _id,
-  )
+  const myFollowing =
+    aboutMe?.following && aboutMe?.following?.map(({ _id }) => _id)
   console.log('myFollowing ', myFollowing)
   const myId = aboutMe?._id
-  console.log('myId ', myId)
-  
   const skip = postsFeed?.length
   // console.log('skip ', skip)
   console.log('postsFeed', postsFeed)
-  // if(postsFeed?.status=='PENDING')
-  // await dispatch(actionClearPromiseForName('postsFeed'))
-  
-  if (skip !==(postsFeedCount ? postsFeedCount:1)) {
-      
-    // const newPostsFeedCount = await dispatch(actionPostsFeedCount([...myFollowing || [], myId]))
-   
-    // if(postsFeed) 
-    const newPosts = await dispatch(actionPostsFeed([...myFollowing || [], myId],skip))
-  console.log('newPosts', newPosts)
-   
-    const newPostsFeedCount = await dispatch(actionPostsFeedCount([...myFollowing || [], myId]))
- 
-   if(newPosts&&newPostsFeedCount)
-{
-  console.log('newPosts', newPosts)
+  if (skip !== (postsFeedCount ? postsFeedCount : 1)) {
+    const newPosts = await dispatch(
+      actionPostsFeed([...(myFollowing || []), myId], skip),
+    )
+    console.log('newPosts', newPosts)
+    const newPostsFeedCount = await dispatch(
+      actionPostsFeedCount([...(myFollowing || []), myId]),
+    )
+    if (newPosts && newPostsFeedCount) {
+      console.log('newPosts', newPosts)
+      await dispatch(actionFeedType(newPosts, newPostsFeedCount))
+      // if(promise?.postsFeed?.status=='PENDING')
+      // await dispatch(actionClearFeedPosts())
+      // await dispatch(actionClearPromiseForName('postsFeed'))
 
-      await dispatch(actionFeedType(newPosts,newPostsFeedCount))
-      if(promise?.postsFeed?.status=='PENDING')
-      await dispatch(actionClearFeedPosts())
-       // await dispatch(actionClearPromiseForName('postsFeed'))
-      
       // await dispatch(actionFeedTypeCount(postsFeedCount))
       // await dispatch(actionClearPromiseForName('postsFeed'))
-   
-    // await dispatch(actionFeedType(newPosts))
-  }
 
-  console.log('newPosts', newPosts)
-
-    // if (newPosts) {
-    //   // await dispatch(actionFeedTypeCount(newPostsFeedCount))
-    //   await dispatch(actionFeedType(newPosts))
-     
-    
+      // await dispatch(actionFeedType(newPosts))
     }
+  }
 }
-  // }
-// }
 
-// export const actionFullAllGetPosts = () => async (dispatch, getState) => {
-   
-//   // const {
-//   //     feed: { postsFeed = [] },
-//   //   } = getState() 
-//   const myFollowing = getState().promise.aboutMe?.payload?.following?.map(
-//       ({ _id }) => _id,
-//   )
-//   const myId = getState().profileData?.aboutMe?._id
-//     const postsFeed = await dispatch(actionPostsFeed([...myFollowing,myId]))
-//     console.log('posts feed ', postsFeed)
-//   const skip = postsFeed.length
-//   console.log('skip', skip)
-//    if(postsFeed>=skip)
-//   await dispatch(actionFeedType(postsFeed))
- 
-//   const postsFeedCount = await dispatch(actionPostsFeedCount([...myFollowing,myId]))
-//   if (skip < postsFeedCount) {
-//     const newPosts = await dispatch(actionPostsFeed([...myFollowing,myId], skip))
-//    console.log('new posts ', newPosts)
-//     if (newPosts) {
-//       await dispatch(actionFeedType(newPosts))
-//     }
-//   }
-   // await dispatch(actionFullFeed([...myFollowing, myId]))
-   
-    // console.log('my following ', myFollowing)
-    
-    
-    // let postsUsers = await dispatch(
-    //   actionFullFeed(...myFollowing),
-    // )
-    // console.log('postsUsers ', postsUsers)
-  
-    // if (postsUsers) {
-    //   dispatch(actionFeedType(postsUsers))
-    // }
- // }
+export const actionFullExplorePosts = () => async (dispatch, getState) => {
+  const {
+    explore: { explorePosts, explorePostsCount },
+    promise,
+  } = getState()
+  console.log('explorePosts', explorePosts)
+
+  if (explorePosts?.length !== (explorePostsCount ? explorePostsCount : 1)) {
+    console.log('explorePosts', explorePosts)
+
+    const newPosts = await dispatch(actionExplorePosts(explorePosts?.length))
+
+    console.log('newPosts', newPosts)
+
+    const newPostsExploreCount = await dispatch(actionExplorePostsCount())
+    if (newPostsExploreCount && newPosts)
+      await dispatch(actionExploreType(newPosts, newPostsExploreCount))
+
+    // if (promise?.explorePosts?.status == 'PENDING')
+    //   await dispatch(actionClearExplorePosts())
+  }
+}
+
 export const actionPostsFeedCount = (myFollowing) =>
   actionPromise(
     'postsFeedCount',
@@ -726,7 +657,7 @@ export const actionPostsFeedCount = (myFollowing) =>
         _id: JSON.stringify([
           {
             ___owner: {
-              $in: myFollowing
+              $in: myFollowing,
             },
           },
         ]),
@@ -738,8 +669,8 @@ export const actionExplorePosts = (skip) =>
   actionPromise(
     'explorePosts',
     gql(
-      ` query PostsFeed($id:String){
-        PostFind(query:$id){
+      ` query PostsFeed($_id:String){
+        PostFind(query:$_id){
         owner{_id login avatar{url}}
         images{_id url} title text
         _id likesCount 
@@ -760,18 +691,31 @@ export const actionExplorePosts = (skip) =>
 }
             }`,
       {
-        id: JSON.stringify([
+        _id: JSON.stringify([
           {},
           {
             sort: [{ _id: -1 }],
             skip: [skip || 0],
-            limit: [300],
+            limit: [10],
           },
         ]),
       },
     ),
   )
+export const actionExplorePostsCount = () =>
+  actionPromise(
+    'explorePostsCount',
+    gql(
+      ` query CountAllPosts($_id:String!){
+                PostCount(query:$_id)
 
+                }`,
+
+      {
+        _id: JSON.stringify([{}]),
+      },
+    ),
+  )
 export const actionSearchUser = (userName) => async (dispatch) => {
   await dispatch(
     actionPromise(
@@ -798,7 +742,7 @@ export const actionSearchUser = (userName) => async (dispatch) => {
   )
 }
 
-export const actionUserUpsert = (user,myId) =>
+export const actionUserUpsert = (user, myId) =>
   actionPromise(
     'userUpsert',
     gql(
@@ -810,13 +754,13 @@ export const actionUserUpsert = (user,myId) =>
       {
         user: {
           _id: myId,
-          ...user
-        }
+          ...user,
+        },
       },
     ),
   )
 
-  // export con
+// export con
 export const actionAboutUser = (_id) =>
   actionPromise(
     'aboutUser',
@@ -913,8 +857,8 @@ export const actionFullSubscribe = (my_Id, followId) => async (
   )
   if (followingId) {
     Promise.all([
-      dispatch(actionFullProfilePageUser(followId)),
-      dispatch(actionFullProfilePage(my_Id)),
+      await dispatch(actionFullProfilePageUser(followId)),
+      await dispatch(actionFullProfilePage(my_Id)),
     ])
     await dispatch(actionClearFeedPosts())
   }
@@ -992,8 +936,6 @@ export const actionUserUpdate = (user, myId) => async (dispatch, getState) => {
   if (status === 'FULFILLED') {
     await dispatch(actionFullProfilePage(myId))
     await dispatch(actionFullProfilePageUser(myId))
-    
-
   }
 }
 

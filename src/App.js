@@ -3,12 +3,13 @@ import { Provider, connect } from 'react-redux'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import createHistory from 'history/createBrowserHistory'
 import React from 'react'
-import { store } from './reducers'
+import { store } from './redux/reducers'
 import { CPageAboutUser } from './components/User'
 import { CPost } from './components/Post'
 import 'antd/dist/antd.css'
-import { actionFullProfilePage } from './actionReducers'
-import { CExplorePosts } from './components/Expore'
+import { actionFullProfilePage } from './redux/thunk'
+import{actionFullAllGetPosts} from './actions'
+import { CExplorePosts } from './components/Explore'
 import { CPostForFeed, Feed } from './components/PostFeed'
 import { CPostEditor } from './components/NewPost'
 import { Header } from './components/Header'
@@ -65,7 +66,8 @@ function App() {
   if (store.getState().auth?.token) {
     console.log('токен', store.getState().auth?.payload?.sub?.id)
     store.dispatch(
-      actionFullProfilePage(store.getState().auth?.payload?.sub?.id),
+      actionFullProfilePage(store.getState().auth?.payload?.sub?.id)
+   
     )
   } else {
     history.push('/input')

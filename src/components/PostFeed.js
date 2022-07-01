@@ -18,8 +18,9 @@ import {
   actionAddFullCommentFeed,
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
-} from '../actionReducers'
-
+ 
+} from '../redux/thunk'
+import {actionFullClearFeedPosts} from '../redux/reducers/feed/feedReducer'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { Upload, Button, DatePicker, Space } from 'antd'
@@ -45,11 +46,10 @@ const MyPostFeed = ({
       setScroll(false)
     }
   }, [checkScroll])
-
+  console.log('check scroll ', checkScroll)
   useEffect(() => {
     
     document.addEventListener('scroll', scrollHandler)
-
     return () => {
       document.removeEventListener('scroll', scrollHandler)
     onClearFeed()
@@ -57,7 +57,8 @@ const MyPostFeed = ({
   }, [])
 
   const scrollHandler = (e) => {
-    if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
+    if (e.target.documentElement.scrollHeight -
+      (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
       setScroll(true)
       
     }
@@ -83,7 +84,7 @@ const MyPostFeed = ({
               )}
               {(postsFeed || []).map(
                 ({ _id, images, title, text, owner, comments, likes }) => (
-                  <div className="PostFeed" key={_id}>
+                  <div className="PostFeed" >
                     <LinkToUser owner={owner} size="70px" />
                     <MyCarousel images={images} style={{ marginTop: '60px' }} />
                     <h1 className='Title'> Title: {title || ''}</h1>
@@ -134,7 +135,7 @@ export const CPostForFeed = connect(
   }),
   {
     onPostsFeed: actionFullAllGetPosts,
-    onClearFeed: actionClearFeedPosts,
+    onClearFeed: actionFullClearFeedPosts,
     addComment: actionAddFullCommentFeed,
     addCommentReply: actionAddSubFullComment,
     addLike: actionAddFullLikeForFeed,

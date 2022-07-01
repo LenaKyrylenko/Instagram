@@ -13,17 +13,16 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
 import { CComments, AddComment } from '../components/Post_Comment'
 import { CPostEditor } from '../components/NewPost'
-import { actionFullOnePost } from '../actionReducers'
+import { actionFullOnePost } from '../redux/reducers/post/postReducer'
 import { Like, Likes } from './Like'
 import { ConstructorModal } from '../helpers'
 import React, { useState, useEffect } from 'react'
 import {
-  actionFullFeed,
-  actionClearFeedPosts,
+
   actionAddFullCommentFeed,
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
-} from '../actionReducers'
+} from '../redux/thunk'
 import {LinkToUser} from './LinkToUser'
 const EditMyPost = ({ _id }) => {
   return (

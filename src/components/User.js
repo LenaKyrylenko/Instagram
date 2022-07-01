@@ -14,8 +14,9 @@ import { connect } from 'react-redux'
 import { Avatar, Button} from 'antd'
 import {
   actionFullProfilePageUser,
-  actionRemoveDataUser,
-} from '../actionReducers'
+ 
+} from '../redux/thunk'
+import { actionRemoveDataUser } from '../redux/reducers/profileData/profileReducer'
 import { Row, Col } from 'antd'
 import { CEditInfo } from '../components/EditAvatar'
 

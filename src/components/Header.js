@@ -1,5 +1,5 @@
 import user from '../materials/user.png'
-import { actionFullProfilePageUser } from '../actionReducers'
+import { actionFullProfilePageUser } from '../redux/thunk'
 import { Avatar, Button } from 'antd'
 import { CSearch } from './Search_Users'
 import { Link } from 'react-router-dom'

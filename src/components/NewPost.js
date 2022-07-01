@@ -5,7 +5,7 @@ import {
   actionUploadFiles,
   actionPostUpsert
 } from '../actions'
-import { actionClearPostsOne } from '../actionReducers'
+import { actionClearPostsOne } from '../redux/reducers/post/postReducer'
 import { Button, message } from 'antd'
 import {
   Basic,

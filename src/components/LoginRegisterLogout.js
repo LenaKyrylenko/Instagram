@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Input, Checkbox, Form } from 'antd'
 import { Link } from 'react-router-dom'
-import { actionClearUserData } from '../actionReducers'
+import { actionClearUserData } from '../redux/thunk'
 import { message } from 'antd'
 import { useEffect } from 'react'
 
