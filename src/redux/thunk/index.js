@@ -20,7 +20,8 @@ import { actionFullAllGetPosts } from '../../actions'
 import { actionAddLikePostInTape } from '../reducers/feed/feedReducer'
 import{actionDeleteLikePostInTape} from '../reducers/feed/feedReducer'
 import{actionAddCommentPostInTape} from '../reducers/feed/feedReducer'
-import{actionProfilePageDataTypeUser} from '../reducers/profileUserPage/profileUserReducer'
+import { actionProfilePageDataTypeUser } from '../reducers/profileUserPage/profileUserReducer'
+import {actionClearDataUserType} from '../reducers/profileUserPage/profileUserReducer'
 //profile page about me
 export const actionFullProfilePage = (_id) => async (dispatch) => {
     const aboutMe = await dispatch(actionAboutMe(_id))
