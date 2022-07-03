@@ -14,7 +14,7 @@ import {
     actionClearPromiseForName
   } from '../../actions'
 import { history } from '../../App'
-  
+  import{actionClearDataUserType} from '../reducers/profileUserPage/profileUserReducer'
 import { actionProfilePageDataType } from '../reducers/profileData/profileReducer'
 import { actionFullAllGetPosts } from '../../actions'
 import { actionAddLikePostInTape } from '../reducers/feed/feedReducer'

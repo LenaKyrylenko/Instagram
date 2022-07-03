@@ -65,7 +65,7 @@ const MyPostFeed = ({
   }
 
   return (
-    <>
+    <div style={{  marginTop: '50px'}}>
       <div className="PostsFeed" >
         
         <Row>
@@ -111,7 +111,7 @@ const MyPostFeed = ({
           </Col>
           </Row>
       </div>
-    </>
+    </div>
   )
 }
 

@@ -34,10 +34,13 @@ export const SortableItem = sortableElement(({ url }) => {
   return (
     <Image
       style={{
-        margin: '10px',
-        maxWidth: '200px',
+        // margin: '20px',
+        maxWidth: '300px',
+        minWidth: '100px',
+
         boxShadow: '0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-        maxHeight: '200px',
+        maxHeight: '300px',
+        minHeight:'100px'
       }}
       src={'/' + url}
     />
@@ -46,7 +49,7 @@ export const SortableItem = sortableElement(({ url }) => {
 export const SortableContainer = sortableContainer(({ children }) => {
   return (
     <>
-      <ul>{children}</ul>
+      <ul style={{display:'flex', flexDirection:'row', margin:'5px'}}>{children}</ul>
     </>
   )
 })

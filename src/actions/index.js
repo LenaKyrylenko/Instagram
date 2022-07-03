@@ -109,6 +109,19 @@ export const actionRegister = (login, password) =>
       { login: login, password: password },
     ),
   )
+
+  export const actionChangePassword = (login, password, newPassword) =>
+  actionPromise(
+    'newPassword',
+    gql(
+      `mutation changePassword($login: String!, $password: String!, $newPassword: newPassword) {
+        changePassword (login: $login, password: $password$newPassword: newPassword) {
+                  _id login
+                }
+              }`,
+      { login, password , newPassword},
+    ),
+  )
 export const actionFullRegister = (login, password) => async (dispatch) => {
   let tokenCheck = await dispatch(actionRegister(login, password))
   if (tokenCheck?.login === login) {

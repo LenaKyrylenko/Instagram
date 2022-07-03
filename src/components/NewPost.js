@@ -116,22 +116,25 @@ const PostEditor = ({
     history.push(`/profile/${myID}`)
   return (
     <section className="Post">
-      <Basic onLoad={onFileDrop} />
-      <Row>
+    
+      <Row> 
         <Col span={12} offset={6}>
+           <Basic onLoad={onFileDrop} />
           <SortableContainer onSortEnd={onSortEnd}>
             {(state?.images || []).map(({ _id, url }, index) => (
-              <div>
-                <SortableItem key={`item-${_id}`} index={index} url={url} />
+              <div>  
                 <Button
                   type="primary"
                   danger
-                  size="large"
+                  size="small"
+                  style={{float:'right'}}
                   onClick={() => onRemoveImage(_id)}
                 >
                   {' '}
                   x{' '}
                 </Button>
+                <SortableItem key={`item-${_id}`} index={index} url={url} />
+              
               </div>
             ))}
           </SortableContainer>
