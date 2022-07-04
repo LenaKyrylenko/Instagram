@@ -129,8 +129,8 @@ main {
 }
 .MyCarousel {
   display: block;
-  min-width: 80%;
-  min-height: 80%;
+  min-width: 60%;
+  min-height: 60%;
   background: #c6cece87;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
@@ -206,7 +206,7 @@ main {
   display: block;
 
   flex-direction: column;
-  height: 300px;
+  height: 200px;
   overflow-y: scroll;
 }
 .ScrollForFeed {

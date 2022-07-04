@@ -132,12 +132,12 @@ export const PageAboutUser = ({
         </Col>
       </Row>
       <Row>
-        <Col span={15} offset={6}>
+        <Col span={17} offset={4}>
           <div
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              padding: '20px',
+              // padding: '20px',
               margin: '20px',
             }}
           >

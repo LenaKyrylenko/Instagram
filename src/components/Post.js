@@ -29,7 +29,7 @@ const EditMyPost = ({ _id }) => {
     <>
       <Link to={`/edit/post/${_id}`}>
         <Button
-          style={{ marginLeft: '300px', width: '100px' }}
+          style={{ marginLeft: '200px',marginTop:'10px', width: '100px' }}
           size="large"
           type="primary"
         >
@@ -156,7 +156,7 @@ export const PagePost = ({
   return (
     <>
       <Row>
-        <Col span={14}>
+        <Col span={14} style={{marginTop:'100px'}}>
           <ConstructorModal
             title={'Edit post'}
             isModalVisible={isModalVisible}
@@ -169,14 +169,16 @@ export const PagePost = ({
             style={{ position: 'absolute' }}
             images={onePost?.images}
           />
-          <h3 style={{ textAlign: 'center', padding: '30px' }}>
+          <h3 style={{ textAlign: 'center', padding: '10px' }}>
             Created Post:{' '}
             {new Intl.DateTimeFormat('en-GB').format(onePost?.createdAt)}
           </h3>
         </Col>
         <Col span={8}>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <LinkToUser owner={onePost?.owner} size={'50px'}/>
+          <div style={{ display: 'flex', flexDirection: 'row', marginTop:'100px' }}>
+            
+            <LinkToUser owner={onePost?.owner} size={'50px'} padding={'0px'} />
+            {/* {my_Id === onePost?.owner?._id && <EditMyPost _id={_id} />} */}
             {/* {onePost?.owner?.avatar ? (
               <Avatar
                 style={{ width: '50px', height: '50px' }}
@@ -205,7 +207,7 @@ export const PagePost = ({
               comments={onePost?.comments || []}
             />
           </div>
-          <div style={{ display: 'flex', margin: '50px 10px' }}>
+          <div style={{ display: 'flex', margin: '40px 10px' }}>
             <CLike likes={onePost?.likes} postId={onePost?._id} />
             <AddComment addComment={addComment} postId={onePost?._id} />
           </div>

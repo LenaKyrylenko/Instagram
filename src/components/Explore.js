@@ -54,7 +54,8 @@ const ExplorePosts = ({ explorePosts = [], onPost, onClearExplore,
               display: 'flex',
               flexWrap: 'wrap',
               padding: '20px',
-              margin: '20px',
+                margin: '20px',
+                marginTop:'50px'
             }}
           >
             {(explorePosts || [])?.map((item) => (
