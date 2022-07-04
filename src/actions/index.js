@@ -140,6 +140,14 @@ export const uploadFile = (file) => {
     body: myForm,
   }).then((result) => result.json())
 }
+
+export const uploadFileType = {
+    name: 'photo',
+    action: `/upload`,
+    headers: localStorage.authToken
+    ? { Authorization: 'Bearer ' + localStorage.authToken }
+    : {},
+}
 export const actionUploadFile = (file) =>
   actionPromise('uploadFile', uploadFile(file))
 
@@ -172,7 +180,7 @@ export const actionAvatar = (imageId, myId) =>
     ),
   )
 
-export const actionPostUpsert = (post) => async (dispatch) => {
+export const actionPostUpsert = (post, _id) => async (dispatch) => {
   await dispatch(
     actionPromise(
       'postUpsert',
@@ -186,6 +194,7 @@ mutation PostUpsert($post:PostInput){
         {
           post: {
             ...post,
+            _id:_id,
             images: post.images.map(({ _id }) => ({ _id })),
           },
         },
