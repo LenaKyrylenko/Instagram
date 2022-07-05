@@ -12,7 +12,7 @@ import {
   Basic,
   SortableContainer,
   SortableItem,
-} from '../../components/Dropzone'
+} from '../../components/DropZone'
 import { arrayMoveImmutable } from 'array-move'
 import { Row, Col } from 'antd'
 import { history } from '../../helpers'
