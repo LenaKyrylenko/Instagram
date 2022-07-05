@@ -34,7 +34,6 @@ export function Basic({ onLoad }) {
 export const SortableItem = SortableElement(({ url, onRemoveImage, _id}) => {
   return (
     <>
- 
     <img
       style={{
         // margin: '20px',
@@ -67,10 +66,7 @@ export const SortableContainer = sortableContainer(({ children ,checkLength}) =>
 
   return (
     <>
-   
           <ul style={{ display: 'flex', flexDirection: 'row', margin: '5px' }}>{children}</ul>
-   
-     
     </>
   )
 })
