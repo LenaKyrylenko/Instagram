@@ -5,25 +5,22 @@ import {
   actionDeleteFullLike,
   actionAddFullLike,
 } from '../actions'
-import photoNotFound from '../materials/photoNotFound.png'
-import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
-import { Carousel, Avatar, Divider, Input, Button } from 'antd'
+
+import { Avatar, Divider, Input, Button } from 'antd'
 import user from '../materials/user.png'
 import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
-import { CComments, AddComment } from '../components/Post_Comment'
-import { CPostEditor } from '../components/NewPost'
+import { CComments, AddComment } from './Comment'
+import { CPostEditor } from '../pages/createAndEditPost/CreateAndEditPost'
 import { actionFullOnePost } from '../redux/reducers/post/postReducer'
-import { Like, Likes } from './Like'
+import { CLike} from './Like'
 import { ConstructorModal } from '../helpers'
 import React, { useState, useEffect } from 'react'
 import {
-
   actionAddFullCommentFeed,
-  actionAddFullLikeFeed,
-  actionDeleteFullLikeFeed,
 } from '../redux/thunk'
-import {LinkToUser} from './LinkToUser'
+import { LinkToUser } from './LinkToUser'
+import { MyCarousel } from './Carousel'
 const EditMyPost = ({ _id }) => {
   return (
     <>
@@ -39,103 +36,7 @@ const EditMyPost = ({ _id }) => {
     </>
   )
 }
-export const Card = ({ post }) => (
-  <>
-    <Link key={post?._id} to={`/post/${post?._id}`}>
-      {post?.images && post?.images[0] && post.images[0]?.url ? (
-        <img
-          className="Card"
-          src={'/' + post.images[0].url}
-          style={{
-            width: '250px',
-            height: '250px',
-            objectFit: 'cover',
-          }}
-        />
-      ) : (
-        <img
-          className="Card"
-          src={photoNotFound}
-          style={{
-            width: '250px',
-            height: '250px',
-            objectFit: 'cover',
-          }}
-        />
-      )}
-    </Link>
-  </>
-)
-const SampleNextArrow = (props) => {
-  const { onClick } = props
-  return (
-    <div
-      style={{
-        fontSize: '50px',
-        color: '#41607d',
-        position: 'absolute',
-        left: '100%',
-        top: '50%',
-        margin: 'auto',
-        paddingLeft: '20px',
-        textShadow: 'black 1px 0 10px',
-      }}
-      onClick={onClick}
-    >
-      <RightCircleFilled />
-    </div>
-  )
-}
 
-const SamplePrevArrow = (props) => {
-  const {  onClick } = props
-  return (
-    <div
-      style={{
-        color: '#41607d',
-        fontSize: '50px',
-        position: 'absolute',
-        margin: 'auto',
-        right: '100%',
-        top: '50%',
-        paddingRight: '20px',
-      }}
-      onClick={onClick}
-    >
-      <LeftCircleFilled />
-    </div>
-  )
-}
-
-export const MyCarousel = ({ images = [] }) => {
-  return (
-    <>
-      <div className="MyCarousel">
-        <Carousel 
-          effect="fade"
-          arrows
-          nextArrow={<SampleNextArrow />}
-          prevArrow={<SamplePrevArrow />}
-        >
-          {images ? (
-            images?.map(
-              (i, index) =>
-                i?.url && (
-                  <div key={index}>
-                    <img key={index} className="PostImage" src={'/' + i?.url} />
-                  </div>
-                ),
-            )
-          ) : (
-            <div >
-              <img className="PostImage" src={photoNotFound} />
-            </div>
-          )}
-        </Carousel>
-      </div>
-    </>
-  )
-}
 
 export const PagePost = ({
   my_Id,
@@ -177,20 +78,12 @@ export const PagePost = ({
         <Col span={8}>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop:'100px' }}>
             
-            <LinkToUser owner={onePost?.owner} size={'50px'} padding={'0px'} />
-            {/* {my_Id === onePost?.owner?._id && <EditMyPost _id={_id} />} */}
-            {/* {onePost?.owner?.avatar ? (
-              <Avatar
-                style={{ width: '50px', height: '50px' }}
-                src={'/' + onePost?.owner?.avatar?.url}
-              />
-            ) : (
-              <Avatar style={{ width: '50px', height: '50px' }} src={user} />
-            )}
-            <h1 style={{ marginLeft: '20px' }}>
-              {' '}
-              {onePost?.owner?.login || 'Anon'}
-            </h1> */}
+            <LinkToUser
+              _id={onePost?.owner?._id}
+              login={onePost?.owner?.login}
+              avatar={onePost?.owner?.avatar}
+              key={_id}
+            size={50} padding={'0px'} />
             <Row span={1}>
               {my_Id === onePost?.owner?._id && <EditMyPost _id={_id} />}
             </Row>
@@ -231,23 +124,3 @@ export const CPost = connect(
   },
 )(PagePost)
 
-const AllLikeComp = ({ my_Id, addLike, deleteLike, likes, postId }) => (
-  <Like
-    my_Id={my_Id}
-    addLike={addLike}
-    deleteLike={deleteLike}
-    likes={likes}
-    postId={postId}
-  >
-    <Likes likes={likes} />
-  </Like>
-)
-export const CLike = connect(
-  (state) => ({
-    my_Id: state.auth?.payload?.sub?.id || '',
-  }),
-  {
-    addLike: actionAddFullLikeFeed,
-    deleteLike: actionDeleteFullLikeFeed,
-  },
-)(AllLikeComp)

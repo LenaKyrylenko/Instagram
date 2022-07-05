@@ -1,36 +1,15 @@
-import {
-  actionOnePost,
-  actionUploadFile,
-  actionFullUnSubscribe,
-  actionFullSubscribe,
-} from '../actions'
-import user from '../materials/user.png'
+import { actionOnePost, actionUploadFile } from '../../actions'
+import user from '../../materials/user.png'
 import React, { useState, useEffect } from 'react'
-import { Card } from './Post'
-import ListFollowing from './ListFollowing'
-import ListFollowers from './ListFollowers'
-
+import { Card } from '../../components/PostCard'
+import ListOfUsers from '../../components/ListOfUsers'
 import { connect } from 'react-redux'
-import { Avatar, Button} from 'antd'
-import {
-  actionFullProfilePageUser,
- 
-} from '../redux/thunk'
-import { actionRemoveDataUser } from '../redux/reducers/profileData/profileReducer'
+import { Avatar, Button } from 'antd'
+import { actionFullProfilePageUser } from '../../redux/thunk'
 import { Row, Col } from 'antd'
-import { CEditInfo } from '../components/EditAvatar'
+import { CSubscribe } from '../../components/Subscribe'
+import { CEditSetting } from '../setting/Setting'
 
-export const EditAccount = ({ open, children }) => {
-  const [opened, setOpened] = useState(open)
-  return (
-    <>
-      <button style={{ width: '100px' }} onClick={setOpened(!opened)}>
-        Edit account
-      </button>
-      {opened && children}
-    </>
-  )
-}
 export const PageAboutUser = ({
   match: {
     params: { _id },
@@ -38,19 +17,11 @@ export const PageAboutUser = ({
   my_Id,
   aboutUser: { login, nick, createdAt, avatar, followers, following } = {},
   allPosts,
-  followId,
   onPost,
-  addSubscribe,
-  deleteSubscribe,
-  onePost,
   onAboutUser,
-  aboutUserFollowers = [],
   onPageData,
-  aboutUserFollowing = [],
-  aboutMeFollowing,
   countAllPostsUser,
 }) => {
-
   useEffect(() => {
     onAboutUser(_id)
     // console.log('USER DATA ', login, _id)
@@ -104,28 +75,28 @@ export const PageAboutUser = ({
                     <h3> 0 posts </h3>
                   )}
 
-                  <ListFollowers aboutUserFollowers={aboutUserFollowers}
-                    followers={followers} onPageData={onPageData} />
+                  <ListOfUsers
+                    listResult={followers}
+                    listUsers={followers}
+                                      onPageData={onPageData}
+                                      text={'followers'}
+                  />
 
-                  <ListFollowing aboutUserFollowing={aboutUserFollowing}
-                    following={following} onPageData={onPageData} />
-
+                  <ListOfUsers
+                   listResult={following}
+                   listUsers={following}
+                                     onPageData={onPageData}
+                                     text={'following'}
+                  />
                 </div>
                 <h3> nick: {nick == null ? login : nick}</h3>
                 {checkMyId ? (
                   <>
-                    <CEditInfo/>
+                    <CEditSetting />
                   </>
                 ) : (
-                  <Subscribe
-                    my_Id={my_Id}
-                    deleteSubscribe={deleteSubscribe}
-                    followId={followId}
-                    addSubscribe={addSubscribe}
-                    aboutMeFollowing={aboutMeFollowing}
-                  />
+                  <CSubscribe />
                 )}
-            
               </div>
             </Row>
           </section>
@@ -150,65 +121,17 @@ export const PageAboutUser = ({
     </>
   )
 }
-const Subscribe = ({
-  my_Id,
-  deleteSubscribe,
-  aboutMeFollowing = [],
-  addSubscribe,
-  followId,
-}) => {
-  const checkFollowId = aboutMeFollowing?.find(
-    (follower) => follower?._id === followId,
-  )?._id
-
-
-  console.log('FOLLOWING ', checkFollowId)
-
-  return (
-    <>
-      <div style={{ display: 'flex' }}>
-        {checkFollowId ? (
-          <Button
-            size="large" type="primary"
-             danger
-            onClick={() => deleteSubscribe(my_Id, followId)}
-          >
-            Unsubscribe
-          </Button>
-        ) : (
-          <Button
-            size="large"
-              type="primary"
-              primary
-            onClick={() => addSubscribe(my_Id, followId)}
-          >
-            Subscribe
-          </Button>
-        )}
-      </div>
-    </>
-  )
-}
 
 export const CPageAboutUser = connect(
   (state) => ({
     my_Id: state.auth?.payload?.sub?.id,
     aboutUser: state.profilePage?.aboutUser,
-    aboutUserFollowers: state.profilePage?.aboutUser?.followers,
-    aboutUserFollowing: state.profilePage?.aboutUser?.following,
-    followId: state.profilePage?.aboutUser?._id,
-    aboutMeFollowing: state.profileData?.aboutMe?.following,
     countAllPostsUser: state.promise?.countAllPostsUser?.payload,
     allPosts: state.profilePage?.allPosts,
-    onePost: state.promise?.onePost?.payload,
   }),
   {
     onAboutUser: actionFullProfilePageUser,
-    actionRemoveDataUser: actionRemoveDataUser,
-    onLoad: actionUploadFile,
     onPost: actionOnePost,
     onPageData: actionFullProfilePageUser,
-    addSubscribe: actionFullSubscribe,
-    deleteSubscribe: actionFullUnSubscribe,
   },
 )(PageAboutUser)

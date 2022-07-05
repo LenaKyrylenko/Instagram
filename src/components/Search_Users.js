@@ -6,43 +6,20 @@ import { actionSearchUser } from '../actions'
 import {UserOutlined } from '@ant-design/icons'
 
 import { actionFullProfilePageUser } from '../redux/thunk'
+import LinkToUser from './LinkToUser'
 export const ResultUserFind = ({
   userFind = [],
-  handleCancel,
+  handleCancel, 
+ 
 }) => { 
+    console.log('user find', userFind) 
   return (
     <div className="ResultUserFind">
       {userFind?.map(({ _id, login, avatar }) => (
-        <Link to={`/profile/${_id}`} onClick={handleCancel} key={_id}>
-          <Row>
-            <Col offset={1}>
-              {avatar?.url ? (
-                <Avatar
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    marginBottom: '10px',
-                  }}
-                  src={'/' + avatar?.url}
-                />
-              ) : (
-                <Avatar
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    marginBottom: '10px',
-                  }}
-                  src={user}
-                />
-              )}
-            </Col>
-            <Col offset={1}>
-              <h3 style={{ marginBottom: '20px' }}> {login || 'Anon'}</h3>
-            </Col>
-          </Row>
-        </Link>
+       
+        <LinkToUser _id={_id} login={login} avatar={avatar} size={40} padding={'0px'} onClick={handleCancel} key={_id} />
       ))}
-    </div>
+      </div>
   )
 }
 const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {

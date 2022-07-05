@@ -4,10 +4,23 @@ import { Avatar, Button } from 'antd'
 import { CSearch } from './Search_Users'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { AddPost } from './NewPost'
-import React, { useEffect } from 'react'
-import { CLogout } from './LoginRegisterLogout'
+import React, { useEffect,useState } from 'react'
 
+export const AddPost = ({ children }) => {
+  const [state, setState] = useState(false)
+
+  return (
+    <>
+      <Link to={`/edit/post/new`}>
+        <a className="button" onClick={() => setState(!state)}>
+          {' '}
+          +{' '}
+        </a>
+        {!state && children}
+      </Link>
+    </>
+  )
+}
 export const Feed = () => {
   return (
     <>
@@ -18,7 +31,7 @@ export const Feed = () => {
   )
 }
 
-const Recommendations = () => (
+export const Explore = () => (
   <Link to={`/explore`}>
     <a size="large" className="button">
       {' '}
@@ -39,24 +52,10 @@ const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
   )
 }
 
-const CUser = connect(
+export const CUser = connect(
   (state) => ({
     my_Id: state.auth?.payload?.sub?.id,
     aboutMe: state.profileData.aboutMe,
   }),
   { onMyPage: actionFullProfilePageUser },
 )(User)
-
-export const Header = () => {
-  return (
-    <section className="Header">
-      <CLogout className="button" />
-      <CSearch />
-      <Feed />
-      <AddPost />
-      <Recommendations />
-
-      <CUser />
-    </section>
-  )
-}

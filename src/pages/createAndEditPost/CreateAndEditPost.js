@@ -5,46 +5,18 @@ import {
   actionUploadFiles,
   actionPostUpsert,
   actionClearPromise,
-} from '../actions'
-import { actionClearPostsOne } from '../redux/reducers/post/postReducer'
+} from '../../actions'
+import { actionClearPostsOne } from '../../redux/reducers/post/postReducer'
 import { Button, message } from 'antd'
-import { Basic, SortableContainer, SortableItem } from '../components/DropZone'
+import {
+  Basic,
+  SortableContainer,
+  SortableItem,
+} from '../../components/Dropzone'
 import { arrayMoveImmutable } from 'array-move'
 import { Row, Col } from 'antd'
-
-import { history } from '../App'
-export const PageCreatePost = () => (
-  <div style={{ background: '#FFFACD' }}>
-    <h2>Edit Post</h2>
-    <CPostEditor />
-  </div>
-)
-
-export const AddPost = ({ children }) => {
-  const [state, setState] = useState(false)
-
-  return (
-    <>
-      <Link to={`/edit/post/new`}>
-        <a className="button" onClick={() => setState(!state)}>
-          {' '}
-          +{' '}
-        </a>
-        {!state && children}
-      </Link>
-    </>
-  )
-}
-
-const Input = ({ state, onChangeText }) => (
-  <input
-    className="Input"
-    value={state}
-    placeholder={state || ''}
-    onChange={onChangeText}
-  />
-)
-
+import { history } from '../../helpers'
+import { Input } from '../../components/Input'
 const PostEditor = ({
   match: {
     params: { _id },
@@ -142,35 +114,40 @@ const PostEditor = ({
   }, [])
   const checkLength = () => {
     if (state?.images?.length > 8) {
-      console.log('state?.images?.length',state?.images?.length)
+      console.log('state?.images?.length', state?.images?.length)
       message.error('Error, upload Max 8 elements')
-      state["images"]=[]
-        return false
+      state['images'] = []
+      return false
+    } else {
+      return <h3> {state?.images.length} / 8</h3>
     }
-    else {
-      return  <h3> {state?.images.length}/ 8</h3>
-    }
-}
+  }
+
   return (
     <section className="Post">
       <Row>
-        <Col span={12} offset={7}>
+        <Col span={12} offset={6}>
           <Basic onLoad={onFileDrop} />
           <Col offset={1}>
-          <SortableContainer onSortEnd={onSortEnd} style={{ with: '300px' }}>
-          
-            { state?.images?.length<8 && (state?.images || []).map(({ _id, url }, index) => (
-             <SortableItem
-                key={`item-${_id}`}
-                url={url}
-                index={index}
-                onRemoveImage={onRemoveImage}
-                _id={_id}
-              /> 
-            ))}
-          </SortableContainer>
+         
+              <SortableContainer
+                onSortEnd={onSortEnd}
+                style={{ with: '300px' }}
+              >
+                {state?.images?.length < 8 &&
+                  (state?.images || []).map(({ _id, url }, index) => (
+                    <SortableItem
+                      key={`item-${_id}`}
+                      url={url}
+                      index={index}
+                      onRemoveImage={onRemoveImage}
+                      _id={_id}
+                    />
+                  ))}
+              </SortableContainer>
+           
             {checkLength()}
-            </Col>
+          </Col>
         </Col>
       </Row>
 
@@ -188,9 +165,16 @@ const PostEditor = ({
         onChangeText={onChangeText}
       />
       <br />
-      <center>
+      <Col offset={5}>
         <Button
-          style={{ width: '200px', margin: '10px' }}
+          style={{
+            display: 'flex',
+            margin: '10px',
+            alignItems: 'center',
+            alignContent: 'center',
+            justifyContent: 'center',
+            width: '200px',
+          }}
           disabled={disabledBtn}
           onClick={savePost}
           size="large"
@@ -198,7 +182,7 @@ const PostEditor = ({
         >
           Save
         </Button>
-      </center>
+      </Col>
     </section>
   )
 }

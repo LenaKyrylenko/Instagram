@@ -11,7 +11,7 @@ import {
   actionAddFullLikeForFeed,
   actionDeleteFullLikeForFeed,
   actionAddFullLike,
-} from '../actions'
+} from '../../actions'
 import {
   actionFullFeed,
   actionClearFeedPosts,
@@ -19,19 +19,18 @@ import {
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
  
-} from '../redux/thunk'
-import {actionFullClearFeedPosts} from '../redux/reducers/feed/feedReducer'
+} from '../../redux/thunk'
+import {actionFullClearFeedPosts} from '../../redux/reducers/feed/feedReducer'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { Upload, Button, DatePicker, Space } from 'antd'
-import user from '../materials/user.png'
 import { Avatar, Image, Divider, Radio } from 'antd'
-import { CPost, MyCarousel } from './Post'
+import { CPost } from '../../components/Post'
 import { Row, Col } from 'antd'
-import LinkToUser from './LinkToUser'
-import { AddComment, Comments } from './Post_Comment'
-import { Like, Likes } from './Like'
-
+import LinkToUser from '../../components/LinkToUser'
+import { AddComment, Comments } from '../../components/Comment'
+import { Like, Likes } from '../../components/Like'
+import { MyCarousel } from '../../components/Carousel'
 const MyPostFeed = ({
   profileData,
   postsFeed = [],
@@ -85,7 +84,7 @@ const MyPostFeed = ({
               {(postsFeed || []).map(
                 ({ _id, images, title, text, owner, comments, likes }) => (
                   <div className="PostFeed" >
-                    <LinkToUser owner={owner} size="70px" />
+                    <LinkToUser _id={owner?._id} key={_id} login={owner?.login} avatar={owner?.avatar} size={50} />
                     <MyCarousel images={images} style={{ marginTop: '60px' }} />
                     <h1 className='Title'> Title: {title || ''}</h1>
                     <h1  className='Title'> Text: {text || ''}</h1>

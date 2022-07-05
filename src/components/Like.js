@@ -4,31 +4,20 @@ import { Link } from 'react-router-dom'
 import user from '../materials/user.png'
 import { HeartOutlined, HeartFilled } from '@ant-design/icons'
 import React, { useState } from 'react'
+import { LinkToUser } from './LinkToUser'
+import {
+  actionAddFullLikeFeed,
+  actionDeleteFullLikeFeed,
+} from '../redux/thunk'
+import { connect } from 'react-redux'
 
 export const Likes = ({ likes }) => {
   return (
     <>
       <div className="Modal">
         {likes &&
-          likes?.map(({ owner: { _id, login, avatar } }) => (
-            <Link to={`/profile/${_id}`}>
-              <Row style={{margin:'10px'}}>
-                <Col offset={1}>
-                {avatar?.url ? (
-              <Avatar
-                style={{ width: '50px', height: '50px' }}
-                src={'/' + avatar?.url}
-              />
-            ) : (
-              <Avatar style={{ width: '50px', height: '50px' }} src={user} />
-            )}
-
-                </Col>
-                <Col offset={2}>
-                  <h3> {login || 'Anon'}</h3>
-                </Col>
-              </Row>
-            </Link>
+          likes?.map(({owner:{_id,login, avatar}}) => (
+            <LinkToUser _id={_id} login={login} avatar={avatar} size={50} padding={'0px'} />
           ))}
       </div>
     </>
@@ -84,3 +73,24 @@ export const Like = ({
     </>
   )
 }
+const AllLikeComponent = ({ my_Id, addLike, deleteLike, likes, postId }) => (
+  <Like
+    my_Id={my_Id}
+    addLike={addLike}
+    deleteLike={deleteLike}
+    likes={likes}
+    postId={postId}
+  >
+    <Likes likes={likes} />
+  </Like>
+)
+
+export const CLike = connect(
+  (state) => ({
+    my_Id: state.auth?.payload?.sub?.id || '',
+  }),
+  {
+    addLike: actionAddFullLikeFeed,
+    deleteLike: actionDeleteFullLikeFeed,
+  },
+)(AllLikeComponent)

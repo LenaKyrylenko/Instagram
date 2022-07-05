@@ -15,8 +15,7 @@ export function Basic({ onLoad }) {
       {file.path} - {file.size} bytes
     </li>
   ))
-  console.log('acceptedFiles name', acceptedFiles[0]?.name)
-
+  // console.log('acceptedFiles name', acceptedFiles[0]?.name)
   // console.log('acceptedFiles',acceptedFiles)
   useEffect(() => {
     if (acceptedFiles) onLoad(acceptedFiles)
@@ -32,7 +31,6 @@ export function Basic({ onLoad }) {
     </section>
   )
 }
-const videoRegularExp = / *\.(mp4|mkv|wmv|m4v|mov|avi|flv|webm|flac|mka|m4a|aac|ogg)/
 export const SortableItem = SortableElement(({ url, onRemoveImage, _id}) => {
   return (
     <>

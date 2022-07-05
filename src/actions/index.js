@@ -11,7 +11,7 @@ import { actionClearExplorePosts } from '../redux/reducers/explore/exploreReduce
 import { actionExploreType } from '../redux/reducers/explore/exploreReducer'
 import { actionClearFeedPosts } from '../redux/reducers/feed/feedReducer'
 
-import { history } from '../App'
+import { history } from '../helpers'
 export const actionAuthLogin = (token) => ({ type: 'AUTH_LOGIN', token })
 export const actionAuthLogout = () => ({ type: 'AUTH_LOGOUT' })
 export const getGQL = (url) => (query, variables) =>

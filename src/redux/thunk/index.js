@@ -13,7 +13,7 @@ import {
     actionAuthLogout,
     actionClearPromiseForName
   } from '../../actions'
-import { history } from '../../App'
+import { history } from '../../helpers'
   import{actionClearDataUserType} from '../reducers/profileUserPage/profileUserReducer'
 import { actionProfilePageDataType } from '../reducers/profileData/profileReducer'
 import { actionFullAllGetPosts } from '../../actions'
