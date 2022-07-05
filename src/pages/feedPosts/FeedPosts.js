@@ -40,14 +40,13 @@ const MyPostFeed = ({
 }) => {
   const [checkScroll, setScroll] = useState(true)
   useEffect(() => {
-    if (checkScroll && profileData.following?.length ) {
-      onPostsFeed()
-      setScroll(false)
+    if (checkScroll) {
+       console.log('попало в новую порцию постов')
+          onPostsFeed()
     }
+    setScroll(false)
   }, [checkScroll])
-  console.log('check scroll ', checkScroll)
   useEffect(() => {
-    
     document.addEventListener('scroll', scrollHandler)
     return () => {
       document.removeEventListener('scroll', scrollHandler)
@@ -55,13 +54,19 @@ const MyPostFeed = ({
     }
   }, [])
 
-  const scrollHandler = (e) => {
-    if (e.target.documentElement.scrollHeight -
-      (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
-      setScroll(true)
-      
-    }
-  }
+  console.log('check scroll ', checkScroll)
+  useEffect(() => {
+     document.addEventListener('scroll', scrollHandler)
+     }, [postsFeed.length])
+  
+    const scrollHandler = (e) => {
+         if (e.target.documentElement.scrollHeight -
+           (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
+          console.log('SCROLL HANDLER', checkScroll)
+          setScroll(true)
+          document.removeEventListener('scroll', scrollHandler)
+         }
+       }
 
   return (
     <div style={{  marginTop: '50px'}}>

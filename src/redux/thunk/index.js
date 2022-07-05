@@ -25,9 +25,7 @@ import { actionProfilePageDataTypeUser } from '../reducers/profileUserPage/profi
 export const actionFullProfilePage = (_id) => async (dispatch) => {
     const aboutMe = await dispatch(actionAboutMe(_id))
     if (aboutMe) {
-     const data = await dispatch(actionProfilePageDataType(aboutMe))
-      if (data)
-        await dispatch(actionFullAllGetPosts())
+    await dispatch(actionProfilePageDataType(aboutMe))
   }
  
   }

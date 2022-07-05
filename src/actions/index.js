@@ -2,7 +2,6 @@ import { ConsoleSqlOutlined } from '@ant-design/icons'
 import {
   actionFullProfilePageUser,
   actionFullProfilePage,
-
 } from '../redux/thunk'
 import { actionFeedTypeCount } from '../redux/reducers/feed/feedReducer'
 import { actionFeedType } from '../redux/reducers/feed/feedReducer'
@@ -110,7 +109,7 @@ export const actionRegister = (login, password) =>
     ),
   )
 
-  export const actionChangePassword = (login, password, newPassword) =>
+export const actionChangePassword = (login, password, newPassword) =>
   actionPromise(
     'newPassword',
     gql(
@@ -119,7 +118,7 @@ export const actionRegister = (login, password) =>
                   _id login
                 }
               }`,
-      { login, password , newPassword},
+      { login, password, newPassword },
     ),
   )
 export const actionFullRegister = (login, password) => async (dispatch) => {
@@ -142,9 +141,9 @@ export const uploadFile = (file) => {
 }
 
 export const uploadFileType = {
-    name: 'photo',
-    action: `/upload`,
-    headers: localStorage.authToken
+  name: 'photo',
+  action: `/upload`,
+  headers: localStorage.authToken
     ? { Authorization: 'Bearer ' + localStorage.authToken }
     : {},
 }
@@ -194,7 +193,7 @@ mutation PostUpsert($post:PostInput){
         {
           post: {
             ...post,
-            _id:_id,
+            _id: _id,
             images: post.images.map(({ _id }) => ({ _id })),
           },
         },
@@ -613,10 +612,16 @@ export const actionFullAllGetPosts = () => async (dispatch, getState) => {
     profileData: { aboutMe },
     promise,
   } = getState()
-  const myFollowing =
+  let myFollowing =
     aboutMe?.following && aboutMe?.following?.map(({ _id }) => _id)
+  const myId = getState().auth.payload?.sub?.id
+  console.log('myId', myId)
+  if (!myFollowing) await dispatch(actionFullProfilePage(myId))
+  myFollowing =
+    getState().profileData.aboutMe?.following &&
+    getState().profileData.aboutMe?.following?.map(({ _id }) => _id)
   console.log('myFollowing ', myFollowing)
-  const myId = aboutMe?._id
+
   const skip = postsFeed?.length
   // console.log('skip ', skip)
   console.log('postsFeed', postsFeed)

@@ -91,7 +91,7 @@ const SpoilerButton = ({ text, close, children }) => {
     </>
   )
 }
-const CommentAuthor = ({ owner }) => (
+const CommentAuthor = ({ owner:{_id, login, avatar} }) => (
   <>
     <div
       style={{
@@ -101,7 +101,7 @@ const CommentAuthor = ({ owner }) => (
         margin: '5px',
       }}
     >
-      <LinkToUser owner={owner} size={'10px'} sizePadding={'0px'} />
+      <LinkToUser _id={_id} login={login} avatar={avatar} size={'10px'} sizePadding={'0px'} />
     </div>
   </>
 )
