@@ -35,6 +35,25 @@ export const getGQL = (url) => (query, variables) =>
 
 export const gql = getGQL('/graphql')
 
+export const getGQLAnon = (url) => (query, variables) =>
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ query, variables }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.data) {
+        return Object.values(data.data)[0]
+      } else {
+        throw new Error(JSON.stringify(data.errors))
+      }
+    })
+
+export const gqlAnon = getGQLAnon('/graphql')
+
 export const actionPending = (name) => ({
   type: 'PROMISE',
   name,
@@ -112,9 +131,9 @@ export const actionRegister = (login, password) =>
 export const actionChangePassword = (login, password, newPassword) =>
   actionPromise(
     'newPassword',
-    gql(
-      `mutation changePassword($login: String!, $password: String!, $newPassword: newPassword) {
-        changePassword (login: $login, password: $password$newPassword: newPassword) {
+    gqlAnon(
+      `mutation changePassword($login: String!, $password: String!, $newPassword: String!) {
+        changePassword (login: $login, password: $password, newPassword: $newPassword) {
                   _id login
                 }
               }`,
@@ -156,6 +175,9 @@ export const actionClearPromise = (name) => (dispatch) => {
 export const actionClearPromiseForName = (name) => ({
   type: 'PROMISE_CLEAR',
   name,
+})
+export const actionAllClearPromise = () => ({
+  type: 'PROMISE_All_CLEAR',
 })
 
 export const actionUploadFiles = (files) =>
@@ -616,7 +638,8 @@ export const actionFullAllGetPosts = () => async (dispatch, getState) => {
     aboutMe?.following && aboutMe?.following?.map(({ _id }) => _id)
   const myId = getState().auth.payload?.sub?.id
   console.log('myId', myId)
-  if (!myFollowing) await dispatch(actionFullProfilePage(myId))
+  if (!myFollowing)
+    await dispatch(actionFullProfilePage(myId))
   myFollowing =
     getState().profileData.aboutMe?.following &&
     getState().profileData.aboutMe?.following?.map(({ _id }) => _id)
@@ -723,7 +746,7 @@ export const actionExplorePosts = (skip) =>
           {
             sort: [{ _id: -1 }],
             skip: [skip || 0],
-            limit: [10],
+            limit: [12],
           },
         ]),
       },
@@ -781,7 +804,8 @@ export const actionUserUpsert = (user, myId) =>
       {
         user: {
           _id: myId,
-          ...user,
+          login: user?.login,
+          nick : user?.nick
         },
       },
     ),
@@ -822,7 +846,7 @@ PostFind(query:$userId){
           {
             sort: [{ _id: -1 }],
             skip: [skip || 0],
-            limit: [300],
+            limit: [10],
           },
         ]),
       },

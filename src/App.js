@@ -7,13 +7,12 @@ import 'antd/dist/antd.css'
 import { actionFullProfilePage } from './redux/thunk'
 import { actionFullAllGetPosts } from './actions'
 
-import { CShowHeader } from './pages/header/Header'
+import { CShowHeader } from './pages/header'
 import { CRouting } from './components/Routing'
 import {history} from './helpers'
 console.log(store.getState())
 store.subscribe(() => console.log(store.getState()))
 console.log('ABOUT ME', store.getState().auth?.payload?.sub?.id)
-
 
 
 function App() {

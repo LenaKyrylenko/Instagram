@@ -13,7 +13,6 @@ export const profileUserReducer = (
       },
       'CLEAR-DATA': () => {
         return {
-          ...(state = {}),
           aboutUser: {},
           allPosts: [],
         }

@@ -29,7 +29,7 @@ export const feedReducer = (
         }
       },
       'CLEAR-POSTS': () => ({
-        ...state,
+
         postsFeed: [],
         postsFeedCount: 0,
     }),

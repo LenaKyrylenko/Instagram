@@ -11,16 +11,20 @@ import {
     actionDeleteLike,
     actionPostsCount,
     actionAuthLogout,
-    actionClearPromiseForName
+    actionAllClearPromise
   } from '../../actions'
 import { history } from '../../helpers'
   import{actionClearDataUserType} from '../reducers/profileUserPage/profileUserReducer'
 import { actionProfilePageDataType } from '../reducers/profileData/profileReducer'
 import { actionFullAllGetPosts } from '../../actions'
-import { actionAddLikePostInTape } from '../reducers/feed/feedReducer'
-import{actionDeleteLikePostInTape} from '../reducers/feed/feedReducer'
-import{actionAddCommentPostInTape} from '../reducers/feed/feedReducer'
+import {
+  actionAddLikePostInTape,
+  actionDeleteLikePostInTape,
+  actionAddCommentPostInTape,
+  actionClearFeedPosts
+} from '../reducers/feed/feedReducer'
 import { actionProfilePageDataTypeUser } from '../reducers/profileUserPage/profileUserReducer'
+import {actionRemoveDataAboutMe} from '../reducers/profileData/profileReducer'
 //profile page about me
 export const actionFullProfilePage = (_id) => async (dispatch) => {
     const aboutMe = await dispatch(actionAboutMe(_id))
@@ -82,18 +86,30 @@ export const actionClearUserData = () => async (dispatch) => {
     const logOut = await dispatch(actionAuthLogout())
     if (logOut) {
       history.push('/input')
-       await dispatch(actionClearDataUserType())
+      await dispatch(actionClearDataUserType())
+      await dispatch(actionClearFeedPosts())
+      await dispatch(actionRemoveDataAboutMe())
+      await dispatch(actionAllClearPromise())
+      
     }
   }
 
 
 //full profile user
-export const actionFullProfilePageUser = (_id) => async (dispatch) => {
+export const actionFullProfilePageUser = (_id) => async (dispatch, getState) => {
+  const {
+    profilePage
+  } = getState()
+  console.log('тут айдиии', _id)
+  if (_id != undefined) {
     const aboutUser = await dispatch(actionAboutUser(_id))
     const allPosts = await dispatch(actionAllPostsUser(_id))
     await dispatch(actionPostsCount(_id))
     if (aboutUser && allPosts) {
       await dispatch(actionProfilePageDataTypeUser(aboutUser, allPosts))
+    }
   }
+  _id = getState().profilePage.aboutUser?._id
+  console.log('тут айдиии после', _id)
 
   }

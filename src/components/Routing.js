@@ -1,9 +1,9 @@
 import { InputForm, CRegisterForm, CLoginForm } from './LoginRegisterLogout'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
-import { CExplorePosts } from '../pages/explorePosts/ExplorePosts'
-import { CPostForFeed, Feed } from '../pages/feedPosts/FeedPosts'
-import { CPostEditor } from '../pages/createAndEditPost/CreateAndEditPost'
-import { CPageAboutUser } from '../pages/profilePage/ProfilePageUser'
+import { CExplorePosts } from '../pages/explorePosts'
+import { CPostForFeed, Feed } from '../pages/feedPosts'
+import { CPostEditor } from '../pages/createAndEditPost'
+import { CPageAboutUser } from '../pages/profilePage'
 import { CPost } from './Post'
 import { Provider, connect } from 'react-redux'
 

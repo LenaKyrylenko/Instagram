@@ -1,4 +1,4 @@
-import { actionFullLogin, actionFullRegister }
+import { actionFullLogin, actionFullRegister, actionClearPromise}
  from '../actions'
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
@@ -8,11 +8,10 @@ import { actionClearUserData } from '../redux/thunk'
 import { message } from 'antd'
 import { useEffect } from 'react'
 
-const LoginForm = ({ onLogin, children, auth }) => {
+const LoginForm = ({ onLogin, children, auth,register, onClearPromise }) => {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(false)
-
   useEffect(() => {
     if (auth?.status === 'FULFILLED' && auth?.payload === null) {
       message.error({
@@ -23,7 +22,25 @@ const LoginForm = ({ onLogin, children, auth }) => {
       })
     }
   }, [auth])
-
+  
+  useEffect(() => {
+    if (register?.status === 'FULFILLED' && register?.payload === null) {
+      message.error({
+        content: 'This login is already in the database',
+        style: {
+          marginTop: '80px',
+        },
+      })
+      &&
+      onClearPromise('register')
+  
+    }
+  }, [register])
+  const input = () => {
+    onLogin(login, password)
+      // &&
+    // onClearPromise('auth')
+  }
   return (
     <>
       <center>
@@ -95,7 +112,7 @@ const LoginForm = ({ onLogin, children, auth }) => {
               style={{ width: '100%' }}
               className="Btn"
               disabled={login.length < 5 || password.length < 5}
-              onClick={() => onLogin(login, password)}
+              onClick={input}
             >
               {children}
             </Button>
@@ -112,15 +129,20 @@ export const CLoginForm = connect(
   }),
   {
     onLogin: actionFullLogin,
+    onClearPromise:actionClearPromise
+
   },
 )(LoginForm)
 
 export const CRegisterForm = connect(
   (state) => ({
     children: `Register`,
+    register: state.promise?.register
   }),
   {
     onLogin: actionFullRegister,
+    onClearPromise:actionClearPromise
+
   },
 )(LoginForm)
 

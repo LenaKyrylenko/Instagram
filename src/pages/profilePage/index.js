@@ -8,7 +8,7 @@ import { Avatar, Button } from 'antd'
 import { actionFullProfilePageUser } from '../../redux/thunk'
 import { Row, Col } from 'antd'
 import { CSubscribe } from '../../components/Subscribe'
-import { CEditSetting } from '../setting/Setting'
+import { CEditSetting } from '../setting'
 
 export const PageAboutUser = ({
   match: {
@@ -19,7 +19,6 @@ export const PageAboutUser = ({
   allPosts,
   onPost,
   onAboutUser,
-  onPageData,
   countAllPostsUser,
 }) => {
   useEffect(() => {
@@ -78,14 +77,14 @@ export const PageAboutUser = ({
                   <ListOfUsers
                     listResult={followers}
                     listUsers={followers}
-                                      onPageData={onPageData}
+                                      onPageData={onAboutUser}
                                       text={'followers'}
                   />
 
                   <ListOfUsers
                    listResult={following}
                    listUsers={following}
-                                     onPageData={onPageData}
+                                     onPageData={onAboutUser}
                                      text={'following'}
                   />
                 </div>
@@ -132,6 +131,6 @@ export const CPageAboutUser = connect(
   {
     onAboutUser: actionFullProfilePageUser,
     onPost: actionOnePost,
-    onPageData: actionFullProfilePageUser,
+    // onPageData: actionFullProfilePageUser,
   },
 )(PageAboutUser)

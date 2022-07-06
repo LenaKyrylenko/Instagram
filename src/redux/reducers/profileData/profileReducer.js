@@ -9,7 +9,6 @@ export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
       },
       'REMOVE-DATA': () => {
         return {
-          ...(state = {}),
           aboutMe: {},
         }
       },
@@ -27,7 +26,7 @@ export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
     
 
   
-  export const actionRemoveDataUser = () => 
+  export const actionRemoveDataAboutMe = () => 
   ({ type: 'REMOVE-DATA' })
   
   

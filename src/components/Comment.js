@@ -76,7 +76,7 @@ export const AddComment = ({ addComment, postId }) => {
     </>
   )
 }
-const SpoilerButton = ({ text, close, children }) => {
+export const SpoilerButton = ({ text, close, children, style }) => {
   const [opened, setOpened] = useState(close)
   return (
     <>
@@ -84,6 +84,7 @@ const SpoilerButton = ({ text, close, children }) => {
         onClick={() => {
           setOpened(!opened)
         }}
+        style={style}
       >
         {text}
       </Button>

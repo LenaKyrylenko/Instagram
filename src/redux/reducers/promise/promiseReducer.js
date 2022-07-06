@@ -11,7 +11,13 @@ export function promiseReducer(state = {}, { type, name, status, payload, error 
         ...state,
         [name]: null,
       }
+  }
+  if (type === 'PROMISE_All_CLEAR') {
+    return {
+      state:null
+     
     }
+  }
     return state
   }
   

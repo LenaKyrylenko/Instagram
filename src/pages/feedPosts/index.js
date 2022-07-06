@@ -31,12 +31,15 @@ import LinkToUser from '../../components/LinkToUser'
 import { AddComment, Comments } from '../../components/Comment'
 import { Like, Likes } from '../../components/Like'
 import { MyCarousel } from '../../components/Carousel'
+import load from '../../materials/load.gif'
+
 const MyPostFeed = ({
   profileData,
   postsFeed = [],
   onPostsFeed,
   addComment,
-  onClearFeed
+  onClearFeed,
+  postsFeedPromise
 }) => {
   const [checkScroll, setScroll] = useState(true)
   useEffect(() => {
@@ -111,9 +114,14 @@ const MyPostFeed = ({
                  
                 ),
               )}
+             
             </div>
           </Col>
-          </Row>
+        </Row>
+        {(postsFeedPromise?.status == "PENDING") &&
+                
+               <img style={{display:'block', margin: '0 auto', padding:'10px' }} src={load} width="100" height="100" />
+             }
       </div>
     </div>
   )
@@ -136,6 +144,7 @@ export const CPostForFeed = connect(
     profileData:  state?.profileData.aboutMe || '',
     postsFeed: state.feed?.postsFeed,
     addComment: state.promise?.addComment?.payload,
+    postsFeedPromise :state.promise?.postsFeed
   }),
   {
     onPostsFeed: actionFullAllGetPosts,
