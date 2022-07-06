@@ -9,10 +9,12 @@ import {
 import { actionClearPostsOne } from '../../redux/reducers/post/postReducer'
 import { Button, message } from 'antd'
 import {
-  Basic,
+  Dropzone
+} from '../../components/UploadFiles'
+import {
   SortableContainer,
-  SortableItem,
-} from '../../components/Dropzone'
+  SortableItem
+} from '../../components/Sortable'
 import { arrayMoveImmutable } from 'array-move'
 import { Row, Col } from 'antd'
 import { history } from '../../helpers'
@@ -115,7 +117,7 @@ const PostEditor = ({
   const checkLength = () => {
     if (state?.images?.length > 8) {
       console.log('state?.images?.length', state?.images?.length)
-      message.error('Error, upload Max 8 elements')
+      message.error('Error, please, upload maximum 8 elements')
       state['images'] = []
       return false
     } else {
@@ -127,7 +129,7 @@ const PostEditor = ({
     <section className="Post">
       <Row>
         <Col span={12} offset={6}>
-          <Basic onLoad={onFileDrop} />
+          <Dropzone onLoad={onFileDrop} />
           <Col offset={1}>
          
               <SortableContainer
