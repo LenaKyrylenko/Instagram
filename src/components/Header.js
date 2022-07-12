@@ -1,5 +1,5 @@
 import user from '../materials/user.png'
-import { actionFullProfilePageUser } from '../redux/thunk'
+import { actionFullProfilePageUser } from '../redux/saga'
 import { Avatar, Button } from 'antd'
 import { CSearch } from './Search_Users'
 import { Link } from 'react-router-dom'
@@ -40,7 +40,12 @@ export const Explore = () => (
   </Link>
 )
 const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
-  useEffect(() => onMyPage(_id), [_id])
+  console.log('_id in user', _id)
+  
+  // useEffect(() => {
+  //   if (my_Id)
+  //     onMyPage(my_Id)
+  // }, [my_Id])
   return (
     <Link to={`/profile/${_id}`}>
       {avatar?.url ? (
@@ -57,5 +62,5 @@ export const CUser = connect(
     my_Id: state.auth?.payload?.sub?.id,
     aboutMe: state.profileData.aboutMe,
   }),
-  { onMyPage: actionFullProfilePageUser },
+  // { onMyPage: actionFullProfilePageUser },
 )(User)

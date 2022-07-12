@@ -2,15 +2,17 @@ import { ConsoleSqlOutlined } from '@ant-design/icons'
 import {
   actionFullProfilePageUser,
   actionFullProfilePage,
-} from '../redux/thunk'
+} from '../redux/saga'
 import { actionFeedTypeCount } from '../redux/reducers/feed/feedReducer'
 import { actionFeedType } from '../redux/reducers/feed/feedReducer'
 import { actionExploreTypeCount } from '../redux/reducers/explore/exploreReducer'
 import { actionClearExplorePosts } from '../redux/reducers/explore/exploreReducer'
 import { actionExploreType } from '../redux/reducers/explore/exploreReducer'
 import { actionClearFeedPosts } from '../redux/reducers/feed/feedReducer'
-
+import {actionProfilePageDataType} from '../redux/reducers/profileData/profileReducer'
 import { history } from '../helpers'
+import{promiseWorker} from '../redux/saga'
+import { all, put, takeEvery, takeLatest, takeLeading, select,call } from 'redux-saga/effects'; //
 export const actionAuthLogin = (token) => ({ type: 'AUTH_LOGIN', token })
 export const actionAuthLogout = () => ({ type: 'AUTH_LOGOUT' })
 export const getGQL = (url) => (query, variables) =>
@@ -71,16 +73,20 @@ export const actionRejected = (name, error) => ({
   status: 'REJECTED',
   error,
 })
-export const actionPromise = (name, promise) => async (dispatch) => {
-  dispatch(actionPending(name))
-  try {
-    let payload = await promise
-    dispatch(actionFulfilled(name, payload))
-    return payload
-  } catch (error) {
-    dispatch(actionRejected(name, error))
-  }
-}
+// export const actionPromise = (name, promise) => async (dispatch) => {
+//   dispatch(actionPending(name))
+//   try {
+//     let payload = await promise
+//     dispatch(actionFulfilled(name, payload))
+//     return payload
+//   } catch (error) {
+//     dispatch(actionRejected(name, error))
+//   }
+// }
+const actionPromise = (name, promise) =>
+  ({ type: 'PROMISE_START', name, promise })
+
+
 export const actionAboutMe = (_id) =>
   actionPromise(
     'aboutMe',
@@ -99,21 +105,37 @@ export const actionAboutMe = (_id) =>
     ),
   )
 
-export const actionFullLogin = (login, password) => async (dispatch) => {
-  let token = await dispatch(
-    actionPromise(
-      'auth',
-      gql(
-        ` query login($login:String!, $password:String!){
-            login(login:$login, password:$password)} `,
-        { login, password },
-      ),
-    ),
-  )
-  if (token) {
-    await dispatch(actionAuthLogin(token))
-  }
-}
+ export const actionFullLogin = (login, password) =>  //упрощенный action для саги
+    ({type: 'FULL_LOGIN', login, password})
+    
+export const actionLogin = (login, password) => { //функция, которая возвращает результат actionPromise
+    return actionPromise(
+        "auth",
+        gql(
+            `query log($login:String, $password:String) {
+              login(login:$login, password:$password)
+             }`,
+            { login, password }
+        )
+    );
+};
+
+
+// export const actionFullLogin = (login, password) => async (dispatch) => {
+//   let token = await dispatch(
+//     actionPromise(
+//       'auth',
+//       gql(
+//         ` query login($login:String!, $password:String!){
+//             login(login:$login, password:$password)} `,
+//         { login, password },
+//       ),
+//     ),
+//   )
+//   if (token) {
+//     await dispatch(actionAuthLogin(token))
+//   }
+// }
 
 export const actionRegister = (login, password) =>
   actionPromise(

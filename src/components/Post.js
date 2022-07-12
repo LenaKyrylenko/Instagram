@@ -18,7 +18,7 @@ import { ConstructorModal } from '../helpers'
 import React, { useState, useEffect } from 'react'
 import {
   actionAddFullCommentFeed,
-} from '../redux/thunk'
+} from '../redux/saga'
 import { LinkToUser } from './LinkToUser'
 import { MyCarousel } from './Carousel'
 const EditMyPost = ({ _id }) => {

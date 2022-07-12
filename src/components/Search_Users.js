@@ -5,7 +5,7 @@ import user from '../materials/user.png'
 import { actionSearchUser } from '../actions'
 import {UserOutlined } from '@ant-design/icons'
 
-import { actionFullProfilePageUser } from '../redux/thunk'
+import { actionFullProfilePageUser } from '../redux/saga'
 import LinkToUser from './LinkToUser'
 export const ResultUserFind = ({
   userFind = [],

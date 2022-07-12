@@ -4,7 +4,7 @@ import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import React from 'react'
 import { store } from './redux/reducers'
 import 'antd/dist/antd.css'
-import { actionFullProfilePage } from './redux/thunk'
+import { actionFullProfilePage } from './redux/saga'
 import { actionFullAllGetPosts } from './actions'
 
 import { CShowHeader } from './pages/header'
@@ -19,7 +19,7 @@ function App() {
   if (store.getState().auth?.token) {
     console.log('токен', store.getState().auth?.payload?.sub?.id)
     store.dispatch(
-      actionFullProfilePage(store.getState().auth?.payload?.sub?.id)
+      actionFullProfilePage()
     )
     }
   return (

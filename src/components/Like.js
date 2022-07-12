@@ -8,7 +8,7 @@ import { LinkToUser } from './LinkToUser'
 import {
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
-} from '../redux/thunk'
+} from '../redux/saga'
 import { connect } from 'react-redux'
 
 export const Likes = ({ likes }) => {

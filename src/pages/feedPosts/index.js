@@ -19,7 +19,7 @@ import {
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
  
-} from '../../redux/thunk'
+} from '../../redux/saga'
 import {actionFullClearFeedPosts} from '../../redux/reducers/feed/feedReducer'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
