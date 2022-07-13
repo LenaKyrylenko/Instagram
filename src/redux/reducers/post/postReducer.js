@@ -1,34 +1,39 @@
 import {actionOnePost} from '../../../actions'
 export const postReducer = (
     state = {},
-    { skip, type, newPosts = [], onePost, postsFeed, postsFeedCount },
+    { skip, type, newPosts = [], onePost,newResult, postsFeed, postsFeedCount },
   ) => {
     const types = {
-      'ONE-POST': () => {
+      'POST': () => {
         return {
           ...state,
           onePost,
         }
       },
-      'CLEAR-POST-ONE': () => {
+      'CLEAR_ONE_POST': () => {
         return {
           ...state,
           onePost: {},
         }
       },
-    }
+      'CHANGE_LIKE': () => {
+        return {
+          ...state,
+        onePost: ({...state?.onePost, likes: [...newResult] })
+        
+      }
+      },
+      'ADD_COMMENT': () => {
+        return {
+          ...state,
+        onePost: ({...state?.onePost, comments: [...newResult] })
+        
+      }
+      }
+  }
+  
     if (type in types) {
       return types[type]()
     }
     return state
   }
-
-
-  //type
-  export const actionOnePostType = (onePost) => ({ type: 'ONE-POST', onePost })
-  export const actionClearPostsOne = () => ({ type: 'CLEAR-POST-ONE' })
- 
-   //one post
-export const actionFullOnePost = (_id) => ({
-  type:"ONE_POST", _id
-})

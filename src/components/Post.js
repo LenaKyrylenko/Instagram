@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import {
-  actionAddFullComment,
   actionAddSubFullComment,
   actionDeleteFullLike,
   actionAddFullLike,
@@ -12,7 +11,8 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
 import { CComments, AddComment } from './Comment'
 import { CPostEditor } from '../pages/createAndEditPost'
-import { actionFullOnePost } from '../redux/reducers/post/postReducer'
+
+import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../actions/typeSaga/postActionSaga'
 import { CLike} from './Like'
 import { ConstructorModal } from '../helpers'
 import React, { useState, useEffect } from 'react'
@@ -21,6 +21,7 @@ import {
 } from '../redux/saga'
 import { LinkToUser } from './LinkToUser'
 import { MyCarousel } from './Carousel'
+
 const EditMyPost = ({ _id }) => {
   return (
     <>
@@ -95,14 +96,14 @@ export const PagePost = ({
           <h2> Text: {onePost?.text || ''} </h2>
           <Divider>Comments</Divider>
           <div className="Scroll">
-            {/* <CComments
+            <CComments
               postId={onePost?._id}
               comments={onePost?.comments || []}
-            /> */}
+            />
           </div>
           <div style={{ display: 'flex', margin: '40px 10px' }}>
-            {/* <CLike likes={onePost?.likes} postId={onePost?._id} />
-            <AddComment addComment={addComment} postId={onePost?._id} /> */}
+            <CLike likes={onePost?.likes} postId={onePost?._id} />
+            <AddComment addComment={addComment} postId={onePost?._id} />
           </div>
         </Col>
       </Row>
@@ -118,9 +119,9 @@ export const CPost = connect(
     addComment: state.promise?.addComment?.payload,
   }),
   {
-    // addComment: actionAddFullCommentFeed,
+    addComment: actionAddFullCommentSaga,
     // addCommentReply: actionAddSubFullComment,
-    onPost: actionFullOnePost,
+    onPost: actionFullOnePostSaga,
   },
 )(PagePost)
 

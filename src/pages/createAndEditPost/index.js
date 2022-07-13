@@ -6,7 +6,7 @@ import {
   actionPostUpsert,
   actionClearPromise,
 } from '../../actions'
-import { actionClearPostsOne } from '../../redux/reducers/post/postReducer'
+import { actionClearOnePostType } from '../../actions/types/postActionTypes'
 import { Button, message } from 'antd'
 import {
   Dropzone
@@ -198,7 +198,7 @@ export const CPostEditor = connect(
   {
     onSave: actionPostUpsert,
     onFileDrop: actionUploadFiles,
-    clearPostOne: actionClearPostsOne,
+    clearPostOne: actionClearOnePostType,
     clearPromise: actionClearPromise,
   },
 )(PostEditor)

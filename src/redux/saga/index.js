@@ -16,6 +16,8 @@ import {
   actionAuthLogin,
   actionClearPromise,
   actionGetCommentsOnePost,
+  actionFindLikes,
+
   // actionOnePost
   } from '../../actions'
 import { history } from '../../helpers'
@@ -34,9 +36,9 @@ import { actionRemoveDataAboutMe } from '../reducers/profileData/profileReducer'
 import {actionExploreType,actionClearExplorePosts} from '../reducers/explore/exploreReducer'
 import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
-import {actionOnePostType,} from '../reducers/post/postReducer'
-
-  //promise
+import { actionOnePostType, actionChangeLikeType } from '../../actions/types/postActionTypes'
+import {actionAddCommentType} from '../../actions/types/postActionTypes'
+  //promise 
  export function* promiseWorker(action){ //это типа actionPromise который thunk
     const {name, promise} = action
     yield put(actionPending(name)) //это как dispatch
@@ -173,7 +175,6 @@ export function* exploreWatcher() {
 //feed
 function* addCommentFeedWorker({ postId, newResult }) {
   yield call(promiseWorker,actionAddComment(postId, newResult))
-  console.log('ВВВВВВВВВВВВВВ')
   const { comments } = yield call(promiseWorker, actionGetCommentsOnePost(postId))
   console.log('commentsss', comments)
   if (comments)
@@ -223,41 +224,98 @@ function* onePostWorker({ _id }) {
 export function* onePostWatcher(){
 yield takeLeading("ONE_POST",onePostWorker)
 }
-// => async (dispatch) => {
-//   const onePost = await dispatch(actionOnePost(_id))
-//   if (onePost) {
-//     await dispatch(actionOnePostType(onePost))
-//     // await dispatch(actionClearDataUserType())
-//   }
 
-export const actionAddFullLikeFeed = (postId) => async (dispatch, getState) => {
-    await dispatch(actionAddLike(postId))
-    const {
-      promise: {
-        addLike: { status },
-      },
-    } = getState()
-    if (status === 'FULFILLED') {
-      const onePost = await dispatch(actionOnePost(postId))
-      if (onePost) await dispatch(actionAddLikePostInTape(postId))
-    }
-}
-  
-export const actionDeleteFullLikeFeed = (likeId, postId) => async (
-    dispatch,
-    getState,
-  ) => {
-    await dispatch(actionDeleteLike(likeId, postId))
-    const {
-      promise: {
-        deleteLike: { status },
-      },
-    } = getState()
-    if (status === 'FULFILLED') {
-      const onePost = await dispatch(actionOnePost(postId))
-      if (onePost) await dispatch(actionDeleteLikePostInTape(likeId, postId))
-    }
+//comment
+
+function* addCommentOnePostWorker({ postId, text }) {
+  console.log('post id', postId)
+  console.log('comment', text)
+  const add= yield call(promiseWorker, actionAddComment(postId, text))
+  console.log('add', add)
+  const {
+    promise: {
+      addComment: { status },
+    },
+  } = yield select()
+  if (status === 'FULFILLED') {
+    yield call(promiseWorker, actionOnePost(postId))
+    const { comments } = yield call(promiseWorker, actionGetCommentsOnePost(postId))
+   console.log('add comments', comments)
+    if (comments)
+      yield put (actionAddCommentType(comments))
   }
+}
+export function* addCommentOnePostWatcher(){
+  yield takeLeading("ONE_POST_COMMENT",addCommentOnePostWorker)
+  }
+  // await dispatch(actionOnePost(postId));
+// }}
+
+
+
+// export const actionAddFullLike = (postId) => async (dispatch, getState) => {
+//     await dispatch(actionAddLike(postId))
+//     const {
+//       promise: {
+//         addLike: { status },
+//       },
+//     } = getState()
+//     if (status === 'FULFILLED') {
+//       const onePost = await dispatch(actionOnePost(postId))
+//       if (onePost) await dispatch(actionAddLikePostInTape(postId))
+//     }
+// }
+
+export const actionChangeLike = (likeId, postId) =>
+({
+    type:"CHANGE_LIKE_POST", likeId,postId
+})
+  
+function* changeLikePostWorker({ likeId, postId }) {
+  console.log('likeId', likeId)
+  console.log('postId', postId)
+
+  const changeOneLike = () =>
+    likeId ? actionDeleteLike(likeId, postId) : actionAddLike(postId)
+
+  yield call(promiseWorker, changeOneLike())
+  const { likes } = yield call(promiseWorker, actionFindLikes(postId))
+  console.log('likes in worker', likes)
+
+  
+  if (likes) {
+  
+    yield call(promiseWorker, actionOnePost(postId))
+    yield put(actionChangeLikeType(likes))
+  }
+  // const { likes } = yield call(promiseWorker, actionFindLikes(postId))
+  // console.log('likes', likes)
+  // if (likes)
+  // yield call(promiseWorker, actionOnePost(postId))
+}
+
+
+
+export function* changeLikePostWatcher() {
+  yield takeLeading("CHANGE_LIKE_POST", changeLikePostWorker)
+}
+
+
+// export const actionDeleteFullLikeFeed = (likeId, postId) => async (
+//     dispatch,
+//     getState,
+//   ) => {
+//     await dispatch(actionDeleteLike(likeId, postId))
+//     const {
+//       promise: {
+//         deleteLike: { status },
+//       },
+//     } = getState()
+//     if (status === 'FULFILLED') {
+//       const onePost = await dispatch(actionOnePost(postId))
+//       if (onePost) await dispatch(actionDeleteLikePostInTape(likeId, postId))
+//     }
+//   }
 
   //comment
 export const actionAddFullCommentFeed = (postId, newResult) => ({

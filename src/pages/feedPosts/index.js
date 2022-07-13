@@ -2,8 +2,8 @@ import React, { useMemo, useState, useEffect } from 'react'
 import {
   actionAllPostsFeed,
   actionFullAllGetPosts,
-  actionAddFullComment,
-  actionFindSubComment,
+  // actionAddFullComment,
+  // actionFindSubComment,
   actionAddSubFullComment,
   actionFindLikes,
   actionGetFindLiked,
@@ -15,9 +15,9 @@ import {
 import {
   actionFullFeed,
 
-  actionAddFullCommentFeed,
-  actionAddFullLikeFeed,
-  actionDeleteFullLikeFeed,
+  // actionAddFullCommentFeed,
+  // actionAddFullLikeFeed,
+  // actionDeleteFullLikeFeed,
  
 } from '../../redux/saga'
 import {actionClearFeedPosts} from '../../redux/reducers/feed/feedReducer'
@@ -98,16 +98,16 @@ const MyPostFeed = ({
                     <h1  className='Title'> Text: {text || ''}</h1>
                     <Divider>Comments</Divider>
                     <div className="ScrollForFeed">
-                      <CCommentsForFeed
+                      {/* <CCommentsForFeed
                         postId={_id}
                         comments={comments || []}
-                      />
+                      /> */}
                       </div>
                       <center>
                       <div style={{ display: 'flex', padding: '20px', marginLeft:'100px' }}>
                         {/* <CLikeForFeed likes={likes} postId={_id} /> */}
 
-                        <AddComment addComment={addComment} postId={_id} />
+                        {/* <AddComment addComment={addComment} postId={_id} /> */}
                       </div>
                        </center>
                     </div>
@@ -133,7 +133,7 @@ const CCommentsForFeed = connect(
     // addSubComment: state.promise?.addSubComment,
   }),
   {
-    addComment: actionAddFullCommentFeed,
+    // addComment: actionAddFullCommentFeed,
     // addCommentReply: actionAddSubFullComment,
     // findSubComment: actionFindSubComment,
   },
@@ -149,7 +149,7 @@ export const CPostForFeed = connect(
   {
     onPostsFeed: actionFullAllGetPosts,
     onClearFeed: actionClearFeedPosts,
-    addComment: actionAddFullCommentFeed,
+    // addComment: actionAddFullCommentFeed,
     // addCommentReply: actionAddSubFullComment,
     // addLike: actionAddFullLikeForFeed,
 
@@ -174,7 +174,7 @@ export const CLikeForFeed = connect(
     deleteLike: state.promise?.deleteLike?.payload,
   }),
   {
-    addLike: actionAddFullLikeFeed,
-    deleteLike: actionDeleteFullLikeFeed,
+    // addLike: actionAddFullLikeFeed,
+    // deleteLike: actionDeleteFullLikeFeed,
   },
 )(AllLikeComp)

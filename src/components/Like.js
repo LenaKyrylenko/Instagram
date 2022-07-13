@@ -6,8 +6,7 @@ import { HeartOutlined, HeartFilled } from '@ant-design/icons'
 import React, { useState } from 'react'
 import { LinkToUser } from './LinkToUser'
 import {
-  actionAddFullLikeFeed,
-  actionDeleteFullLikeFeed,
+  actionChangeLike
 } from '../redux/saga'
 import { connect } from 'react-redux'
 
@@ -29,12 +28,13 @@ export const Like = ({
   addLike,
   deleteLike,
   likes = [],
+  changeLike,
   children,
 }) => {
   const likeId = likes.find((like) => like?.owner?._id === my_Id)?._id
-  const changeLike = () =>
-    likeId ? deleteLike(likeId, postId) : addLike(postId)
-
+  // const changeLike = () =>
+  //   likeId ? deleteLike(likeId, postId) : addLike(postId)
+console.log('like id in component', likeId)
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const showModal = () => {
@@ -43,7 +43,8 @@ export const Like = ({
   return (
     <>
       <div style={{ display: 'flex' }}>
-        <h2 onClick={changeLike}>
+        <h3 onClick={() => changeLike(likeId, postId)}>
+       
           {likeId ? (
             <HeartFilled
               style={{ cursor: 'pointer', fontSize: 'xx-large', color: 'red' }}
@@ -53,7 +54,7 @@ export const Like = ({
               style={{ cursor: 'pointer', fontSize: 'xx-large' }}
             />
           )}
-        </h2>
+        </h3>
         {likes.length ? (
           <h3 style={{ cursor: 'pointer', paddingLeft: 8 }} onClick={showModal}>
             {' '}
@@ -73,13 +74,12 @@ export const Like = ({
     </>
   )
 }
-const AllLikeComponent = ({ my_Id, addLike, deleteLike, likes, postId }) => (
+const AllLikeComponent = ({ my_Id, likes,changeLike, postId }) => (
   <Like
     my_Id={my_Id}
-    addLike={addLike}
-    deleteLike={deleteLike}
     likes={likes}
     postId={postId}
+    changeLike={changeLike}
   >
     <Likes likes={likes} />
   </Like>
@@ -90,7 +90,6 @@ export const CLike = connect(
     my_Id: state.auth?.payload?.sub?.id || '',
   }),
   {
-    addLike: actionAddFullLikeFeed,
-    deleteLike: actionDeleteFullLikeFeed,
+    changeLike: actionChangeLike
   },
 )(AllLikeComponent)
