@@ -29,11 +29,6 @@ export const postReducer = (
   export const actionClearPostsOne = () => ({ type: 'CLEAR-POST-ONE' })
  
    //one post
-   export const actionFullOnePost = (_id) => async (dispatch) => {
-    const onePost = await dispatch(actionOnePost(_id))
-    if (onePost) {
-      await dispatch(actionOnePostType(onePost))
-      // await dispatch(actionClearDataUserType())
-    }
-  
-  }
+export const actionFullOnePost = (_id) => ({
+  type:"ONE_POST", _id
+})

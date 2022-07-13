@@ -415,7 +415,7 @@ export const actionAllFollowing = (_id) => async (dispatch) => {
 export const actionAddComment = (postId, text) => async (dispatch) => {
   await dispatch(
     actionPromise(
-      'addComment',
+      "addComment",
       gql(
         `mutation AddComment($comment:CommentInput){
           CommentUpsert(comment:$comment)
@@ -437,6 +437,24 @@ export const actionAddComment = (postId, text) => async (dispatch) => {
     ),
   )
 }
+
+export const actionGetCommentsOnePost = (postId) =>
+    actionPromise('commentsOnePost', gql(`query commentFindPost ($id:String!){
+        PostFindOne(query:$id){
+            comments {
+                _id text createdAt 
+                owner{
+                    _id nick login
+                    avatar{
+                        _id url
+                        }
+                    } 
+                    likes{_id}
+                }
+        }
+    }`, { id: JSON.stringify([{ _id: postId }]) }))
+
+
 export const actionAddSubComment = (commentId, comment) => async (dispatch) => {
   await dispatch(
     actionPromise(
@@ -470,21 +488,21 @@ export const actionAddSubComment = (commentId, comment) => async (dispatch) => {
 //   }
 // }
 
-export const actionAddFullComment = (postId, comment) => async (
-  dispatch,
-  getState,
-) => {
-  await dispatch(actionAddComment(postId, comment))
-  const {
-    promise: {
-      addComment: { status },
-    },
-  } = getState()
-  if (status === 'FULFILLED') {
-    await dispatch(actionOnePost(postId))
-  }
-  // await dispatch(actionOnePost(postId));
-}
+// export const actionAddFullComment = (postId, comment) => async (
+//   dispatch,
+//   getState,
+// ) => {
+//   await dispatch(actionAddComment(postId, comment))
+//   const {
+//     promise: {
+//       addComment: { status },
+//     },
+//   } = getState()
+//   if (status === 'FULFILLED') {
+//     await dispatch(actionOnePost(postId))
+//   }
+//   // await dispatch(actionOnePost(postId));
+// }
 
 export const actionAddSubFullComment = (postId, commentId, comment) => async (
   dispatch,

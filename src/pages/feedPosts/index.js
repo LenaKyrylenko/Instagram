@@ -98,16 +98,16 @@ const MyPostFeed = ({
                     <h1  className='Title'> Text: {text || ''}</h1>
                     <Divider>Comments</Divider>
                     <div className="ScrollForFeed">
-                      {/* <CCommentsForFeed
+                      <CCommentsForFeed
                         postId={_id}
                         comments={comments || []}
-                      /> */}
+                      />
                       </div>
                       <center>
                       <div style={{ display: 'flex', padding: '20px', marginLeft:'100px' }}>
-                        {/* <CLikeForFeed likes={likes} postId={_id} />
+                        {/* <CLikeForFeed likes={likes} postId={_id} /> */}
 
-                        <AddComment addComment={addComment} postId={_id} /> */}
+                        <AddComment addComment={addComment} postId={_id} />
                       </div>
                        </center>
                     </div>
@@ -130,12 +130,12 @@ const MyPostFeed = ({
 const CCommentsForFeed = connect(
   (state) => ({
     addComment: state.promise?.addComment?.payload,
-    addSubComment: state.promise?.addSubComment,
+    // addSubComment: state.promise?.addSubComment,
   }),
   {
     addComment: actionAddFullCommentFeed,
-    addCommentReply: actionAddSubFullComment,
-    findSubComment: actionFindSubComment,
+    // addCommentReply: actionAddSubFullComment,
+    // findSubComment: actionFindSubComment,
   },
 )(Comments)
 
@@ -149,7 +149,7 @@ export const CPostForFeed = connect(
   {
     onPostsFeed: actionFullAllGetPosts,
     onClearFeed: actionClearFeedPosts,
-    // addComment: actionAddFullCommentFeed,
+    addComment: actionAddFullCommentFeed,
     // addCommentReply: actionAddSubFullComment,
     // addLike: actionAddFullLikeForFeed,
 

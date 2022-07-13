@@ -14,7 +14,9 @@ import {
   actionAllClearPromise,
   actionLogin,
   actionAuthLogin,
-  actionClearPromise
+  actionClearPromise,
+  actionGetCommentsOnePost,
+  // actionOnePost
   } from '../../actions'
 import { history } from '../../helpers'
   import{actionClearDataUserType} from '../reducers/profileUserPage/profileUserReducer'
@@ -32,7 +34,7 @@ import { actionRemoveDataAboutMe } from '../reducers/profileData/profileReducer'
 import {actionExploreType,actionClearExplorePosts} from '../reducers/explore/exploreReducer'
 import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
-
+import {actionOnePostType,} from '../reducers/post/postReducer'
 
   //promise
  export function* promiseWorker(action){ //это типа actionPromise который thunk
@@ -169,7 +171,64 @@ export function* exploreWatcher() {
 }
 
 //feed
+function* addCommentFeedWorker({ postId, newResult }) {
+  yield call(promiseWorker,actionAddComment(postId, newResult))
+  console.log('ВВВВВВВВВВВВВВ')
+  const { comments } = yield call(promiseWorker, actionGetCommentsOnePost(postId))
+  console.log('commentsss', comments)
+  if (comments)
+    yield put(actionAddCommentPostInTape(postId, newResult))
+  }
+  // const {
+  //   promise: {
+  //     addComment
+  //   }
+  // } = yield select()
+  // if (addComment?.status === 'FULFILLED') {
+  //   console.log('УРААА')
+  //   const onePost = yield call(promiseWorker, actionOnePost(postId))
+  //   if (onePost)
+  //   yield call(promiseWorker,actionAddCommentPostInTape(postId, newResult))
+  // }
+    
+// }
+export function* addCommentFeedWatcher() {
+  yield takeLeading("ADD_COMMENT_FEED", addCommentFeedWorker)
+  
+}
+// export const actionAddFullCommentFeed = (postId, newResult) => async (
+//   dispatch,
+//   getState,
+// ) => {
+//   await dispatch(actionAddComment(postId, newResult))
+//   const {
+//     promise: {
+//       addComment: { status },
+//     },
+//   } = getState()
+//   if (status === 'FULFILLED') {
+//     const onePost = await dispatch(actionOnePost(postId))
+//     if (onePost) await dispatch(actionAddCommentPostInTape(postId, newResult))
+//   }
+//   // await dispatch(actionOnePost(postId));
+// }
 
+//one post
+function* onePostWorker({ _id }) {
+  
+  const onePost = yield call(promiseWorker,actionOnePost(_id))
+  if (onePost)
+  yield put(actionOnePostType(onePost))
+}
+export function* onePostWatcher(){
+yield takeLeading("ONE_POST",onePostWorker)
+}
+// => async (dispatch) => {
+//   const onePost = await dispatch(actionOnePost(_id))
+//   if (onePost) {
+//     await dispatch(actionOnePostType(onePost))
+//     // await dispatch(actionClearDataUserType())
+//   }
 
 export const actionAddFullLikeFeed = (postId) => async (dispatch, getState) => {
     await dispatch(actionAddLike(postId))
@@ -201,22 +260,9 @@ export const actionDeleteFullLikeFeed = (likeId, postId) => async (
   }
 
   //comment
-export const actionAddFullCommentFeed = (postId, newResult) => async (
-    dispatch,
-    getState,
-  ) => {
-    await dispatch(actionAddComment(postId, newResult))
-    const {
-      promise: {
-        addComment: { status },
-      },
-    } = getState()
-    if (status === 'FULFILLED') {
-      const onePost = await dispatch(actionOnePost(postId))
-      if (onePost) await dispatch(actionAddCommentPostInTape(postId, newResult))
-    }
-    // await dispatch(actionOnePost(postId));
-}
+export const actionAddFullCommentFeed = (postId, newResult) => ({
+  type:"ADD_COMMENT_FEED", postId, newResult
+})
 
 //clear user data after log out
 export const actionClearUserData = () => async (dispatch) => {

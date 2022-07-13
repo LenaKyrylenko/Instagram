@@ -14,6 +14,8 @@ import {
   fullPageAboutUserWatcher,
   feedWatcher,
   exploreWatcher,
+onePostWatcher,
+  addCommentFeedWatcher
 } from '../saga'
 import createSagaMiddleware from 'redux-saga' //функция по созданию middleware
 import {
@@ -45,7 +47,10 @@ function* rootSaga() {
     loginWatcher(),
     fullPageAboutUserWatcher(),
     feedWatcher(),
-    exploreWatcher()
+    exploreWatcher(),
+
+    onePostWatcher()
+    // addCommentFeedWatcher()
   ])
 }
 sagaMiddleware.run(rootSaga)

@@ -220,7 +220,7 @@ export const Comments = ({
                 {comment?.answers && comment?.answers?.length ? (
                   <div style={{ marginLeft: '10px', display: 'inline-block' }}>
                     <SpoilerButton
-                      style={{ position: 'fixed' }}
+                      // style={{ position: 'fixed' }}
                       text={'More comments'}
                       onClick={() => findSubComment(commentId)}
                     >
@@ -247,7 +247,7 @@ export const CComments = connect(
     addSubComment: state.promise?.addSubComment,
   }),
   {
-    addComment: actionAddFullComment,
+    // addComment: actionAddFullComment,
     addCommentReply: actionAddSubFullComment,
     findSubComment: actionFindSubComment,
   },

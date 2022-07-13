@@ -95,14 +95,14 @@ export const PagePost = ({
           <h2> Text: {onePost?.text || ''} </h2>
           <Divider>Comments</Divider>
           <div className="Scroll">
-            <CComments
+            {/* <CComments
               postId={onePost?._id}
               comments={onePost?.comments || []}
-            />
+            /> */}
           </div>
           <div style={{ display: 'flex', margin: '40px 10px' }}>
-            <CLike likes={onePost?.likes} postId={onePost?._id} />
-            <AddComment addComment={addComment} postId={onePost?._id} />
+            {/* <CLike likes={onePost?.likes} postId={onePost?._id} />
+            <AddComment addComment={addComment} postId={onePost?._id} /> */}
           </div>
         </Col>
       </Row>
@@ -118,8 +118,8 @@ export const CPost = connect(
     addComment: state.promise?.addComment?.payload,
   }),
   {
-    addComment: actionAddFullCommentFeed,
-    addCommentReply: actionAddSubFullComment,
+    // addComment: actionAddFullCommentFeed,
+    // addCommentReply: actionAddSubFullComment,
     onPost: actionFullOnePost,
   },
 )(PagePost)
