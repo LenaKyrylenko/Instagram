@@ -14,13 +14,13 @@ import {
 } from '../../actions'
 import {
   actionFullFeed,
-  actionClearFeedPosts,
+
   actionAddFullCommentFeed,
   actionAddFullLikeFeed,
   actionDeleteFullLikeFeed,
  
 } from '../../redux/saga'
-import {actionFullClearFeedPosts} from '../../redux/reducers/feed/feedReducer'
+import {actionClearFeedPosts} from '../../redux/reducers/feed/feedReducer'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { Upload, Button, DatePicker, Space } from 'antd'
@@ -98,16 +98,16 @@ const MyPostFeed = ({
                     <h1  className='Title'> Text: {text || ''}</h1>
                     <Divider>Comments</Divider>
                     <div className="ScrollForFeed">
-                      <CCommentsForFeed
+                      {/* <CCommentsForFeed
                         postId={_id}
                         comments={comments || []}
-                      />
+                      /> */}
                       </div>
                       <center>
                       <div style={{ display: 'flex', padding: '20px', marginLeft:'100px' }}>
-                        <CLikeForFeed likes={likes} postId={_id} />
+                        {/* <CLikeForFeed likes={likes} postId={_id} />
 
-                        <AddComment addComment={addComment} postId={_id} />
+                        <AddComment addComment={addComment} postId={_id} /> */}
                       </div>
                        </center>
                     </div>
@@ -142,16 +142,16 @@ const CCommentsForFeed = connect(
 export const CPostForFeed = connect(
   (state) => ({
     profileData:  state?.profileData.aboutMe || '',
-    postsFeed: state.feed?.postsFeed,
+    postsFeed: state.feed?.postsFeed || [],
     addComment: state.promise?.addComment?.payload,
     postsFeedPromise :state.promise?.postsFeed
   }),
   {
     onPostsFeed: actionFullAllGetPosts,
-    onClearFeed: actionFullClearFeedPosts,
-    addComment: actionAddFullCommentFeed,
-    addCommentReply: actionAddSubFullComment,
-    addLike: actionAddFullLikeForFeed,
+    onClearFeed: actionClearFeedPosts,
+    // addComment: actionAddFullCommentFeed,
+    // addCommentReply: actionAddSubFullComment,
+    // addLike: actionAddFullLikeForFeed,
 
   },
 )(MyPostFeed)

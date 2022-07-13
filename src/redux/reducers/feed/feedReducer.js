@@ -59,17 +59,11 @@ export const feedReducer = (
     }
     return state
 }
-export const actionFullClearFeedPosts = () => (dispatch) => {
-  return dispatch(actionClearFeedPosts())
-}
-export const actionAllClearFeed = () => async (dispatch) => {
-  Promise.all([
-    await dispatch(actionClearPromiseForName('postsFeed')),
-    await dispatch(actionClearPromiseForName('postsFeedCount')),
-      await dispatch(actionClearFeedPosts())
-  ])
 
-}
+// export const actionFullClearFeedPosts = () => (dispatch) => {
+//   return dispatch(actionClearFeedPosts())
+// }
+
 export const actionClearFeedPosts = () =>
   ({ type: 'CLEAR-POSTS' })
 

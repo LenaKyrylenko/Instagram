@@ -29,7 +29,7 @@ import {
 } from '../reducers/feed/feedReducer'
 import { actionProfilePageDataTypeUser } from '../reducers/profileUserPage/profileUserReducer'
 import { actionRemoveDataAboutMe } from '../reducers/profileData/profileReducer'
-import { all, put, takeEvery, takeLatest, takeLeading, select,call } from 'redux-saga/effects'; //
+import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected} from '../../actions'
 
 
@@ -59,7 +59,7 @@ function* loginWorker({login, password}){ //обработчик экшона FU
   }
 }
 export function* loginWatcher() {
-yield takeEvery("'FULL_LOGIN'", loginWorker)
+yield takeEvery("FULL_LOGIN", loginWorker)
 
 }
 //profile page about me
@@ -70,16 +70,17 @@ export const actionFullProfilePage = () =>
 
 function* fullProfilePageWorker() {
   const { auth } = yield select()
+  console.log('auth', auth)
   if (auth?.payload?.sub?.id) {
     const aboutMe = yield call(promiseWorker, actionAboutMe(auth?.payload?.sub.id))
+  console.log('aboutMe in worker', aboutMe)
+   
     if (aboutMe) {
       yield put(actionProfilePageDataType(aboutMe))
-      console.log('about me _id',aboutMe?._id)
-      yield put(actionFullProfilePageUser(aboutMe?._id))
+    
     }
   }
 }
-
 
 export function* fullProfilePageWatcher() {
   yield takeEvery("FULLPROFILE_PAGE", fullProfilePageWorker)
@@ -106,21 +107,21 @@ function* fullPageAboutUserWorker({ _id }) {
 export function* fullPageAboutUserWatcher() {
   yield takeLeading("USER_PAGE", fullPageAboutUserWorker)
 }
-
 function* feedWorker() {
   const {
     feed: { postsFeed, postsFeedCount },
-    profileData: { aboutMe },
+    profileData: { aboutMe},
     
-  } = yield select()
-  let myFollowing =
-    aboutMe?.following && aboutMe?.following?.map(({ _id }) => _id)
-  const myId = yield select().auth.payload?.sub?.id
-  if (!myFollowing)
-  yield put(actionFullProfilePage(myId))
-  // await dispatch(actionFullProfilePage(myId))
-myFollowing = yield select().profileData.aboutMe?.following?.map(({ _id }) => _id)
-  console.log('myFollowing ', myFollowing)
+  }  = yield select()
+  let myFollowing = aboutMe?.following && aboutMe?.following?.map(({ _id }) => _id)
+  const myId = (yield select()).auth?.payload?.sub?.id
+
+  if (!aboutMe) {
+    yield call(fullProfilePageWorker, actionFullProfilePage())
+  }
+  myFollowing = (yield select()).profileData.aboutMe?.following &&
+    (yield select()).profileData.aboutMe?.following?.map(({ _id }) => _id)
+  // console.log('myFollowing after if', myFollowing)
   if (postsFeed.length !== (postsFeedCount ? postsFeedCount : 1)) {
     const newPosts = yield call(promiseWorker, 
       actionPostsFeed([...(myFollowing || []), myId], postsFeed.length),
@@ -128,21 +129,21 @@ myFollowing = yield select().profileData.aboutMe?.following?.map(({ _id }) => _i
     console.log('newPosts', newPosts)
     const newPostsFeedCount = yield call(promiseWorker, (
       actionPostsFeedCount([...(myFollowing || []), myId])))
-    
     if (newPosts && newPostsFeedCount) {
       console.log('newPosts', newPosts)
       yield put(actionFeedType(newPosts, newPostsFeedCount))
     }
   }
-  // const aboutMe = yield call(promiseWorker, actionAboutMe(_id))
-  // if (aboutMe)
-  // yield put(actionProfilePageDataType(aboutMe))
 }
-
 
 export function* feedWatcher() {
-  yield takeEvery("FEED_POSTS", feedWorker)
+  yield takeLeading("FEED_POSTS", feedWorker)
 }
+export function* clearFeedWatcher() {
+  yield takeLeading("CLEAR-POSTS",
+  yield put(actionClearFeedPosts()))
+}
+
 
 //feed
 

@@ -650,48 +650,9 @@ export const actionPostsFeed = (myFollowing, skip) =>
     ),
   )
 
-export const actionFullAllGetPosts = () => async (dispatch, getState) => {
-  const {
-    feed: { postsFeed, postsFeedCount },
-    profileData: { aboutMe },
-    promise,
-  } = getState()
-  let myFollowing =
-    aboutMe?.following && aboutMe?.following?.map(({ _id }) => _id)
-  const myId = getState().auth.payload?.sub?.id
-  console.log('myId', myId)
-  if (!myFollowing)
-    await dispatch(actionFullProfilePage(myId))
-  myFollowing =
-    getState().profileData.aboutMe?.following &&
-    getState().profileData.aboutMe?.following?.map(({ _id }) => _id)
-  console.log('myFollowing ', myFollowing)
-
-  const skip = postsFeed?.length
-  // console.log('skip ', skip)
-  console.log('postsFeed', postsFeed)
-  if (skip !== (postsFeedCount ? postsFeedCount : 1)) {
-    const newPosts = await dispatch(
-      actionPostsFeed([...(myFollowing || []), myId], skip),
-    )
-    console.log('newPosts', newPosts)
-    const newPostsFeedCount = await dispatch(
-      actionPostsFeedCount([...(myFollowing || []), myId]),
-    )
-    if (newPosts && newPostsFeedCount) {
-      console.log('newPosts', newPosts)
-      await dispatch(actionFeedType(newPosts, newPostsFeedCount))
-      // if(promise?.postsFeed?.status=='PENDING')
-      // await dispatch(actionClearFeedPosts())
-      // await dispatch(actionClearPromiseForName('postsFeed'))
-
-      // await dispatch(actionFeedTypeCount(postsFeedCount))
-      // await dispatch(actionClearPromiseForName('postsFeed'))
-
-      // await dispatch(actionFeedType(newPosts))
-    }
-  }
-}
+export const actionFullAllGetPosts = () => ({
+  type:"FEED_POSTS"
+})
 
 export const actionFullExplorePosts = () => async (dispatch, getState) => {
   const {

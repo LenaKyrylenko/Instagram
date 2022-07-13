@@ -40,12 +40,12 @@ export const Explore = () => (
   </Link>
 )
 const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
-  console.log('_id in user', _id)
+  // console.log('_id in user', _id)
   
-  // useEffect(() => {
-  //   if (my_Id)
-  //     onMyPage(my_Id)
-  // }, [my_Id])
+  useEffect(() => {
+    if (my_Id)
+      onMyPage(my_Id)
+  }, [my_Id])
   return (
     <Link to={`/profile/${_id}`}>
       {avatar?.url ? (
@@ -62,5 +62,5 @@ export const CUser = connect(
     my_Id: state.auth?.payload?.sub?.id,
     aboutMe: state.profileData.aboutMe,
   }),
-  // { onMyPage: actionFullProfilePageUser },
+  { onMyPage: actionFullProfilePageUser },
 )(User)
