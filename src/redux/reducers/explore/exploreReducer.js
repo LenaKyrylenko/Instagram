@@ -23,7 +23,7 @@ export const exploreReducer = (
           explorePosts: explorePosts ,
         }
       },
-      'CLEAR-EXPLORE-POSTS': () => ({
+      'CLEAR_EXPLORE_POSTS': () => ({
         ...state,
         explorePosts: [],
         explorePostsCount: 0,
@@ -43,7 +43,7 @@ export const exploreReducer = (
 
 // }
 export const actionClearExplorePosts = () =>
-  ({ type: 'CLEAR-EXPLORE-POSTS' })
+  ({ type: 'CLEAR_EXPLORE_POSTS' })
 
 export const actionExploreType = (newPosts,newPostsExploreCount) => 
   ({ type: 'ADD-EXPLORE-POSTS', newPosts, newPostsExploreCount })

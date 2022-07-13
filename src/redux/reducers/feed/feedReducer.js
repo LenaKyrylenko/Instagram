@@ -28,7 +28,7 @@ export const feedReducer = (
           postsFeed: postsFeed ,
         }
       },
-      'CLEAR-POSTS': () => ({
+      'CLEAR_POSTS': () => ({
 
         postsFeed: [],
         postsFeedCount: 0,
@@ -65,7 +65,7 @@ export const feedReducer = (
 // }
 
 export const actionClearFeedPosts = () =>
-  ({ type: 'CLEAR-POSTS' })
+  ({ type: 'CLEAR_POSTS' })
 
 //type
 export const actionAddLikePostInTape = (postId) =>

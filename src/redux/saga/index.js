@@ -14,7 +14,7 @@ import {
   actionAllClearPromise,
   actionLogin,
   actionAuthLogin,
-  
+  actionClearPromise
   } from '../../actions'
 import { history } from '../../helpers'
   import{actionClearDataUserType} from '../reducers/profileUserPage/profileUserReducer'
@@ -29,8 +29,8 @@ import {
 } from '../reducers/feed/feedReducer'
 import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/profileUserPage/profileUserReducer'
 import { actionRemoveDataAboutMe } from '../reducers/profileData/profileReducer'
-import {actionExploreType} from '../reducers/explore/exploreReducer'
-import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call } from 'redux-saga/effects'; //
+import {actionExploreType,actionClearExplorePosts} from '../reducers/explore/exploreReducer'
+import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
 
 
@@ -126,9 +126,9 @@ function* feedWorker() {
   myFollowing = (yield select()).profileData.aboutMe?.following &&
     (yield select()).profileData.aboutMe?.following?.map(({ _id }) => _id)
   // console.log('myFollowing after if', myFollowing)
-  if (postsFeed.length !== (postsFeedCount ? postsFeedCount : 1)) {
+  if (postsFeed?.length !== (postsFeedCount ? postsFeedCount : 1)) {
     const newPosts = yield call(promiseWorker, 
-      actionPostsFeed([...(myFollowing || []), myId], postsFeed.length),
+      actionPostsFeed([...(myFollowing || []), myId], postsFeed?.length),
     )
     console.log('newPosts', newPosts)
     const newPostsFeedCount = yield call(promiseWorker, (
@@ -143,11 +143,6 @@ function* feedWorker() {
 export function* feedWatcher() {
   yield takeLeading("FEED_POSTS", feedWorker)
 }
-export function* clearFeedWatcher() {
-  yield takeLeading("CLEAR-POSTS",
-  yield put(actionClearFeedPosts()))
-}
-
 //explore 
 function* exploreWorker(){
   const {
@@ -155,25 +150,26 @@ function* exploreWorker(){
   } = yield select()
   console.log('explorePosts', explorePosts)
 
+
   if (explorePosts?.length !== (explorePostsCount ? explorePostsCount : 1)) {
     console.log('explorePosts', explorePosts)
 
-    const newPosts = yield call(promiseWorker, actionExplorePosts(explorePosts?.length))
+    const newPosts = yield fork(promiseWorker, actionExplorePosts(explorePosts?.length))
 
     console.log('newPosts', newPosts)
 
-    const newPostsExploreCount = yield call(promiseWorker,(actionExplorePostsCount()))
-    if (newPostsExploreCount && newPosts)
-      yield put(actionExploreType(newPosts, newPostsExploreCount))
-
-    // if (promise?.explorePosts?.status == 'PENDING')
-    //   await dispatch(actionClearExplorePosts())
+    const newPostsExploreCount = yield fork(promiseWorker, (actionExplorePostsCount()))
+    const [posts,exploreCount] = yield join([newPosts,newPostsExploreCount])
+    if (posts && exploreCount)
+      yield put(actionExploreType(posts, exploreCount))
   }
 }
 export function* exploreWatcher() {
   yield takeLeading("EXPLORE_POSTS", exploreWorker)
 }
+
 //feed
+
 
 export const actionAddFullLikeFeed = (postId) => async (dispatch, getState) => {
     await dispatch(actionAddLike(postId))
