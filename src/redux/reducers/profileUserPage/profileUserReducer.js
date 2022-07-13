@@ -1,7 +1,7 @@
 
 export const profileUserReducer = (
     state = {},
-    { type, aboutUser, allPosts, newPosts },
+    { type, aboutUser, allPosts, newPosts, countPosts },
   ) => {
     const types = {
       'PROFILE-PAGE-USER': () => {
@@ -23,6 +23,13 @@ export const profileUserReducer = (
           aboutUser,
         }
       },
+      'COUNT_ALL_POSTS': () => {
+        
+        return {
+          ...state,
+          countPosts
+        }
+      }
     }
   
     if (type in types) {
@@ -40,7 +47,9 @@ export const actionProfilePageDataTypeUser = (aboutUser, allPosts) => ({
   aboutUser,
   allPosts,
 })
-
+export const actionCountPostsType = (countPosts) =>
+  ({ type: "COUNT_ALL_POSTS", countPosts })
+  
 export const actionProfilePageData = (id) => 
 ({ type: 'DATA_PROFILE', id })
 

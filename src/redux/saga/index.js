@@ -27,10 +27,11 @@ import {
   actionClearFeedPosts,
   actionFeedType
 } from '../reducers/feed/feedReducer'
-import { actionProfilePageDataTypeUser } from '../reducers/profileUserPage/profileUserReducer'
+import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/profileUserPage/profileUserReducer'
 import { actionRemoveDataAboutMe } from '../reducers/profileData/profileReducer'
+import {actionExploreType} from '../reducers/explore/exploreReducer'
 import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call } from 'redux-saga/effects'; //
-import {actionPending,actionFulfilled,actionRejected} from '../../actions'
+import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
 
 
   //promise
@@ -98,10 +99,13 @@ function* fullPageAboutUserWorker({ _id }) {
   const aboutUser = yield call(promiseWorker, actionAboutUser(_id))
   console.log('about user',  aboutUser)
   const allPosts = yield call(promiseWorker, actionAllPostsUser(_id))
+  const countPosts = yield call(promiseWorker, actionPostsCount(_id))
+
   if (aboutUser && allPosts) {
     yield put(actionProfilePageDataTypeUser(aboutUser, allPosts))
-
   }
+  if (countPosts)
+  yield put(actionCountPostsType(countPosts))
 }
 
 export function* fullPageAboutUserWatcher() {
@@ -144,7 +148,31 @@ export function* clearFeedWatcher() {
   yield put(actionClearFeedPosts()))
 }
 
+//explore 
+function* exploreWorker(){
+  const {
+    explore: { explorePosts, explorePostsCount },
+  } = yield select()
+  console.log('explorePosts', explorePosts)
 
+  if (explorePosts?.length !== (explorePostsCount ? explorePostsCount : 1)) {
+    console.log('explorePosts', explorePosts)
+
+    const newPosts = yield call(promiseWorker, actionExplorePosts(explorePosts?.length))
+
+    console.log('newPosts', newPosts)
+
+    const newPostsExploreCount = yield call(promiseWorker,(actionExplorePostsCount()))
+    if (newPostsExploreCount && newPosts)
+      yield put(actionExploreType(newPosts, newPostsExploreCount))
+
+    // if (promise?.explorePosts?.status == 'PENDING')
+    //   await dispatch(actionClearExplorePosts())
+  }
+}
+export function* exploreWatcher() {
+  yield takeLeading("EXPLORE_POSTS", exploreWorker)
+}
 //feed
 
 export const actionAddFullLikeFeed = (postId) => async (dispatch, getState) => {

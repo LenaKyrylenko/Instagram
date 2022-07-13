@@ -654,34 +654,15 @@ export const actionFullAllGetPosts = () => ({
   type:"FEED_POSTS"
 })
 
-export const actionFullExplorePosts = () => async (dispatch, getState) => {
-  const {
-    explore: { explorePosts, explorePostsCount },
-    promise,
-  } = getState()
-  console.log('explorePosts', explorePosts)
-
-  if (explorePosts?.length !== (explorePostsCount ? explorePostsCount : 1)) {
-    console.log('explorePosts', explorePosts)
-
-    const newPosts = await dispatch(actionExplorePosts(explorePosts?.length))
-
-    console.log('newPosts', newPosts)
-
-    const newPostsExploreCount = await dispatch(actionExplorePostsCount())
-    if (newPostsExploreCount && newPosts)
-      await dispatch(actionExploreType(newPosts, newPostsExploreCount))
-
-    // if (promise?.explorePosts?.status == 'PENDING')
-    //   await dispatch(actionClearExplorePosts())
-  }
-}
+export const actionFullExplorePosts = () => ({
+  type:"EXPLORE_POSTS"
+})
 
 export const actionPostsFeedCount = (myFollowing) =>
   actionPromise(
     'postsFeedCount',
     gql(
-      ` query CountAllPostsUser($_id:String!){
+      ` query CountAllPostsFeed($_id:String!){
                 PostCount(query:$_id)
 
                 }`,

@@ -46,6 +46,7 @@ export const actionClearExplorePosts = () =>
   ({ type: 'CLEAR-EXPLORE-POSTS' })
 
 export const actionExploreType = (newPosts,newPostsExploreCount) => 
-  ({ type: 'ADD-EXPLORE-POSTS', newPosts,newPostsExploreCount })
+  ({ type: 'ADD-EXPLORE-POSTS', newPosts, newPostsExploreCount })
+  
   export const actionExploreTypeCount = (explorePostsCount) => 
   ({ type: 'EXPLORE-COUNT', explorePostsCount })
