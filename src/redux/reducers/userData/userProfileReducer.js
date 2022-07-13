@@ -1,5 +1,5 @@
 
-export const profileUserReducer = (
+export const userProfileReducer = (
     state = {},
     { type, aboutUser, allPosts, newPosts, countPosts },
   ) => {

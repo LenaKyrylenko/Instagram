@@ -186,7 +186,7 @@ const EditSetting = ({ info, myId, onSaveUserUpsert,
   export const CEditSetting = connect(
     (state) => ({
       myId: state?.auth.payload.sub?.id,
-      info: state?.profileData?.aboutMe,
+      info: state?.myData?.aboutMe,
       changePassword : state.promise?.newPassword
     }),
     {

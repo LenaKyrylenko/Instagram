@@ -1,7 +1,7 @@
 
 import { CLogout } from '../../components/LoginRegisterLogout'
 import { CSearch } from '../../components/Search_Users'
-import { Feed, AddPost, Explore, CUser } from '../../components/Header'
+import { Feed, AddPost, Explore, CUser } from '../../components/HeaderButtons'
 import { connect } from 'react-redux'
 
 export const Header = () => {

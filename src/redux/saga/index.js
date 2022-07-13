@@ -21,8 +21,8 @@ import {
   // actionOnePost
   } from '../../actions'
 import { history } from '../../helpers'
-  import{actionClearDataUserType} from '../reducers/profileUserPage/profileUserReducer'
-import { actionProfilePageDataType } from '../reducers/profileData/profileReducer'
+  import{actionClearDataUserType} from '../reducers/userData/userProfileReducer'
+import { actionProfilePageDataType } from '../reducers/myData/myProfileReducer'
 import { actionFullAllGetPosts } from '../../actions'
 import {
   actionAddLikePostInTape,
@@ -31,8 +31,8 @@ import {
   actionClearFeedPosts,
   actionFeedType
 } from '../reducers/feed/feedReducer'
-import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/profileUserPage/profileUserReducer'
-import { actionRemoveDataAboutMe } from '../reducers/profileData/profileReducer'
+import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/userData/userProfileReducer'
+import { actionRemoveDataAboutMe } from '../reducers/myData/myProfileReducer'
 import {actionExploreType,actionClearExplorePosts} from '../reducers/explore/exploreReducer'
 import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
@@ -118,7 +118,7 @@ export function* fullPageAboutUserWatcher() {
 function* feedWorker() {
   const {
     feed: { postsFeed, postsFeedCount },
-    profileData: { aboutMe},
+    myData: { aboutMe},
     
   }  = yield select()
   let myFollowing = aboutMe?.following && aboutMe?.following?.map(({ _id }) => _id)
@@ -127,8 +127,8 @@ function* feedWorker() {
   if (!aboutMe) {
     yield call(fullProfilePageWorker, actionFullProfilePage())
   }
-  myFollowing = (yield select()).profileData.aboutMe?.following &&
-    (yield select()).profileData.aboutMe?.following?.map(({ _id }) => _id)
+  myFollowing = (yield select()).myData.aboutMe?.following &&
+    (yield select()).myData.aboutMe?.following?.map(({ _id }) => _id)
   // console.log('myFollowing after if', myFollowing)
   if (postsFeed?.length !== (postsFeedCount ? postsFeedCount : 1)) {
     const newPosts = yield call(promiseWorker, 

@@ -1,5 +1,5 @@
 
-export const profileReducer = (state = {}, { type, aboutMe, newResult }) => {
+export const myProfileReducer = (state = {}, { type, aboutMe, newResult }) => {
     const types = {
       'PROFILE-PAGE': () => {
         return {

@@ -4,7 +4,7 @@ import { CExplorePosts } from '../pages/explorePosts'
 import { CPostForFeed, Feed } from '../pages/feedPosts'
 import { CPostEditor } from '../pages/createAndEditPost'
 import { CPageAboutUser } from '../pages/profilePage'
-import { CPost } from './Post'
+import { CPost } from '../pages/onePost'
 import { Provider, connect } from 'react-redux'
 
 const Routing = ({ token }) => {

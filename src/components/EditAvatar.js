@@ -75,7 +75,7 @@ export const CEditAvatar = connect(
   (state) => ({
     myId: state?.auth.payload.sub?.id,
     fileStatus: state.promise?.uploadFile,
-    info: state?.profileData?.aboutMe?.avatar,
+    info: state?.myData?.aboutMe?.avatar,
   }),
   {
     onSaveAvatar: actionSetAvatar,

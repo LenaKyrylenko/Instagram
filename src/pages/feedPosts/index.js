@@ -25,7 +25,7 @@ import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { Upload, Button, DatePicker, Space } from 'antd'
 import { Avatar, Image, Divider, Radio } from 'antd'
-import { CPost } from '../../components/Post'
+import { CPost } from '../onePost'
 import { Row, Col } from 'antd'
 import LinkToUser from '../../components/LinkToUser'
 import { AddComment, Comments } from '../../components/Comment'
@@ -34,7 +34,7 @@ import { MyCarousel } from '../../components/Carousel'
 import load from '../../materials/load.gif'
 
 const MyPostFeed = ({
-  profileData,
+  // myData,
   postsFeed = [],
   onPostsFeed,
   addComment,
@@ -141,7 +141,7 @@ const CCommentsForFeed = connect(
 
 export const CPostForFeed = connect(
   (state) => ({
-    profileData:  state?.profileData.aboutMe || '',
+    // myData:  state?.myData.aboutMe || '',
     postsFeed: state.feed?.postsFeed || [],
     addComment: state.promise?.addComment?.payload,
     postsFeedPromise :state.promise?.postsFeed

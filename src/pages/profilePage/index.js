@@ -124,9 +124,9 @@ export const PageAboutUser = ({
 export const CPageAboutUser = connect(
   (state) => ({
     my_Id: state.auth?.payload?.sub?.id,
-    aboutUser: state.profilePage?.aboutUser,
+    aboutUser: state.userData?.aboutUser,
     countAllPostsUser: state.promise?.countAllPostsUser?.payload,
-    allPosts: state.profilePage?.allPosts,
+    allPosts: state.userData?.allPosts,
   }),
   {
     onAboutUser: actionFullProfilePageUser,

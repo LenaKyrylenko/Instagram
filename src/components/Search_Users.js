@@ -55,7 +55,7 @@ const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {
 }
 export const CSearch = connect(
   (state) => ({
-    aboutUser: state.profilePage?.aboutUser,
+    aboutUser: state.userData?.aboutUser,
     searchUser: state.promise?.searchUser?.payload,
     my_Id: state.auth?.payload?.sub?.id || '',
   }),

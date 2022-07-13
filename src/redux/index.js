@@ -1,12 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { promiseReducer } from './promise/promiseReducer'
-import { authReducer } from './auth/authReducer'
-import { profileReducer } from './profileData/profileReducer'
-import { profileUserReducer } from './profileUserPage/profileUserReducer'
-import { feedReducer } from './feed/feedReducer'
-import { postReducer } from './post/postReducer'
-import { exploreReducer } from './explore/exploreReducer'
+import { promiseReducer } from './reducers/promise/promiseReducer'
+import { authReducer } from './reducers/auth/authReducer'
+import { myProfileReducer } from './reducers/myData/myProfileReducer'
+import { userProfileReducer } from './reducers/userData/userProfileReducer'
+import { feedReducer } from './reducers/feed/feedReducer'
+import { postReducer } from './reducers/post/postReducer'
+import { exploreReducer } from './reducers/explore/exploreReducer'
 import {
   promiseWatcher,
   fullProfilePageWatcher,
@@ -18,7 +18,7 @@ onePostWatcher,
   addCommentFeedWatcher,
   addCommentOnePostWatcher,
   changeLikePostWatcher
-} from '../saga'
+} from './saga'
 import createSagaMiddleware from 'redux-saga' //функция по созданию middleware
 import {
   all,
@@ -34,8 +34,8 @@ export const store = createStore(
   combineReducers({
     promise: promiseReducer,
     auth: authReducer,
-    profileData: profileReducer,
-    profilePage: profileUserReducer,
+    myData: myProfileReducer,
+    userData: userProfileReducer,
     feed: feedReducer,
     post: postReducer,
     explore: exploreReducer,

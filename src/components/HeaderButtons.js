@@ -5,7 +5,6 @@ import { CSearch } from './Search_Users'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import React, { useEffect,useState } from 'react'
-
 export const AddPost = ({ children }) => {
   const [state, setState] = useState(false)
 
@@ -39,6 +38,7 @@ export const Explore = () => (
     </a>
   </Link>
 )
+
 const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
   // console.log('_id in user', _id)
   
@@ -60,7 +60,7 @@ const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
 export const CUser = connect(
   (state) => ({
     my_Id: state.auth?.payload?.sub?.id,
-    aboutMe: state.profileData.aboutMe,
+    aboutMe: state.myData.aboutMe,
   }),
   { onMyPage: actionFullProfilePageUser },
 )(User)

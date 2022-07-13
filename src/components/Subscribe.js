@@ -42,8 +42,8 @@ const Subscribe = ({
 }
 export const CSubscribe = connect((state) => ({
     my_Id: state.auth?.payload?.sub?.id,
-    aboutMeFollowing: state.profileData?.aboutMe?.following,
-    followId: state.profilePage?.aboutUser?._id,
+    aboutMeFollowing: state.myData?.aboutMe?.following,
+    followId: state.userData?.aboutUser?._id,
 }),
     {
         addSubscribe: actionFullSubscribe,

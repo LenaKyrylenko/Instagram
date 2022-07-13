@@ -23,7 +23,7 @@ const PostEditor = ({
   match: {
     params: { _id },
   },
-  myID,
+  myId,
   post = {},
   onSave,
   onFileDrop,
@@ -104,7 +104,7 @@ const PostEditor = ({
   const savePost = () =>
     onSave(state, state?._id) &&
     message.success(`Post published success!`) &&
-    history.push(`/profile/${myID}`)
+    history.push(`/profile/${myId}`)
   useEffect(() => {
     return () => {
       clearPromise('uploadFiles')
@@ -193,7 +193,7 @@ export const CPostEditor = connect(
   (state) => ({
     fileStatus: state.promise?.uploadFiles,
     post: state?.post?.onePost,
-    myID: state?.profileData?.aboutMe?._id,
+    myId: state?.myData?.aboutMe?._id,
   }),
   {
     onSave: actionPostUpsert,

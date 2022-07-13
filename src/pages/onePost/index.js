@@ -3,40 +3,25 @@ import {
   actionAddSubFullComment,
   actionDeleteFullLike,
   actionAddFullLike,
-} from '../actions'
+} from '../../actions'
 
 import { Avatar, Divider, Input, Button } from 'antd'
-import user from '../materials/user.png'
+import user from '../../materials/user.png'
 import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
-import { CComments, AddComment } from './Comment'
-import { CPostEditor } from '../pages/createAndEditPost'
+import { CComments, AddComment } from '../../components/Comment'
+import { CPostEditor } from '../createAndEditPost'
 
-import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../actions/typeSaga/postActionSaga'
-import { CLike} from './Like'
-import { ConstructorModal } from '../helpers'
+import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../../actions/typeSaga/postActionSaga'
+import { CLike} from '../../components/Like'
+import { ConstructorModal } from '../../helpers'
 import React, { useState, useEffect } from 'react'
 import {
   actionAddFullCommentFeed,
-} from '../redux/saga'
-import { LinkToUser } from './LinkToUser'
-import { MyCarousel } from './Carousel'
-
-const EditMyPost = ({ _id }) => {
-  return (
-    <>
-      <Link to={`/edit/post/${_id}`}>
-        <Button
-          style={{ marginLeft: '200px',marginTop:'10px', width: '100px' }}
-          size="large"
-          type="primary"
-        >
-          Edit Post
-        </Button>
-      </Link>
-    </>
-  )
-}
+} from '../../redux/saga'
+import { LinkToUser } from '../../components/LinkToUser'
+import { MyCarousel } from '../../components/Carousel'
+import {EditMyPostButton} from '../../components/EditPostButton'
 
 
 export const PagePost = ({
@@ -86,7 +71,7 @@ export const PagePost = ({
               key={_id}
             size={50} padding={'0px'} />
             <Row span={1}>
-              {my_Id === onePost?.owner?._id && <EditMyPost _id={_id} />}
+              {my_Id === onePost?.owner?._id && <EditMyPostButton _id={_id} />}
             </Row>
           </div>
 
@@ -113,10 +98,9 @@ export const PagePost = ({
 
 export const CPost = connect(
   (state) => ({
-    onePost: state.promise?.onePost?.payload,
+    onePost: state?.post.onePost,
     my_Id: state.auth.payload?.sub?.id || '',
-    aboutUser: state.profilePage?.aboutUser,
-    addComment: state.promise?.addComment?.payload,
+    aboutUser: state.userData?.aboutUser,
   }),
   {
     addComment: actionAddFullCommentSaga,
