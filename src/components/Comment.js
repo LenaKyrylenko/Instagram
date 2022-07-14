@@ -5,38 +5,52 @@ import {
 } from '../actions'
 import { Tooltip } from 'antd'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { Input, Button } from 'antd'
 import { SmileOutlined } from '@ant-design/icons'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import data from 'emoji-mart/data/google.json'
 import { NimblePicker, Emoji } from 'emoji-mart'
 import { LinkToUser } from './LinkToUser'
 import reactStringReplace from 'react-string-replace'
+import {  Comment,Avatar } from 'antd';
+import user from '../materials/user.png'
+// import EmojiSelector from 'react-native-emoji-selector'
+// render(<EmojiPicker onEmojiSelect={console.log} />, document.querySelector('#picker'))
+import { ConstructorModal } from '../helpers'
 
 export const AddComment = ({ addComment, postId }) => {
   const [text, setComment] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  const addEmoji = ({ colons }) => {
-    setComment((text + ' ' + colons).trim())
-  }
+  console.log('show stickers', showEmojiPicker)
+  const handleOK = () => 
+    setShowEmojiPicker(!showEmojiPicker)
+
+  const addEmoji = ({ native }) => 
+  setComment((text + ' ' + native).trim())
+
   return (
     <>
       {showEmojiPicker && (
+       
         <Picker
-          autoFocus={true}
           style={{
-            color: '#74d2e7',
+            color: '#108ee9',
             position: 'absolute',
             bottom: '160px',
             right: '30px',
           }}
-          onSelect={(emojiTag) => addEmoji(emojiTag)}
-          set="apple"
-        />
+          theme="light"
+          native={true}
+          showPreview={false}
+          showSkinTones={false}
+          onSelect={(native) =>
+            addEmoji(native)}
+          />
       )}
       <Input
         style={{
@@ -55,20 +69,32 @@ export const AddComment = ({ addComment, postId }) => {
           setComment(e.target.value)
         }}
       />
-      <SmileOutlined
+      {
+        !showEmojiPicker ?
+        <SmileOutlined
         className="smile-btn"
         style={{ fontSize: 'xx-large', marginRight: '30px' }}
-        onClick={() => {
-          setShowEmojiPicker(!showEmojiPicker)
-        }}
-      />
+      
+        onClick={handleOK}
+          />
+          :
+          <SmileOutlined
+          className="smile-btn"
+          style={{ color:'#108ee9',fontSize: 'xx-large', marginRight: '30px' }}
+        
+          onClick={handleOK}
+        />
+    }
+     
       <Button
         size="large"
         disabled={text.length < 1}
         type="primary"
-        onClick={(e) =>
-          addComment(postId, text) && setComment((e.target.value = ''))
-        }
+        onClick={(e) => { 
+          addComment(postId, text)
+            && setComment(e.target.value = '') &&
+            setShowEmojiPicker(false)
+        }}
       >
         {' '}
         Publish{' '}
@@ -92,21 +118,6 @@ export const SpoilerButton = ({ text, close, children, style }) => {
     </>
   )
 }
-const CommentAuthor = ({ owner:{_id, login, avatar} }) => (
-  <>
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        padding: '5px',
-        margin: '5px',
-      }}
-    >
-      <LinkToUser _id={_id} login={login} avatar={avatar} size={'10px'} sizePadding={'0px'} />
-    </div>
-  </>
-)
-
 const CommentForReply = ({ addCommentReply, commentId, postId }) => {
   const [comment, setComment] = useState('')
   return (
@@ -140,35 +151,10 @@ const CommentForReply = ({ addCommentReply, commentId, postId }) => {
   )
 }
 
-const CommentText = ({ text, close }) => {
-  // const [edit, setEdited] = useState(close)
-  return (
-    <div
-      style={{
-        width: '90%',
-        margin: '20px',
-        paddingLeft: '5px',
-        display: 'flex',
-        alignItems: 'left',
-        justifyContent: 'left',
-        transition: '.3s',
-        boxShadow: '0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-      }}
-    >
-      {/* <EditOutlined style={{float:'right',  fontSize: 'x-large' }}/> */}
-      <h3 style={{ display: 'block' }}>
-        {' '}
-        {reactStringReplace(text, /:(.+?):/g, (match, i) => (
-          <Emoji emoji={match} set="apple" size={20} />
-        ))}
-      </h3>
-    </div>
-  )
-}
 const CommentData = ({ createdAt }) => {
   return (
     <Tooltip
-      color={'#87d068'}
+      color={'#108ee9'}
       style={{ paddingLeft: '10px' }}
       title={moment(new Date(+createdAt)).format('lll')}
     >
@@ -179,65 +165,72 @@ const CommentData = ({ createdAt }) => {
   )
 }
 
-export const Comments = ({
+export const Comments =  ({
   comments,
   postId,
+  commentsFind,
   addCommentReply,
-  commentId,
   children,
   close,
   findSubComment,
+  onGetLikes,
+  onGetType
 }) => {
   const [opened, setOpened] = useState(close)
-
   return (
     <>
-      {comments
-        ? comments.map((comment) => (
-            <>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
-                  padding: '15px',
-                }}
-              >
-                <CommentAuthor owner={comment.owner} />
-                <CommentText text={comment.text} />
-              </div>
-              <CommentData createdAt={comment.createdAt} />
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <SpoilerButton text={'Reply to'}>
-                    <CommentForReply
-                      addCommentReply={addCommentReply}
-                      commentId={comment._id}
-                      postId={postId}
-                    />
-                  </SpoilerButton>
-                </div>
-                {comment?.answers && comment?.answers?.length ? (
-                  <div style={{ marginLeft: '10px', display: 'inline-block' }}>
-                    <SpoilerButton
-                      // style={{ position: 'fixed' }}
-                      text={'More comments'}
-                      onClick={() => findSubComment(commentId)}
-                    >
-                      <Comments
-                        comments={comment.answers}
-                        addCommentReply={addCommentReply}
-                        commentId={comment._id}
-                      ></Comments>
-                    </SpoilerButton>
-                  </div>
-                ) : null}
-              </div>
-            </>
-          ))
-        : null}
-    </>
-  )
+      {comments 
+        
+        ? 
+        comments?.map((comment) => (
+          <Comment
+      
+            author={ <Link
+              to={`/profile/${comment?.owner?._id}`}
+            >
+                {comment?.owner?.login || 'Anon'}
+             
+            </Link>}
+        
+            avatar= 
+            {comment.owner?.avatar ? (
+              <Link
+              to={`/profile/${comment?.owner?._id}`}
+            >
+                <Avatar
+                  size={30}
+                  src={'/' + comment.owner?.avatar?.url}
+                style={{ marginLeft: '15px' }}
+                alt={comment.owner?.login || 'Anon'}
+                />
+                </Link>
+            ) : (
+              <Link
+              to={`/profile/${comment?.owner?._id}`}
+            >
+                <Avatar size={30}
+                  src={user}
+                  style={{ marginLeft: '15px' }}
+                  alt={comment.owner?.login || 'Anon'}
+                  />
+              </Link>
+              )}
+  
+            content=
+            {
+              <p>
+                {comment?.text}
+                </p>
+            }
+           
+            datetime={
+              <CommentData createdAt={comment?.createdAt} />
+            }
+          />
+
+            
+     )) : <h3> No comments </h3>}
+    </>)
 }
 
 export const CComments = connect(
@@ -247,7 +240,6 @@ export const CComments = connect(
     addSubComment: state.promise?.addSubComment,
   }),
   {
-    // addComment: actionAddFullComment,
     addCommentReply: actionAddSubFullComment,
     findSubComment: actionFindSubComment,
   },

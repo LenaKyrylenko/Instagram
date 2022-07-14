@@ -9,7 +9,7 @@ import { actionExploreTypeCount } from '../redux/reducers/explore/exploreReducer
 import { actionClearExplorePosts } from '../redux/reducers/explore/exploreReducer'
 import { actionExploreType } from '../redux/reducers/explore/exploreReducer'
 import { actionClearFeedPosts } from '../redux/reducers/feed/feedReducer'
-import {actionProfilePageDataType} from '../redux/reducers/profileData/profileReducer'
+import {actionProfilePageDataType} from '../redux/reducers/myData/myProfileReducer'
 import { history } from '../helpers'
 import{promiseWorker} from '../redux/saga'
 import { all, put, takeEvery, takeLatest, takeLeading, select,call } from 'redux-saga/effects'; //
