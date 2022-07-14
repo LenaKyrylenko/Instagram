@@ -10,18 +10,11 @@ import { Link } from 'react-router-dom'
 import { Input, Button } from 'antd'
 import { SmileOutlined } from '@ant-design/icons'
 import moment from 'moment'
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
-import data from 'emoji-mart/data/google.json'
-import { NimblePicker, Emoji } from 'emoji-mart'
-import { LinkToUser } from './LinkToUser'
-import reactStringReplace from 'react-string-replace'
 import {  Comment,Avatar } from 'antd';
 import user from '../materials/user.png'
-// import EmojiSelector from 'react-native-emoji-selector'
-// render(<EmojiPicker onEmojiSelect={console.log} />, document.querySelector('#picker'))
-import { ConstructorModal } from '../helpers'
 
 export const AddComment = ({ addComment, postId }) => {
   const [text, setComment] = useState('')

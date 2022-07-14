@@ -2,7 +2,7 @@ import { InputForm, CRegisterForm, CLoginForm } from './LoginRegisterLogout'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { CExplorePosts } from '../pages/explorePosts'
 import { CPostForFeed, Feed } from '../pages/feedPosts'
-import { CPostEditor } from '../pages/createAndEditPost'
+import { CPostEditor,CPostCreator } from '../pages/createAndEditPost'
 import { CPageAboutUser } from '../pages/profilePage'
 import { CPost } from '../pages/onePost'
 import { Provider, connect } from 'react-redux'
@@ -15,6 +15,8 @@ const Routing = ({ token }) => {
           <Route path="/profile/:_id" component={CPageAboutUser} />
           <Route path="/explore" component={CExplorePosts} />
           <Route path="/edit/post/:_id" component={CPostEditor} />
+          <Route path="/edit/post/new" component={CPostCreator} />
+
           <Route path="/post/:_id" component={CPost} />
           <Route path="/feed" component={CPostForFeed} />
           <Redirect from="/*" to="/feed" />

@@ -223,8 +223,7 @@ export const actionAvatar = (imageId, myId) =>
     ),
   )
 
-export const actionPostUpsert = (post, _id) => async (dispatch) => {
-  await dispatch(
+export const actionPostUpsert = (post, postId) => 
     actionPromise(
       'postUpsert',
       gql(
@@ -237,15 +236,12 @@ mutation PostUpsert($post:PostInput){
         {
           post: {
             ...post,
-            _id: _id,
+            _id:postId,
             images: post.images.map(({ _id }) => ({ _id })),
           },
         },
       ),
-    ),
-  )
-}
-
+    )
 export const actionAllPosts = (userId) =>
   actionPromise(
     'allPostsMe',

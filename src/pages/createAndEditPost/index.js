@@ -19,46 +19,43 @@ import { arrayMoveImmutable } from 'array-move'
 import { Row, Col } from 'antd'
 import { history } from '../../helpers'
 import { Input } from '../../components/Input'
+import {actionCreateEditPost} from '../../redux/saga'
+
 const PostEditor = ({
   match: {
     params: { _id },
   },
   myId,
-  post = {},
   onSave,
   onFileDrop,
+  post={},
   fileStatus,
   clearPostOne,
   clearPromise,
 }) => {
+  console.log('post in start component', post)
   post = {
     _id: post?._id || '',
     title: post?.title || '',
     text: post?.text || '',
     images: post?.images || [],
   }
-
-  console.log('post ', post)
+  console.log('post after', post)
   console.log('post _id', _id)
   const [state, setState] = useState(post)
   useEffect(() => {
     if (_id === 'new' && Object.keys(post)) {
-      console.log('in condition')
       clearPostOne()
-      clearPromise('onePost')
-      if (post?._id?.length < 8) {
-        console.log('post with _id < 8', post)
-        post = {
-          _id: post?._id || '',
-          title: post?.title || '',
-          text: post?.text || '',
-          images: post?.images || [],
-        }
-        console.log('after post ', post)
-        console.log('update state', state)
-        return () => setState(post)
+      // clearPromise("onePost")
+      post = {
+        _id: post?._id || '',
+    title: post?.title || '',
+    text: post?.text || '',
+    images: post?.images || [],
       }
-
+      console.log('попало в иф айди нью ', _id)
+     return setState(post)
+ 
       //console.log('post after clear ', post)
     }
   }, [_id])
@@ -100,20 +97,20 @@ const PostEditor = ({
     })
   const disabledBtn =
     state?.images && state?.title && state?.text ? false : true
-
+  console.log('STATEEE IDDDD', state?._id)
   const savePost = () =>
-    onSave(state, state?._id) &&
+    onSave(state) &&
     message.success(`Post published success!`) &&
     history.push(`/profile/${myId}`)
-  useEffect(() => {
-    return () => {
-      clearPromise('uploadFiles')
-      clearPromise('postUpsert')
-      clearPromise('post')
-      clearPostOne()
-      clearPromise('onePost')
-    }
-  }, [])
+  // useEffect(() => {
+  //   return () => {
+  //     clearPromise('uploadFiles')
+  //     clearPromise('postUpsert')
+  //     clearPromise('post')
+  //     clearPostOne()
+  //     clearPromise('onePost')
+  //   }
+  // }, [])
   const checkLength = () => {
     if (state?.images?.length > 8) {
       console.log('state?.images?.length', state?.images?.length)
@@ -134,8 +131,7 @@ const PostEditor = ({
          
               <SortableContainer
                 onSortEnd={onSortEnd}
-                style={{ with: '300px' }}
-              >
+                style={{ with: '300px' }} >
                 {state?.images?.length < 8 &&
                   (state?.images || []).map(({ _id, url }, index) => (
                     <SortableItem
@@ -189,6 +185,34 @@ const PostEditor = ({
   )
 }
 
+// export const CPostEditor = connect(
+//   (state) => ({
+//     fileStatus: state.promise?.uploadFiles,
+//     post: state?.post?.onePost,
+//     myId: state?.myData?.aboutMe?._id,
+//   }),
+//   {
+//     onSave: actionCreateEditPost,
+//     onFileDrop: actionUploadFiles,
+//     clearPostOne: actionClearOnePostType,
+//     // clearPromise: actionClearPromise,
+//   },
+// )(PostEditor)
+
+export const CPostCreator = connect(
+  (state) => ({
+    fileStatus: state.promise?.uploadFiles,
+    // post: state?.post?.onePost,
+    myId: state?.myData?.aboutMe?._id,
+  }),
+  {
+    onSave: actionCreateEditPost,
+    onFileDrop: actionUploadFiles,
+    clearPostOne: actionClearOnePostType,
+    clearPromise: actionClearPromise,
+  },
+)(PostEditor)
+
 export const CPostEditor = connect(
   (state) => ({
     fileStatus: state.promise?.uploadFiles,
@@ -196,9 +220,9 @@ export const CPostEditor = connect(
     myId: state?.myData?.aboutMe?._id,
   }),
   {
-    onSave: actionPostUpsert,
+    onSave: actionCreateEditPost,
     onFileDrop: actionUploadFiles,
     clearPostOne: actionClearOnePostType,
-    clearPromise: actionClearPromise,
+    // clearPromise: actionClearPromise,
   },
 )(PostEditor)

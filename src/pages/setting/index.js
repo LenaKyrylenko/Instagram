@@ -29,8 +29,8 @@ const EditSetting = ({ info, myId, onSaveUserUpsert,
   const [changePass, setChangePass] = useState(changePassword)
     const [isModalVisibleEdit, setIsModalVisibleEdit] = useState(false);
     // actionChangePassword
-  console.log('all info ', info)
-  console.log('login ', info?.login)
+  // console.log('all info ', info)
+  // console.log('login ', info?.login)
   
     const showModalEdit = () => {
       setIsModalVisibleEdit(true);

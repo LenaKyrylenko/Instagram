@@ -17,7 +17,8 @@ import {
   actionClearPromise,
   actionGetCommentsOnePost,
   actionFindLikes,
-
+  actionPostUpsert,
+  actionClearPromiseForName
   // actionOnePost
   } from '../../actions'
 import { history } from '../../helpers'
@@ -75,10 +76,10 @@ export const actionFullProfilePage = () =>
 
 function* fullProfilePageWorker() {
   const { auth } = yield select()
-  console.log('auth', auth)
+  // console.log('auth', auth)
   if (auth?.payload?.sub?.id) {
     const aboutMe = yield call(promiseWorker, actionAboutMe(auth?.payload?.sub.id))
-  console.log('aboutMe in worker', aboutMe)
+  // console.log('aboutMe in worker', aboutMe)
    
     if (aboutMe) {
       yield put(actionProfilePageDataType(aboutMe))
@@ -98,10 +99,10 @@ export const actionFullProfilePageUser = (_id) =>
   ({ type: "USER_PAGE", _id })
   
 function* fullPageAboutUserWorker({ _id }) {
-  console.log('_id ',  _id)
+  // console.log('_id ',  _id)
 
   const aboutUser = yield call(promiseWorker, actionAboutUser(_id))
-  console.log('about user',  aboutUser)
+  // console.log('about user',  aboutUser)
   const allPosts = yield call(promiseWorker, actionAllPostsUser(_id))
   const countPosts = yield call(promiseWorker, actionPostsCount(_id))
 
@@ -180,19 +181,7 @@ function* addCommentFeedWorker({ postId, newResult }) {
   if (comments)
     yield put(actionAddCommentPostInTape(postId, newResult))
   }
-  // const {
-  //   promise: {
-  //     addComment
-  //   }
-  // } = yield select()
-  // if (addComment?.status === 'FULFILLED') {
-  //   console.log('УРААА')
-  //   const onePost = yield call(promiseWorker, actionOnePost(postId))
-  //   if (onePost)
-  //   yield call(promiseWorker,actionAddCommentPostInTape(postId, newResult))
-  // }
-    
-// }
+
 export function* addCommentFeedWatcher() {
   yield takeLeading("ADD_COMMENT_FEED", addCommentFeedWorker)
   
@@ -228,10 +217,10 @@ yield takeLeading("ONE_POST",onePostWorker)
 //comment
 
 function* addCommentOnePostWorker({ postId, text }) {
-  console.log('post id', postId)
-  console.log('comment', text)
+  // console.log('post id', postId)
+  // console.log('comment', text)
   const add= yield call(promiseWorker, actionAddComment(postId, text))
-  console.log('add', add)
+  // console.log('add', add)
   const {
     promise: {
       addComment: { status },
@@ -240,7 +229,7 @@ function* addCommentOnePostWorker({ postId, text }) {
   if (status === 'FULFILLED') {
     yield call(promiseWorker, actionOnePost(postId))
     const { comments } = yield call(promiseWorker, actionGetCommentsOnePost(postId))
-   console.log('add comments', comments)
+  //  console.log('add comments', comments)
     if (comments)
       yield put (actionAddCommentType(comments))
   }
@@ -266,6 +255,7 @@ export function* addCommentOnePostWatcher(){
 //     }
 // }
 
+//change like in post
 export const actionChangeLike = (likeId, postId) =>
 ({
     type:"CHANGE_LIKE_POST", likeId,postId
@@ -300,7 +290,34 @@ export function* changeLikePostWatcher() {
   yield takeLeading("CHANGE_LIKE_POST", changeLikePostWorker)
 }
 
+// create and edit post
 
+function* editPostWorker({state }) {
+  
+  console.log('in worker default post', state)
+  console.log('in worker post id', state?._id)
+  const postUpsert = yield call(promiseWorker, actionPostUpsert(state,state?._id))
+  console.log('post Upsert', postUpsert)
+
+//   postUpsert
+//   const upsertPost = yield call(promiseWorker, actionPostUpsert(post))
+// console.log('upsert POST', upsertPost)
+ 
+  if (postUpsert) {
+    yield put(actionClearPromiseForName('postUpsert'))
+    yield put(actionClearPromiseForName('uploadFiles'))
+    yield put(actionClearPromiseForName('onePost'))
+  }
+  
+}
+export function* editPostWatcher() {
+  yield takeEvery("CREATE_EDIT_POST", editPostWorker)
+  
+}
+export const actionCreateEditPost= (state) =>
+({
+    type:"CREATE_EDIT_POST", state
+})
 // export const actionDeleteFullLikeFeed = (likeId, postId) => async (
 //     dispatch,
 //     getState,
