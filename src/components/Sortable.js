@@ -1,5 +1,5 @@
 import { sortableContainer, SortableElement, sortableElement, SortableHandle } from 'react-sortable-hoc'
-import { Button,Image } from 'antd'
+import { Button,Image,Row,Col } from 'antd'
 
 export const SortableItem = SortableElement(({ url, onRemoveImage, _id }) => {
     return (
@@ -7,12 +7,13 @@ export const SortableItem = SortableElement(({ url, onRemoveImage, _id }) => {
       <img
         style={{
           // margin: '20px',
-          maxWidth: '300px',
-            minWidth: '100px',
+         
+          
             objectFit: 'cover',
           boxShadow: '0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-          maxHeight: '300px',
-          minHeight:'100px'
+          height: '100px',
+            width: '100px',
+          marginBottom:'5px'
         }}
         src={'/' + url}
       />
@@ -21,14 +22,15 @@ export const SortableItem = SortableElement(({ url, onRemoveImage, _id }) => {
       danger
       size="small"
           style={{
-            float: 'right',
-          margin:'5px'
+            // float: 'right',
+            margin: '5px'
           }}
       onClick={() => onRemoveImage(_id)}
     >
       {' '}
       x{' '}
-        </Button>
+          </Button>
+          
       </>
     )
   })
@@ -36,7 +38,16 @@ export const SortableItem = SortableElement(({ url, onRemoveImage, _id }) => {
   
     return (
       <>
-            <ul style={{ display: 'flex', flexDirection: 'row', margin: '5px' }}>{children}</ul>
+        {/* <Row> */}
+        {/* <Col span={2}> */}
+        <ul
+          style={{
+          // maxWidth:'100px',
+              margin: '5px'
+          }}
+          >{children}</ul>
+          {/* </Col> */}
+        {/* </Row> */}
       </>
     )
   })

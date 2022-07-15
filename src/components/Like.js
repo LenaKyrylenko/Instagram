@@ -47,12 +47,11 @@ console.log('like id in component', likeId)
        
           {likeId ? (
             <HeartFilled
-              style={{ cursor: 'pointer', fontSize: 'xx-large', color: 'red' }}
+              style={{color:'red'}}
+              className='Like'
             />
           ) : (
-            <HeartOutlined
-              style={{ cursor: 'pointer', fontSize: 'xx-large' }}
-            />
+            <HeartOutlined className='UnLike' />
           )}
         </h3>
         {likes.length ? (

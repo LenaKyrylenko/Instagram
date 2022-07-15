@@ -12,6 +12,13 @@ export const myProfileReducer = (state = {}, { type, aboutMe, newResult }) => {
           aboutMe: {},
         }
       },
+      'UPDATE_FOLLOWING': () => {
+        return {
+          ...state,
+          aboutMe: ({ ...state.aboutMe, following: [...newResult] })
+
+        }
+      },
     }
     if (type in types) {
       return types[type]()
@@ -29,4 +36,7 @@ export const myProfileReducer = (state = {}, { type, aboutMe, newResult }) => {
   export const actionRemoveDataAboutMe = () => 
   ({ type: 'REMOVE-DATA' })
   
-  
+  export const actionChangeFollowingType = (newResult) => ({
+    type:"UPDATE_FOLLOWING", newResult
+    
+  })

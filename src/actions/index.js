@@ -97,6 +97,7 @@ export const actionAboutMe = (_id) =>
               _id createdAt login nick avatar{_id url} 
               followers{_id login nick avatar{_id url}} 
               following{_id login nick avatar{_id url}}
+              likesCount
             }
           }`,
       {
@@ -105,6 +106,24 @@ export const actionAboutMe = (_id) =>
     ),
   )
 
+  export const actionAboutMeLikes = (_id) =>
+  actionPromise(
+    'aboutMeLikes',
+    gql(
+      `query Likes($postId:String){
+            LikeFind(query:$postId)
+            {
+              _id
+              owner { _id nick login
+                avatar{_id url}
+                  }
+            }
+          }`,
+      {
+        postId: JSON.stringify([{ "post._id":_id }]),
+      },
+    ),
+  )
  export const actionFullLogin = (login, password) =>  //упрощенный action для саги
     ({type: 'FULL_LOGIN', login, password})
     
@@ -371,6 +390,7 @@ export const actionAllFollowers = (_id) =>
         `query AllFollowers($userId:String){
   UserFindOne(query:$userId)
         {
+          _id
           followers{_id login}
         }
       }`,
@@ -386,7 +406,7 @@ export const actionAllFollowing = (_id) =>
       gql(
         `query AllFollowing($userId:String){
   UserFindOne(query:$userId)
-    {
+    {_id
           following{_id login}
     }
 }`,
@@ -421,7 +441,8 @@ export const actionAddComment = (postId, text) =>
     )
 
 export const actionGetCommentsOnePost = (postId) =>
-    actionPromise('commentsOnePost', gql(`query commentFindPost ($id:String!){
+  actionPromise('commentsOnePost',
+    gql(`query commentFindPost ($id:String!){
         PostFindOne(query:$id){
             comments {
                 _id text createdAt 
@@ -536,10 +557,10 @@ export const actionGetFindLiked = (_id) =>
       'findLiked',
       gql(
         ` query LikeFindPost($id:String!) {
-                                        LikeFind(query:$id){
-                                          owner { _id nick login
-                                                avatar{_id url}
-                                    }
+          LikeFind(query:$id){
+             owner { _id nick login
+                avatar{_id url}
+                  }
                 }
             } `,
         {
@@ -783,6 +804,43 @@ export const actionAboutUser = (_id) =>
     ),
   )
 
+
+  export const actionGetFollowing = (_id) =>
+  actionPromise(
+    'getFollowing',
+    gql(
+      `query GetFollowing($userId:String){
+      UserFindOne(query:$userId)
+      {
+        _id
+        following{_id login nick avatar{_id url}}
+      }
+    }`,
+      {
+        userId: JSON.stringify([{ _id }]),
+      },
+    ),
+  )
+
+
+  export const actionGetFollowers = (userId) =>
+  actionPromise(
+    'getFollowers',
+    gql(
+      `query GetFollowers($userId:String){
+      UserFindOne(query:$userId)
+      {
+       _id
+        followers{_id login nick avatar{_id url}}
+      }
+    }`,
+      {
+        userId: JSON.stringify([{ _id:userId }]),
+      },
+    ),
+  )
+
+
 export const actionAllPostsUser = (userId, skip) =>
   actionPromise(
     'allPosts',
@@ -827,6 +885,7 @@ export const actionSubscribe = (my_Id, followId, oldFollowing) =>
     ),
   )
 
+
 export const actionUnSubscribe = (my_Id, oldFollowing) =>
   actionPromise(
     'unSubscribe',
@@ -845,6 +904,26 @@ export const actionUnSubscribe = (my_Id, oldFollowing) =>
           _id: my_Id,
           following: oldFollowing || [],
         },
+      },
+    ),
+  )
+
+  export const actionChangeSubscribe = (oldFollowing) =>
+  actionPromise(
+    'changeSubscribe',
+    gql(
+      `mutation changeSubscribe($user:UserInput) {
+        UserUpsert(user: $user) {
+          _id
+        
+        }
+      }
+      `,
+      {
+        user: 
+          // _id: my_Id,
+         oldFollowing 
+        ,
       },
     ),
   )

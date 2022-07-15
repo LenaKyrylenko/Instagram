@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 export const Card = ({ post }) => (
     <>
       <Link key={post?._id} to={`/post/${post?._id}`}>
-        {post?.images && post?.images[0] && post.images[0]?.url ? (
+      {post?.images && post?.images[0] && post.images[0]?.url ? (
+        <div className='Wrapper'>
           <img
             className="Card"
             src={'/' + post.images[0].url}
@@ -14,7 +15,9 @@ export const Card = ({ post }) => (
               objectFit: 'cover',
             }}
           />
-        ) : (
+          </div>
+      ) : (
+          <div className='Wrapper'>
           <img
             className="Card"
             src={photoNotFound}
@@ -23,8 +26,11 @@ export const Card = ({ post }) => (
               height: '250px',
               objectFit: 'cover',
             }}
-          />
-        )}
+            />
+          </div>
+          )
+        
+        }
       </Link>
     </>
   )

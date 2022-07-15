@@ -2,12 +2,16 @@ import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 import React, { useState, useEffect } from 'react'
 
-export const EditMyPostButton = ({ _id }) => {
+export const EditMyPostButton = ({ _id}) => {
   return (
     <>
       <Link to={`/edit/post/${_id}`}>
         <Button
-          style={{ marginLeft: '200px',marginTop:'10px', width: '100px' }}
+          style={{
+            marginLeft: '200px',
+            marginTop: '10px', width: '100px'
+          }}
+
           size="large"
           type="primary"
         >
@@ -17,4 +21,3 @@ export const EditMyPostButton = ({ _id }) => {
     </>
   )
 }
-

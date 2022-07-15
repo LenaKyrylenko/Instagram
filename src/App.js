@@ -15,6 +15,8 @@ store.subscribe(() => console.log(store.getState()))
 console.log('ABOUT ME', store.getState().auth?.payload?.sub?.id)
 
 
+
+
 function App() {
   if (store.getState().auth?.token) {
     console.log('токен', store.getState().auth?.payload?.sub?.id)

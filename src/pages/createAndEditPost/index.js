@@ -21,6 +21,10 @@ import { history } from '../../helpers'
 import { Input } from '../../components/Input'
 import {actionCreateEditPost} from '../../redux/saga'
 
+const checkRoute = ({ match }) => {
+  console.log('match route', match)
+}
+
 const PostEditor = ({
   match: {
     params: { _id },
@@ -28,12 +32,12 @@ const PostEditor = ({
   myId,
   onSave,
   onFileDrop,
-  post={},
+  post,
   fileStatus,
   clearPostOne,
   clearPromise,
+  newPost
 }) => {
-  console.log('post in start component', post)
   post = {
     _id: post?._id || '',
     title: post?.title || '',
@@ -43,23 +47,6 @@ const PostEditor = ({
   console.log('post after', post)
   console.log('post _id', _id)
   const [state, setState] = useState(post)
-  useEffect(() => {
-    if (_id === 'new' && Object.keys(post)) {
-      clearPostOne()
-      // clearPromise("onePost")
-      post = {
-        _id: post?._id || '',
-    title: post?.title || '',
-    text: post?.text || '',
-    images: post?.images || [],
-      }
-      console.log('попало в иф айди нью ', _id)
-     return setState(post)
- 
-      //console.log('post after clear ', post)
-    }
-  }, [_id])
-
   console.log('state after change', state)
   console.log('post', post)
   useEffect(() => {
@@ -102,15 +89,6 @@ const PostEditor = ({
     onSave(state) &&
     message.success(`Post published success!`) &&
     history.push(`/profile/${myId}`)
-  // useEffect(() => {
-  //   return () => {
-  //     clearPromise('uploadFiles')
-  //     clearPromise('postUpsert')
-  //     clearPromise('post')
-  //     clearPostOne()
-  //     clearPromise('onePost')
-  //   }
-  // }, [])
   const checkLength = () => {
     if (state?.images?.length > 8) {
       console.log('state?.images?.length', state?.images?.length)
@@ -124,15 +102,15 @@ const PostEditor = ({
 
   return (
     <section className="Post">
-      <Row>
-        <Col span={12} offset={6}>
+      {/* <Row> */}
+        {/* <Col span={12} offset={6}> */}
           <Dropzone onLoad={onFileDrop} />
-          <Col offset={1}>
-         
+          {/* <Col offset={1}> */}
+      <div style={{}}>
               <SortableContainer
                 onSortEnd={onSortEnd}
-                style={{ with: '300px' }} >
-                {state?.images?.length < 8 &&
+                >
+                {state?.images?.length <= 8 &&
                   (state?.images || []).map(({ _id, url }, index) => (
                     <SortableItem
                       key={`item-${_id}`}
@@ -143,11 +121,11 @@ const PostEditor = ({
                     />
                   ))}
               </SortableContainer>
-           
+           </div>
             {checkLength()}
-          </Col>
-        </Col>
-      </Row>
+          {/* </Col> */}
+        {/* </Col> */}
+      {/* </Row> */}
 
       <h1 className="Title"> Title </h1>
       <Input
@@ -204,6 +182,7 @@ export const CPostCreator = connect(
     fileStatus: state.promise?.uploadFiles,
     // post: state?.post?.onePost,
     myId: state?.myData?.aboutMe?._id,
+    newPost:true
   }),
   {
     onSave: actionCreateEditPost,

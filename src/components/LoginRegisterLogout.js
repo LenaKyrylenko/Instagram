@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { actionClearUserData } from '../redux/saga'
 import { message } from 'antd'
 import { useEffect } from 'react'
+import { LogOut } from './HeaderButtons'
 
 const LoginForm = ({ onLogin, children, auth,register, onClearPromise }) => {
   const [login, setLogin] = useState('')
@@ -147,11 +148,8 @@ export const CRegisterForm = connect(
 )(LoginForm)
 
 export const CLogout = connect(
-  (state) => ({
-    children: `Logout`,
-  }),
-  { onClick: actionClearUserData },
-)('a')
+  null,{ onClick: actionClearUserData },
+)(LogOut)
 
 export const InputForm = ({}) => {
   return (

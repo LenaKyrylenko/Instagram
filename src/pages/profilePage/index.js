@@ -9,11 +9,13 @@ import { actionFullProfilePageUser } from '../../redux/saga'
 import { Row, Col } from 'antd'
 import { CSubscribe } from '../../components/Subscribe'
 import { CEditSetting } from '../setting'
+import { Link,useParams} from 'react-router-dom'
 
 export const PageAboutUser = ({
-  match: {
-    params: { _id },
-  },
+  // match: {
+  //   params: { _id },
+  // },
+  
   my_Id,
   aboutUser: { login, nick, createdAt, avatar, followers, following } = {},
   allPosts,
@@ -21,6 +23,7 @@ export const PageAboutUser = ({
   onAboutUser,
   countAllPostsUser,
 }) => {
+  const { _id } = useParams();
   useEffect(() => {
     onAboutUser(_id)
     // console.log('USER DATA ', login, _id)

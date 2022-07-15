@@ -18,12 +18,21 @@ import {
   actionGetCommentsOnePost,
   actionFindLikes,
   actionPostUpsert,
-  actionClearPromiseForName
+  actionClearPromiseForName,
+  actionChangeSubscribe,
+  actionGetFollowing,
+  actionGetFollowers,
   // actionOnePost
-  } from '../../actions'
+} from '../../actions'
+  
 import { history } from '../../helpers'
-  import{actionClearDataUserType} from '../reducers/userData/userProfileReducer'
-import { actionProfilePageDataType } from '../reducers/myData/myProfileReducer'
+import {
+  actionClearDataUserType,
+  actionChangeFollowersType,
+  actionUserAllPostsType
+
+} from '../reducers/userData/userProfileReducer'
+import { actionProfilePageDataType,actionChangeFollowingType } from '../reducers/myData/myProfileReducer'
 import { actionFullAllGetPosts } from '../../actions'
 import {
   actionAddLikePostInTape,
@@ -106,8 +115,11 @@ function* fullPageAboutUserWorker({ _id }) {
   const allPosts = yield call(promiseWorker, actionAllPostsUser(_id))
   const countPosts = yield call(promiseWorker, actionPostsCount(_id))
 
-  if (aboutUser && allPosts) {
-    yield put(actionProfilePageDataTypeUser(aboutUser, allPosts))
+  if (aboutUser)
+  yield put(actionProfilePageDataTypeUser(aboutUser))
+  
+  if(allPosts) {
+    yield put(actionUserAllPostsType(allPosts))
   }
   if (countPosts)
   yield put(actionCountPostsType(countPosts))
@@ -271,17 +283,12 @@ function* changeLikePostWorker({ likeId, postId }) {
   yield call(promiseWorker, changeOneLike())
   const { likes } = yield call(promiseWorker, actionFindLikes(postId))
   console.log('likes in worker', likes)
-
   
   if (likes) {
   
     yield call(promiseWorker, actionOnePost(postId))
     yield put(actionChangeLikeType(likes))
   }
-  // const { likes } = yield call(promiseWorker, actionFindLikes(postId))
-  // console.log('likes', likes)
-  // if (likes)
-  // yield call(promiseWorker, actionOnePost(postId))
 }
 
 
@@ -298,7 +305,6 @@ function* editPostWorker({state }) {
   console.log('in worker post id', state?._id)
   const postUpsert = yield call(promiseWorker, actionPostUpsert(state,state?._id))
   console.log('post Upsert', postUpsert)
-
 //   postUpsert
 //   const upsertPost = yield call(promiseWorker, actionPostUpsert(post))
 // console.log('upsert POST', upsertPost)
@@ -306,18 +312,74 @@ function* editPostWorker({state }) {
   if (postUpsert) {
     yield put(actionClearPromiseForName('postUpsert'))
     yield put(actionClearPromiseForName('uploadFiles'))
-    yield put(actionClearPromiseForName('onePost'))
   }
   
 }
 export function* editPostWatcher() {
   yield takeEvery("CREATE_EDIT_POST", editPostWorker)
-  
 }
 export const actionCreateEditPost= (state) =>
 ({
     type:"CREATE_EDIT_POST", state
 })
+
+//change subscribe 
+function* changeSubscribeWorker({ followId, checkFollowId }) {
+  const { myData: { aboutMe: { _id, following } } } = yield select()
+  // const checkFollowId = following?.find(
+  //   (follower) => follower?._id === followId,
+  // )?._id
+  console.log('my following', following)
+
+  console.log('check follow id', checkFollowId)
+  console.log('my id', _id)
+ 
+  const oldFollowing = checkFollowId ?
+    {
+      
+      _id,
+      following: [...following.filter((item) => item._id !== followId).map(({ _id }) => ({ _id }))]
+    } 
+  : {
+      
+    _id,
+    following:[...following.map(({ _id }) => ({ _id })), {_id: followId}]
+
+    }
+    
+  console.log('old following', oldFollowing)
+  console.log('еще раз май фолловинг ', following)
+  
+  const change = yield call(promiseWorker, actionChangeSubscribe(oldFollowing))
+console.log('change', change)
+
+  const updateUserFollowers = yield call(promiseWorker, actionGetFollowers(followId))
+  console.log('update user followers', updateUserFollowers)
+
+  const updateMyFollowing = yield call(promiseWorker, actionGetFollowing(_id))
+  console.log('update my following', updateMyFollowing)
+
+  if (updateMyFollowing)
+   yield put(actionChangeFollowingType(updateMyFollowing?.following))
+ if (updateUserFollowers)
+  {
+   
+    yield put(actionChangeFollowersType(updateUserFollowers?.followers))
+    
+    }
+}
+
+
+export function* changeSubscribeWatcher() {
+  yield takeEvery("CHANGE_SUBSCRIBE", changeSubscribeWorker)
+}
+
+export const actionChangeSubscribeSaga= (followId,checkFollowId) =>
+({
+    type:"CHANGE_SUBSCRIBE", followId,checkFollowId
+})
+
+
 // export const actionDeleteFullLikeFeed = (likeId, postId) => async (
 //     dispatch,
 //     getState,

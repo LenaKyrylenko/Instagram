@@ -41,7 +41,7 @@ const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {
         }
       >
         <Search
-          style={{ width: '25%' }}
+          // style={{ width: '25%' }}
           placeholder="Enter search user"
           allowClear
           prefix={<UserOutlined />}

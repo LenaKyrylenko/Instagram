@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { Input, Button } from 'antd'
-import { SmileOutlined } from '@ant-design/icons'
+import { SmileOutlined,SmileFilled } from '@ant-design/icons'
 import moment from 'moment'
 import React, { useState } from 'react'
 import 'emoji-mart/css/emoji-mart.css'
@@ -71,7 +71,7 @@ export const AddComment = ({ addComment, postId }) => {
         onClick={handleOK}
           />
           :
-          <SmileOutlined
+          <SmileFilled 
           className="smile-btn"
           style={{ color:'#108ee9',fontSize: 'xx-large', marginRight: '30px' }}
         

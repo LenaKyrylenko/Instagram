@@ -14,9 +14,8 @@ const Routing = ({ token }) => {
         <Switch>
           <Route path="/profile/:_id" component={CPageAboutUser} />
           <Route path="/explore" component={CExplorePosts} />
-          <Route path="/edit/post/:_id" component={CPostEditor} />
           <Route path="/edit/post/new" component={CPostCreator} />
-
+          <Route path="/edit/post/:_id" component={CPostEditor} />
           <Route path="/post/:_id" component={CPost} />
           <Route path="/feed" component={CPostForFeed} />
           <Redirect from="/*" to="/feed" />

@@ -2,27 +2,30 @@ import {
     actionFullUnSubscribe,
     actionFullSubscribe,
 } from '../actions'
+import {actionChangeSubscribeSaga} from '../redux/saga'
 import { Button} from 'antd'
 import { connect } from 'react-redux'
   
 const Subscribe = ({
-    my_Id,
+    myId,
     deleteSubscribe,
     aboutMeFollowing = [],
-    addSubscribe,
+    changeSubscribe,
     followId,
   }) => {
     const checkFollowId = aboutMeFollowing?.find(
       (follower) => follower?._id === followId,
-    )?._id
+  )?._id
+  console.log('check following in subscribe component', checkFollowId)
     return (
       <>
-        <div style={{ display: 'flex' }}>
-          {checkFollowId ? (
+        <div style={{ display: 'flex' }} onClick={()=>changeSubscribe(followId,checkFollowId)}>
+          {checkFollowId ?
+          
+            (
             <Button
               size="large" type="primary"
                danger
-              onClick={() => deleteSubscribe(my_Id, followId)}
             >
               Unsubscribe
             </Button>
@@ -31,7 +34,6 @@ const Subscribe = ({
               size="large"
                 type="primary"
                 primary
-              onClick={() => addSubscribe(my_Id, followId)}
             >
               Subscribe
             </Button>
@@ -41,12 +43,11 @@ const Subscribe = ({
     )
 }
 export const CSubscribe = connect((state) => ({
-    my_Id: state.auth?.payload?.sub?.id,
+    myId: state.auth?.payload?.sub?.id,
     aboutMeFollowing: state.myData?.aboutMe?.following,
     followId: state.userData?.aboutUser?._id,
 }),
     {
-        addSubscribe: actionFullSubscribe,
-        deleteSubscribe: actionFullUnSubscribe,
-}
+      changeSubscribe:actionChangeSubscribeSaga
+    }
 )(Subscribe)
