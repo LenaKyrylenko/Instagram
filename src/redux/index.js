@@ -19,7 +19,11 @@ onePostWatcher,
   addCommentOnePostWatcher,
   changeLikePostWatcher,
   editPostWatcher,
-  changeSubscribeWatcher
+  changeSubscribeWatcher,
+  userUpdateWatcher,
+  setAvatarWatcher,
+  clearAllDataWatcher,
+  registerWatcher
 } from './saga'
 import createSagaMiddleware from 'redux-saga' //функция по созданию middleware
 import {
@@ -49,6 +53,7 @@ function* rootSaga() {
     promiseWatcher(), 
     fullProfilePageWatcher(),
     loginWatcher(),
+    registerWatcher(),
     fullPageAboutUserWatcher(),
     feedWatcher(),
     exploreWatcher(),
@@ -56,7 +61,10 @@ function* rootSaga() {
     addCommentOnePostWatcher(),
     changeLikePostWatcher(),
     editPostWatcher(),
-    changeSubscribeWatcher()
+    changeSubscribeWatcher(),
+    userUpdateWatcher(),
+    setAvatarWatcher(),
+    clearAllDataWatcher()
     // addCommentFeedWatcher()
   ])
 }

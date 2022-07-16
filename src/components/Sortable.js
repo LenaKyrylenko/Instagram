@@ -6,9 +6,6 @@ export const SortableItem = SortableElement(({ url, onRemoveImage, _id }) => {
       <>
       <img
         style={{
-          // margin: '20px',
-         
-          
             objectFit: 'cover',
           boxShadow: '0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
           height: '100px',

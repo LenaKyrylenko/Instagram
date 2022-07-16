@@ -20,7 +20,7 @@ import {
   // actionDeleteFullLikeFeed,
  
 } from '../../redux/saga'
-import {actionClearFeedPosts} from '../../redux/reducers/feed/feedReducer'
+import {actionClearFeedPostsType} from '../../redux/reducers/feed/feedReducer'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { Upload, Button, DatePicker, Space } from 'antd'
@@ -91,9 +91,12 @@ const MyPostFeed = ({
               )}
               {(postsFeed || []).map(
                 ({ _id, images, title, text, owner, comments, likes }) => (
-                  <div className="PostFeed" >
-                    <LinkToUser _id={owner?._id} key={_id} login={owner?.login} avatar={owner?.avatar} size={50} />
-                    <MyCarousel images={images} style={{ marginTop: '60px' }} />
+                  <div className='PostFeed'>
+                    <LinkToUser _id={owner?._id} key={_id} style={{marginLeft:"50px"}}
+                      login={owner?.login} avatar={owner?.avatar}
+                      size={50} />
+                    <MyCarousel images={images} />
+                    <div style={{margin:"0 10%"}}>
                     <h1 className='Title'> Title: {title || ''}</h1>
                     <h1  className='Title'> Text: {text || ''}</h1>
                     <Divider>Comments</Divider>
@@ -111,7 +114,7 @@ const MyPostFeed = ({
                       </div>
                        </center>
                     </div>
-                 
+                 </div>
                 ),
               )}
              
@@ -148,7 +151,7 @@ export const CPostForFeed = connect(
   }),
   {
     onPostsFeed: actionFullAllGetPosts,
-    onClearFeed: actionClearFeedPosts,
+    onClearFeed: actionClearFeedPostsType,
     // addComment: actionAddFullCommentFeed,
     // addCommentReply: actionAddSubFullComment,
     // addLike: actionAddFullLikeForFeed,

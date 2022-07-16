@@ -50,9 +50,8 @@ export const AddPost = ({ children }) => {
     </>
   )
 }
-export const LogOut = () => 
-<DefaultLink
-tag={<ImportOutlined  />}/>
+export const LogOut = ({onClick}) => 
+  <ImportOutlined className="Links" onClick={onClick} />
 
 // export const Feed = () => {
 //   return (

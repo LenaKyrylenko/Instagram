@@ -10,6 +10,7 @@ import {
 } from '../../actions'
 import { Basic, ConstructorModal } from '../../helpers'
 import { SpoilerButton } from '../../components/Comment'
+import{actionUserUpdateTypeSaga} from '../../redux/saga'
 export const EditAccount = ({showModalEdit }) => {
     return (
          <Button
@@ -24,7 +25,8 @@ export const EditAccount = ({showModalEdit }) => {
     )
   }
 const EditSetting = ({ info, myId, onSaveUserUpsert,
-  onSaveNewPassword, changePassword, onClearPromise}) => {
+  onClearPromise,
+  onSaveNewPassword, changePassword}) => {
   const [state, setState] = useState(info)
   const [changePass, setChangePass] = useState(changePassword)
     const [isModalVisibleEdit, setIsModalVisibleEdit] = useState(false);
@@ -190,9 +192,9 @@ const EditSetting = ({ info, myId, onSaveUserUpsert,
       changePassword : state.promise?.newPassword
     }),
     {
-      onSaveUserUpsert: actionUserUpdate,
+      onSaveUserUpsert: actionUserUpdateTypeSaga,
       onSaveNewPassword: actionChangePassword,
-      onClearPromise:actionClearPromise
+      // onClearPromise:actionClearPromise
     },
   )(EditSetting)
   

@@ -9,7 +9,7 @@ import {
 import React, { useState, useEffect } from 'react'
 import { Basic, ConstructorModal } from '../helpers'
 import { Input } from './Input'
-
+import {actionSetAvatarTypeSaga} from '../redux/saga'
 const EditAvatar = ({
   info,
   onSaveAvatar,
@@ -18,7 +18,7 @@ const EditAvatar = ({
   fileStatus,
   myId,
 }) => {
-  const [state, setState] = useState(info)
+  const [state, setState] = useState({})
 
   console.log('state my ', state)
   useEffect(() => {
@@ -78,7 +78,7 @@ export const CEditAvatar = connect(
     info: state?.myData?.aboutMe?.avatar,
   }),
   {
-    onSaveAvatar: actionSetAvatar,
+    onSaveAvatar: actionSetAvatarTypeSaga,
     onFileDrop: actionUploadFile,
   },
 )(EditAvatar)

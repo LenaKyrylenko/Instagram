@@ -8,7 +8,7 @@ import { actionFeedType } from '../redux/reducers/feed/feedReducer'
 import { actionExploreTypeCount } from '../redux/reducers/explore/exploreReducer'
 import { actionClearExplorePosts } from '../redux/reducers/explore/exploreReducer'
 import { actionExploreType } from '../redux/reducers/explore/exploreReducer'
-import { actionClearFeedPosts } from '../redux/reducers/feed/feedReducer'
+import { actionClearFeedPostsType } from '../redux/reducers/feed/feedReducer'
 import {actionProfilePageDataType} from '../redux/reducers/myData/myProfileReducer'
 import { history } from '../helpers'
 import{promiseWorker} from '../redux/saga'
@@ -106,6 +106,21 @@ export const actionAboutMe = (_id) =>
     ),
   )
 
+  export const actionGetAvatar= (_id) =>
+  actionPromise(
+    'getAvatar',
+    gql(
+      `query AboutMe($userId:String){
+            UserFindOne(query:$userId)
+            {
+             avatar{_id url}
+            }
+          }`,
+      {
+        userId: JSON.stringify([{ _id }]),
+      },
+    ),
+  )
   export const actionAboutMeLikes = (_id) =>
   actionPromise(
     'aboutMeLikes',
@@ -124,14 +139,11 @@ export const actionAboutMe = (_id) =>
       },
     ),
   )
- export const actionFullLogin = (login, password) =>  //упрощенный action для саги
-    ({type: 'FULL_LOGIN', login, password})
-    
-export const actionLogin = (login, password) => { //функция, которая возвращает результат actionPromise
+export const actionLogin = (login, password) => {
     return actionPromise(
         "auth",
         gql(
-            `query log($login:String, $password:String) {
+            `query log($login:String!, $password:String!) {
               login(login:$login, password:$password)
              }`,
             { login, password }
@@ -165,7 +177,7 @@ export const actionRegister = (login, password) =>
                   _id login
                 }
               }`,
-      { login: login, password: password },
+      { login, password },
     ),
   )
 
@@ -181,13 +193,13 @@ export const actionChangePassword = (login, password, newPassword) =>
       { login, password, newPassword },
     ),
   )
-export const actionFullRegister = (login, password) => async (dispatch) => {
-  let tokenCheck = await dispatch(actionRegister(login, password))
-  if (tokenCheck?.login === login) {
-    await dispatch(actionFullLogin(login, password))
-    history.push('/feed')
-  }
-}
+// export const actionFullRegister = (login, password) => async (dispatch) => {
+//   let tokenCheck = await dispatch(actionRegister(login, password))
+//   if (tokenCheck?.login === login) {
+//     await dispatch(actionFullLogin(login, password))
+//     history.push('/feed')
+//   }
+// }
 export const uploadFile = (file) => {
   const myForm = new FormData()
   myForm.append('photo', file)
@@ -217,7 +229,7 @@ export const actionClearPromiseForName = (name) => ({
   type: 'PROMISE_CLEAR',
   name,
 })
-export const actionAllClearPromise = () => ({
+export const actionAllClearPromiseType = () => ({
   type: 'PROMISE_All_CLEAR',
 })
 
@@ -227,7 +239,7 @@ export const actionUploadFiles = (files) =>
     Promise.all(files.map((file) => uploadFile(file))),
   )
 
-export const actionAvatar = (imageId, myId) =>
+export const actionAvatar = (imageId, _id) =>
   actionPromise(
     'setAvatar',
     gql(
@@ -238,7 +250,7 @@ export const actionAvatar = (imageId, myId) =>
     }
     }
     }`,
-      { imageId, userId: myId },
+      { imageId, userId: _id },
     ),
   )
 
@@ -612,15 +624,15 @@ export const actionDeleteLike = (likeId, postId) =>
     ),
   )
 
-export const actionSetAvatar = (file, myId) => async (dispatch) => {
-  const avatar = await dispatch(actionAvatar(file, myId))
-  if (avatar) {
-    await dispatch(actionFullProfilePageUser(myId))
-    await dispatch(actionFullProfilePage(myId))
-    await dispatch(actionClearPromise('setAvatar'))
-    await dispatch(actionClearPromise('uploadFile'))
-  }
-}
+// export const actionSetAvatar = (file, myId) => async (dispatch) => {
+//   const avatar = await dispatch(actionAvatar(file, myId))
+//   if (avatar) {
+//     await dispatch(actionFullProfilePageUser(myId))
+//     await dispatch(actionFullProfilePage(myId))
+//     await dispatch(actionClearPromise('setAvatar'))
+//     await dispatch(actionClearPromise('uploadFile'))
+//   }
+// }
 
 export const actionPostsFeed = (myFollowing, skip) =>
   actionPromise(
@@ -766,7 +778,7 @@ export const actionSearchUser = (userName) =>
       ),
     )
 
-export const actionUserUpsert = (user, myId) =>
+export const actionUserUpsert = (user, _id) =>
   actionPromise(
     'userUpsert',
     gql(
@@ -777,7 +789,7 @@ export const actionUserUpsert = (user, myId) =>
               }`,
       {
         user: {
-          _id: myId,
+          _id,
           login: user?.login,
           nick : user?.nick
         },
@@ -812,7 +824,6 @@ export const actionAboutUser = (_id) =>
       `query GetFollowing($userId:String){
       UserFindOne(query:$userId)
       {
-        _id
         following{_id login nick avatar{_id url}}
       }
     }`,
@@ -863,50 +874,7 @@ PostFind(query:$userId){
       },
     ),
   )
-export const actionSubscribe = (my_Id, followId, oldFollowing) =>
-  actionPromise(
-    'subscribe',
-    gql(
-      `mutation subscribe($user:UserInput) {
-        UserUpsert(user: $user) {
-          _id following{_id login}
-          followers{
-            _id login
-          }
-        }
-      }
-      `,
-      {
-        user: {
-          _id: my_Id,
-          following: [...(oldFollowing || []), { _id: followId }],
-        },
-      },
-    ),
-  )
 
-
-export const actionUnSubscribe = (my_Id, oldFollowing) =>
-  actionPromise(
-    'unSubscribe',
-    gql(
-      `mutation unSubscribe($user:UserInput) {
-        UserUpsert(user: $user) {
-          _id following{_id login}
-          followers{
-            _id login
-          }
-        }
-      }
-      `,
-      {
-        user: {
-          _id: my_Id,
-          following: oldFollowing || [],
-        },
-      },
-    ),
-  )
 
   export const actionChangeSubscribe = (oldFollowing) =>
   actionPromise(
@@ -915,66 +883,17 @@ export const actionUnSubscribe = (my_Id, oldFollowing) =>
       `mutation changeSubscribe($user:UserInput) {
         UserUpsert(user: $user) {
           _id
-        
         }
       }
       `,
       {
         user: 
-          // _id: my_Id,
          oldFollowing 
         ,
       },
     ),
   )
 
-export const actionFullSubscribe = (my_Id, followId) => async (
-  dispatch,
-  getState,
-) => {
-  const oldFollowing = (
-    getState().promise.aboutMe?.payload?.following || []
-  ).map(({ _id }) => ({ _id }))
-  let followingId = await dispatch(
-    actionSubscribe(my_Id, followId, oldFollowing),
-  )
-  if (followingId) {
-    Promise.all([
-      await dispatch(actionFullProfilePageUser(followId)),
-      await dispatch(actionFullProfilePage(my_Id)),
-    ])
-    await dispatch(actionClearFeedPosts())
-  }
-}
-
-export const actionFullUnSubscribe = (my_Id, followId) => async (
-  dispatch,
-  getState,
-) => {
-  const oldFollowing = (getState().promise.aboutMe?.payload?.following || [])
-    .filter((item) => item._id !== followId)
-    .map(({ _id }) => ({ _id }))
-  if (oldFollowing) {
-    await dispatch(actionUnSubscribe(my_Id, oldFollowing))
-    Promise.all([
-      await dispatch(actionFullProfilePageUser(followId)),
-      await dispatch(actionFullProfilePage(my_Id)),
-    ])
-    await dispatch(actionClearFeedPosts())
-  }
-}
-export const actionAddFullLike = (postId) => async (dispatch, getState) => {
-  await dispatch(actionAddLike(postId))
-  const {
-    promise: {
-      addLike: { status },
-    },
-  } = getState()
-  if (status === 'FULFILLED') {
-    await dispatch(actionOnePost(postId))
-  }
-  //  await dispatch(actionOnePost(postId));
-}
 
 export const actionAddFullLikeForFeed = (postId) => async (
   dispatch,
@@ -1009,18 +928,6 @@ export const actionDeleteFullLikeForFeed = (likeId, postId) => async (
   //  await dispatch(actionOnePost(postId));
 }
 
-export const actionUserUpdate = (user, myId) => async (dispatch, getState) => {
-  await dispatch(actionUserUpsert(user, myId))
-  const {
-    promise: {
-      userUpsert: { status },
-    },
-  } = getState()
-  if (status === 'FULFILLED') {
-    await dispatch(actionFullProfilePage(myId))
-    await dispatch(actionFullProfilePageUser(myId))
-  }
-}
 
 export const actionFindSubComment = (findId) =>
   actionPromise(

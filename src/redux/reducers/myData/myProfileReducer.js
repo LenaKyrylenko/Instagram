@@ -19,6 +19,16 @@ export const myProfileReducer = (state = {}, { type, aboutMe, newResult }) => {
 
         }
       },
+      'UPDATE_AVATAR': () => {
+        return {
+          ...state,
+          aboutMe: ({
+            ...state.aboutMe,
+            avatar: { ...newResult }
+          })
+
+        }
+      },
     }
     if (type in types) {
       return types[type]()
@@ -33,10 +43,14 @@ export const myProfileReducer = (state = {}, { type, aboutMe, newResult }) => {
     
 
   
-  export const actionRemoveDataAboutMe = () => 
+  export const actionClearAboutMeType = () => 
   ({ type: 'REMOVE-DATA' })
   
   export const actionChangeFollowingType = (newResult) => ({
     type:"UPDATE_FOLLOWING", newResult
     
-  })
+})
+  
+export const actionUpdateAvatarType= (newResult) => ({
+  type:"UPDATE_AVATAR", newResult
+})

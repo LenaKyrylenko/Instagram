@@ -1,15 +1,21 @@
-import { actionFullLogin, actionFullRegister, actionClearPromise}
- from '../actions'
+import { actionFullRegister, actionClearPromise } from '../actions'
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { Button, Input, Checkbox, Form } from 'antd'
+import { Button, Input, Checkbox, Form, Row, Col } from 'antd'
 import { Link } from 'react-router-dom'
 import { actionClearUserData } from '../redux/saga'
 import { message } from 'antd'
 import { useEffect } from 'react'
 import { LogOut } from './HeaderButtons'
+import { ImportOutlined } from '@ant-design/icons'
+import {
+  actionClearDataLogoutTypeSaga,
+  actionLoginTypeSaga,
+  actionRegisterTypeSaga,
+} from '../redux/saga'
+import logo from '../materials/logo3.png'
 
-const LoginForm = ({ onLogin, children, auth,register, onClearPromise }) => {
+const LoginForm = ({ onLogin, children, auth, register, onClearPromise }) => {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(false)
@@ -23,7 +29,7 @@ const LoginForm = ({ onLogin, children, auth,register, onClearPromise }) => {
       })
     }
   }, [auth])
-  
+
   useEffect(() => {
     if (register?.status === 'FULFILLED' && register?.payload === null) {
       message.error({
@@ -32,170 +38,156 @@ const LoginForm = ({ onLogin, children, auth,register, onClearPromise }) => {
           marginTop: '80px',
         },
       })
-      &&
-      onClearPromise('register')
-  
     }
   }, [register])
   const input = () => {
-    onLogin(login, password)
-      // &&
+    onLogin(login, password) && setPassword('') && setLogin('')
+    // &&
     // onClearPromise('auth')
   }
   return (
     <>
-      <center>
-        <Form
-          className="Form"
-          size="large"
-          name="basic"
-          style={{
-            marginTop: '200px',
-            padding: '100px',
-            width:'50%'
-          }}
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 10 }}
-          initialValues={{ remember: true }}
-          autoComplete="off"
+      <Form
+        className="Form"
+        size="medium"
+        name="basic"
+        style={{
+
+          margin: '0 auto',
+          margin: '50px',
+          padding: '20px',
+          textAlign: 'center',
+        }}
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 13 }}
+        autoComplete="off"
+      >
+        <h2 style={{}}> {children} </h2>
+        <h4> Login and password must be at least 5 characters </h4>
+        <Form.Item
+          label="Login"
+          name="login"
+          size="medium"
+          rules={[
+            {
+              required: true,
+              message: 'Please input login!',
+            },
+          ]}
         >
-          <h1> {children} </h1>
-          <h1> Login and password must be at least 5 characters </h1>
-          <Form.Item
-            label="Login"
-            name="login"
+          <Input
+            value={login}
+            size="medium"
+            onChange={(e) => setLogin(e.target.value)}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          name="password"
+          size="medium"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+          ]}
+        >
+          <Input
+            size="medium"
+            type={checked ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="checked"
+          valuePropName="checked"
+          wrapperCol={{ offset: 5, span: 10 }}
+        >
+          <Checkbox
+            checked={checked}
+            onChange={(e) => {
+              setChecked(e.target.checked)
+            }}
             size="large"
-            rules={[{ required: true, message: 'Please input login!' }]}
           >
-            <Input
-              value={login}
-              size="large"
-              onChange={(e) => setLogin(e.target.value)}
-            />
-          </Form.Item>
+            See the password
+          </Checkbox>
+        </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            size="large"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+        <Form.Item wrapperCol={{ offset: 6, span: 13 }}>
+          <Button
+            size="medium"
+            type="primary"
+            htmlType="submit"
+            primary
+            style={{ width: '100%' }}
+            className="Btn"
+            disabled={login.length < 5 || password.length < 5}
+            onClick={input}
           >
-            <Input
-              size="large"
-              type={checked ? 'password' : 'text'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 8, span: 10 }}
-          >
-            <Checkbox
-              checked={checked}
-              onChange={(e) => {
-                setChecked(e.target.checked)
-              }}
-              size="large"
-            >
-              See the password
-            </Checkbox>
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 8, span: 10 }}>
-            <Button
-              size="large"
-              type="primary"
-              htmlType="submit"
-              primary
-              style={{ width: '100%' }}
-              className="Btn"
-              disabled={login.length < 5 || password.length < 5}
-              onClick={input}
-            >
-              {children}
-            </Button>
-          </Form.Item>
-        </Form>
-      </center>
+            {children}
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   )
 }
+export const CLogout = connect(null, {
+  onClick: actionClearDataLogoutTypeSaga,
+})(LogOut)
+
+export const InputForm = ({onLogin,auth,register, children}) => {
+  return (
+    // <div style={{display:'flex',flexDirection:'row'}}>
+    <div className="InputForm">
+      <Row>
+        <Col span={12}>
+          <img className="LoginPage" src={logo} />
+        </Col>
+
+        <Col span={12}>
+          <div className="LoginForm">
+            <LoginForm onLogin={onLogin} auth={auth} children={children} />
+            {children === "Register" ?
+                <h2>
+               Have an account?
+                <Link to="/login"
+                style={{ color: 'white', marginLeft: '5px' }}>Login</Link>
+              </h2>
+              :
+              <h2>
+                Don't have an account yet?
+                <Link to="/register" style={{ color: 'white', marginLeft: '5px' }}>Register</Link>
+              </h2>
+            }
+          </div>
+        </Col>
+      </Row>
+    </div>
+
+  )
+}
+// export const CInputForm = connect()(InputForm)
 export const CLoginForm = connect(
   (state) => ({
     children: `Sign In`,
     auth: state.promise?.auth,
   }),
   {
-    onLogin: actionFullLogin,
-    onClearPromise:actionClearPromise
-
+    onLogin: actionLoginTypeSaga,
+    // onClearPromise: actionClearPromise,
   },
-)(LoginForm)
-
+)(InputForm)
 export const CRegisterForm = connect(
   (state) => ({
     children: `Register`,
-    register: state.promise?.register
+    register: state.promise?.register,
   }),
   {
-    onLogin: actionFullRegister,
-    onClearPromise:actionClearPromise
-
+    onLogin: actionRegisterTypeSaga,
+    onClearPromise: actionClearPromise,
   },
-)(LoginForm)
-
-export const CLogout = connect(
-  null,{ onClick: actionClearUserData },
-)(LogOut)
-
-export const InputForm = ({}) => {
-  return (
-    <>
-      <center>
-        <div className="InputForm">
-          <h1>
-            {' '}
-            If you have account, click on Sign In,
-            <br />
-            else - click on Register
-          </h1>
-          <div>
-            <Link to={`/login`}>
-              <Button
-                style={{
-                  margin: '50px',
-                  width: '100px',
-                  boxShadow:
-                    '0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-                }}
-                size="large"
-                type="primary"
-              >
-                Sign In
-              </Button>
-            </Link>
-
-            <Link to={`/register`}>
-              <Button
-                style={{
-                  marginLeft: '100px',
-                  width: '100px',
-                  boxShadow:
-                    '0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-                }}
-                size="large"
-                type="primary"
-              >
-                Register
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </center>
-    </>
-  )
-}
-export const CInputForm = connect()(InputForm)
+)(InputForm)

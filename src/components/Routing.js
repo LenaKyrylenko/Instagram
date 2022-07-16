@@ -24,8 +24,8 @@ const Routing = ({ token }) => {
         <Switch>
           <Route path="/login" exact component={CLoginForm} />
           <Route path="/register" component={CRegisterForm} />
-          <Route path="/input" component={InputForm} />
-          <Redirect from="/*" to="/input" />
+          {/* <Route path="/input" component={InputForm} /> */}
+          <Redirect from="/*" to="/login" />
           <CProtectedRoute
             roles={['anon']}
             fallback="/*"

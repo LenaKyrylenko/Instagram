@@ -35,12 +35,10 @@ body {
 @import '~antd/dist/antd.css';
 
 .Dropzone {
-  // flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  // width: 100%;
   border-width: 2px;
   border-radius: 2px;
   background-color: #74d2e7;
@@ -53,35 +51,33 @@ body {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   font-size: 20px;
 }
-.Links{
-  margin:10px;
-  font-size:xx-large;
-   color:black;
+.Links {
+  margin: 10px;
+  font-size: xx-large;
+  color: black;
   transition: 0.3s;
-
 }
-.Links:hover{
-  color:white;
+.Links:hover {
+  color: white;
 
   opacity: 0.7;
-  }
+}
 
-.Links:active{
-    transform: scale(1.10); /* Увеличение картинки */
-  }
+.Links:active {
+  transform: scale(1.1); /* Увеличение картинки */
+}
 .Header {
   display: flex;
   position: fixed;
   align-items: center;
   justify-content: center;
-  // padding-top: 10px;
+  padding: 10px;
   z-index: 4;
   width: 100%;
   background: #74d2e7;
   top: 0;
   transition: 0.3s;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-
 }
 
 .Recomendations {
@@ -100,12 +96,11 @@ body {
   align-items: 'center';
   justify-content: 'center';
 }
-.EditSetting{
+.EditSetting {
   display: 'flex';
   align-items: 'center';
   justify-content: 'center';
   margin: 0 auto;
-
 }
 .Post {
   max-width: 450px;
@@ -117,7 +112,7 @@ body {
   display: 'flex';
   align-items: 'center';
   justify-content: 'center';
-  margin-top:100px ;
+  margin-top: 100px;
   transition: 0.3s;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
@@ -164,9 +159,7 @@ main {
   flex-direction: column;
 }
 .Card {
-
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25),
-   0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   // animation: fade .5s linear forwards;
 }
 // @keyframes fade {
@@ -182,60 +175,54 @@ main {
 //   display: block;
 //   background: rgba(0, 0, 0, 0.5);
 //   cursor: pointer;
-  
 
 // }
-.Wrapper{
+.Wrapper {
   // background: rgba(0, 0, 0, 0.5);
-  // opacity: 0; 
+  // opacity: 0;
   //  padding: 10px;
   margin: 40px;
   // background: rgb(0, 0, 0);
-  
-  // opacity: 1;
-  transition: filter .5s;
-  // background: #000;  /* У блока, оборачивающего картинку при наведении будет просвечивать черный фон */
-    // overflow: hidden;  /* Ограничиваем видиую область */
-}
-.Wrapper:hover{
-  // opacity: 0.8;
-  // opacity: 0.7; /* Высветляем картинку, но она становится темнее, так как под ней черный фон */
 
+  // opacity: 1;
+  transition: filter 0.5s;
+  // background: #000;  /* У блока, оборачивающего картинку при наведении будет просвечивать черный фон */
+  // overflow: hidden;  /* Ограничиваем видиую область */
+}
+.Wrapper:hover {
   -webkit-filter: brightness(40%);
   filter: brightness(50%);
-  // transform: scale(1.05); /* Увеличение картинки */
 }
 
-.Like{
-    cursor: pointer;
-    font-size: xx-large;
-    color: red;
+.Like {
+  cursor: pointer;
+  font-size: xx-large;
+  color: red;
 
-    // background-color: red;
+  // background-color: red;
 }
-.Like:active{
-  transform: scale(1.10); /* Увеличение картинки */
+.Like:active {
+  transform: scale(1.1); 
 }
-.UnLike{
+.UnLike {
   cursor: pointer;
   font-size: xx-large;
   // opacity: 1;
-  color:white;
-  transition: filter .3s;
-
+  color: white;
+  transition: filter 0.3s;
 }
-.UnLike:hover{
-opacity: 0.6;
+.UnLike:hover {
+  opacity: 0.6;
 }
 
 .MyCarousel {
   display: block;
-  min-width: 60%;
-  min-height: 60%;
-  background: #c6cece87;
+  // min-width: 60%;
+  // min-height: 60%;
+  object-fit: cover;
+  background: #84898987;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
-
   background-color: white;
   border: 6px solid #dbebfa;
   margin: 0 10%;
@@ -250,51 +237,81 @@ opacity: 0.6;
 }
 .PostFeed {
   border-width: 20;
-  border-color: #74d2e7;
+  border-color: #ffffff;
   background: #edf8f89e;
   border-radius: 5px;
-
   border-style: solid;
   margin-bottom: 40px;
-
   transition: 0.3s;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25),
+   0 10px 10px rgba(0, 0, 0, 0.22);
   // padding: 20px;
 }
 .InputForm {
   position: fixed;
   color: black;
   flex-direction: column;
-  width: 800px;
-  height: 400px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  padding-top: 10px;
-  background: #74d2e7;
-  padding: 50px;
+  width: 100%;
+  height: 100%;
+  float: right;
+  background: rgb(58,100,180);
+  background: linear-gradient(90deg,
+   rgba(58,100,180,1) 0%, rgba(92,168,221,1) 51%, 
+   rgba(29,253,182,1) 100%);
   transition: 0.3s;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  right:0;
+
+}
+.LoginPage{
+  margin:150px;
+
+}
+.LoginForm{
+  margin:100px;
+  padding: 20px 0px;
+  background:  rgba(58,100,180,1);
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.22);
+
+  
+}
+.NextArrow {
+  font-size: 50px;
+  color: #41607d;
+  position: absolute;
+  left: 100%;
+  top: 50%;
   margin: auto;
+  padding-left: 20px;
+  text-shadow: black 1px 0 10px;
+  transition: opacity 0.3s;
+
+}
+.NextArrow:hover{
+  opacity: 0.6;
+}
+.NextArrow:active{
+  transform: scale(1.1); 
+  
+
 }
 .PostImage {
   display: flex;
   align-items: center;
   width: 700px;
-  margin: 20px;
+  // margin: 20px;
   height: 500px;
   object-fit: cover;
   margin-left: auto;
   margin-right: auto;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 .Form {
-  padding: 300px;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.22);
-  background: #74d2e7;
+  background: rgb(142, 199, 239);
+  border-radius: 10px;
+  
 }
 .Comments {
   position: fixed;
@@ -341,13 +358,11 @@ opacity: 0.6;
   margin: 20px;
   padding: 40px;
   // overflow-y: scroll;
-
 }
 .SpoilerButton {
   right: 30px;
   margin: 20px;
 }
-
 
 .Avatar {
   margin-left: 20px;

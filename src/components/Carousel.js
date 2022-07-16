@@ -5,17 +5,7 @@ import photoNotFound from '../materials/photoNotFound.png'
 const SampleNextArrow = (props) => {
     const { onClick } = props
     return (
-      <div
-        style={{
-          fontSize: '50px',
-          color: '#41607d',
-          position: 'absolute',
-          left: '100%',
-          top: '50%',
-          margin: 'auto',
-          paddingLeft: '20px',
-          textShadow: 'black 1px 0 10px',
-        }}
+      <div className='NextArrow'
         onClick={onClick}
       >
         <RightCircleFilled />

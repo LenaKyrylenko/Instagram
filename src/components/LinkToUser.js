@@ -12,6 +12,8 @@ export const LinkToUser = ({
     onClick, key
 }) => {
   return (
+    // <Row style={{ margin:'10px', marginBottom:'20px' }}>
+ 
     <Row style={{ margin:'10px', marginBottom:'20px' }}>
       <Link
         to={`/profile/${_id}`}
@@ -29,13 +31,13 @@ export const LinkToUser = ({
             <Avatar
               size={size}
               src={'/' + avatar?.url}
-              style={{ marginRight: '5px' }}
+              style={{ marginRight: '3px' }}
             />
           ) : (
-            <Avatar size={size} src={user} style={{ marginRight: '5px' }} />
+            <Avatar size={size} src={user} style={{ marginRight: '3px' }} />
           )}
         </Col>
-        <Col offset={2}>
+        <Col offset={2} style={{marginTop:'5px'}}>
           <h3> {login || 'Anon'}</h3>
         </Col>
       </Link>

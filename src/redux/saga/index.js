@@ -10,8 +10,11 @@ import {
     actionAddLike,
     actionDeleteLike,
     actionPostsCount,
-    actionAuthLogout,
+  actionAuthLogout,
+  actionRegister,
+  actionGetAvatar,
   actionAllClearPromise,
+  actionAvatar,
   actionLogin,
   actionAuthLogin,
   actionClearPromise,
@@ -22,9 +25,13 @@ import {
   actionChangeSubscribe,
   actionGetFollowing,
   actionGetFollowers,
+  actionUserUpsert,
+  actionAllClearPromiseType
   // actionOnePost
 } from '../../actions'
-  
+import { message } from 'antd'
+
+import { actionClearAboutMeType } from '../reducers/myData/myProfileReducer'
 import { history } from '../../helpers'
 import {
   actionClearDataUserType,
@@ -39,10 +46,11 @@ import {
   actionDeleteLikePostInTape,
   actionAddCommentPostInTape,
   actionClearFeedPosts,
-  actionFeedType
+  actionFeedType,
+  actionClearFeedPostsType
 } from '../reducers/feed/feedReducer'
 import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/userData/userProfileReducer'
-import { actionRemoveDataAboutMe } from '../reducers/myData/myProfileReducer'
+import { actionRemoveDataAboutMe,actionUpdateAvatarType } from '../reducers/myData/myProfileReducer'
 import {actionExploreType,actionClearExplorePosts} from '../reducers/explore/exploreReducer'
 import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
@@ -69,6 +77,7 @@ import {actionAddCommentType} from '../../actions/types/postActionTypes'
 //login
 function* loginWorker({login, password}){ //обработчик экшона FULL_LOGIN
   let token = yield call(promiseWorker,actionLogin(login, password)) //dispatch(actionLogin(login, password));
+  console.log('token login ', token)
   if (token) {
       yield put(actionAuthLogin(token));
   }
@@ -77,6 +86,28 @@ export function* loginWatcher() {
 yield takeEvery("FULL_LOGIN", loginWorker)
 
 }
+export const actionLoginTypeSaga = (login, password) =>  //упрощенный action для саги
+({type: 'FULL_LOGIN', login, password})
+
+//register 
+
+function* registerWorker({ login, password }) {
+  let token = yield call(promiseWorker,actionRegister(login, password)) //dispatch(actionLogin(login, password));
+  console.log('token reg ', token)
+  if (token) {
+  console.log('token reg в ифе ', token)
+    yield put(actionLoginTypeSaga(login, password ))
+    history.push('/feed')
+  }
+}
+export function* registerWatcher() {
+yield takeEvery("REGISTER", registerWorker)
+
+}
+export const actionRegisterTypeSaga = (login, password) =>  //упрощенный action для саги
+({type: 'REGISTER', login, password})
+
+
 //profile page about me
 export const actionFullProfilePage = () =>
 ({
@@ -326,27 +357,22 @@ export const actionCreateEditPost= (state) =>
 //change subscribe 
 function* changeSubscribeWorker({ followId, checkFollowId }) {
   const { myData: { aboutMe: { _id, following } } } = yield select()
-  // const checkFollowId = following?.find(
-  //   (follower) => follower?._id === followId,
-  // )?._id
   console.log('my following', following)
-
   console.log('check follow id', checkFollowId)
   console.log('my id', _id)
  
   const oldFollowing = checkFollowId ?
     {
-      
       _id,
-      following: [...following.filter((item) => item._id !== followId).map(({ _id }) => ({ _id }))]
+      following: [...(following||[]).filter((item) =>
+        item._id !== followId).map(({ _id }) => ({ _id }))]
     } 
   : {
       
     _id,
-    following:[...following.map(({ _id }) => ({ _id })), {_id: followId}]
-
+      following: [...(following||[]).map(({ _id }) =>
+        ({ _id })), { _id: followId }]
     }
-    
   console.log('old following', oldFollowing)
   console.log('еще раз май фолловинг ', following)
   
@@ -362,11 +388,7 @@ console.log('change', change)
   if (updateMyFollowing)
    yield put(actionChangeFollowingType(updateMyFollowing?.following))
  if (updateUserFollowers)
-  {
-   
     yield put(actionChangeFollowersType(updateUserFollowers?.followers))
-    
-    }
 }
 
 
@@ -379,38 +401,80 @@ export const actionChangeSubscribeSaga= (followId,checkFollowId) =>
     type:"CHANGE_SUBSCRIBE", followId,checkFollowId
 })
 
-
-// export const actionDeleteFullLikeFeed = (likeId, postId) => async (
-//     dispatch,
-//     getState,
-//   ) => {
-//     await dispatch(actionDeleteLike(likeId, postId))
-//     const {
-//       promise: {
-//         deleteLike: { status },
-//       },
-//     } = getState()
-//     if (status === 'FULFILLED') {
-//       const onePost = await dispatch(actionOnePost(postId))
-//       if (onePost) await dispatch(actionDeleteLikePostInTape(likeId, postId))
-//     }
-//   }
-
   //comment
 export const actionAddFullCommentFeed = (postId, newResult) => ({
   type:"ADD_COMMENT_FEED", postId, newResult
 })
 
-//clear user data after log out
-export const actionClearUserData = () => async (dispatch) => {
-    const logOut = await dispatch(actionAuthLogout())
-    if (logOut) {
-      history.push('/input')
-      await dispatch(actionClearDataUserType())
-      await dispatch(actionClearFeedPosts())
-      await dispatch(actionRemoveDataAboutMe())
-      await dispatch(actionAllClearPromise())
-      
-    }
+export const actionUserUpdateTypeSaga = (user) => ({
+  type:"USER_UPDATE", user
+})
+function* userUpdateWorker({ user }) {
+  const {myData:{aboutMe:{_id}}}= yield select()
+  const userUpsert = yield call(promiseWorker, actionUserUpsert(user, _id))
+  if (userUpsert) {
+    yield call(fullPageAboutUserWorker, { _id })
+   yield call(fullProfilePageWorker)
   }
+}
 
+export function* userUpdateWatcher() {
+  yield takeEvery("USER_UPDATE", userUpdateWorker)
+}
+
+export const actionSetAvatarTypeSaga = (file) => ({
+  type:"SET_AVATAR", file
+})
+
+function* setAvatarWorker({ file }) {
+  const {myData:{aboutMe:{_id}}}= yield select()
+  const setAvatar = yield call(promiseWorker, actionAvatar(file, _id))
+  console.log('setAvatar', setAvatar)
+  const {avatar} =yield call(promiseWorker,actionGetAvatar(_id))
+  if (setAvatar) {
+    yield call(fullPageAboutUserWorker, { _id })
+    yield put(actionUpdateAvatarType(avatar))
+    // yield call(promiseWorker,actionClearPromiseForName("setAvatar"))
+    // yield call(promiseWorker,actionClearPromiseForName("uploadFile"))
+
+  }
+}
+
+export function* setAvatarWatcher() {
+  yield takeEvery("SET_AVATAR", setAvatarWorker)
+}
+
+// export const actionUserUpdate = (user, myId) => async (dispatch, getState) => {
+//   await dispatch(actionUserUpsert(user, myId))
+//   const {
+//     promise: {
+//       userUpsert: { status },
+//     },
+//   } = getState()
+//   if (status === 'FULFILLED') {
+//     await dispatch(actionFullProfilePage(myId))
+//     await dispatch(actionFullProfilePageUser(myId))
+//   }
+// }
+
+
+//clear user data after log out
+
+export const actionClearDataLogoutTypeSaga = () => ({
+  type:"CLEAR_ALL_DATA"
+})
+function* clearAllDataWorker() {
+  const logOut = yield put (actionAuthLogout())
+  if (logOut) {
+    history.push('/input')
+      yield put(actionClearDataUserType())
+      yield put(actionClearFeedPostsType())
+      yield put(actionClearAboutMeType())
+      yield put(actionAllClearPromiseType())
+    
+  }
+}
+
+export function* clearAllDataWatcher() {
+  yield takeEvery("CLEAR_ALL_DATA", clearAllDataWorker)
+}

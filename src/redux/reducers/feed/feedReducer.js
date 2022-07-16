@@ -64,7 +64,7 @@ export const feedReducer = (
 //   return dispatch(actionClearFeedPosts())
 // }
 
-export const actionClearFeedPosts = () =>
+export const actionClearFeedPostsType= () =>
   ({ type: 'CLEAR_POSTS' })
 
 //type
