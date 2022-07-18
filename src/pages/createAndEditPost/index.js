@@ -18,7 +18,7 @@ import {
 import { arrayMoveImmutable } from 'array-move'
 import { Row, Col } from 'antd'
 import { history } from '../../helpers'
-import { Input } from '../../components/Input'
+import { CustomInput } from '../../components/Input'
 import {actionCreateEditPost} from '../../redux/saga'
 
 const checkRoute = ({ match }) => {
@@ -128,14 +128,14 @@ const PostEditor = ({
       {/* </Row> */}
 
       <h1 className="Title"> Title </h1>
-      <Input
+      <CustomInput
         state={state?.title || ''}
         className="Input"
         onChangeText={onChangeTitle}
       />
       <h1 className="Title"> Text </h1>
 
-      <Input
+      <CustomInput
         state={state?.text || ''}
         className="Input"
         onChangeText={onChangeText}

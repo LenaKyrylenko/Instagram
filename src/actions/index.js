@@ -3,13 +3,13 @@ import {
   actionFullProfilePageUser,
   actionFullProfilePage,
 } from '../redux/saga'
-import { actionFeedTypeCount } from '../redux/reducers/feed/feedReducer'
-import { actionFeedType } from '../redux/reducers/feed/feedReducer'
-import { actionExploreTypeCount } from '../redux/reducers/explore/exploreReducer'
-import { actionClearExplorePosts } from '../redux/reducers/explore/exploreReducer'
-import { actionExploreType } from '../redux/reducers/explore/exploreReducer'
-import { actionClearFeedPostsType } from '../redux/reducers/feed/feedReducer'
-import {actionProfilePageDataType} from '../redux/reducers/myData/myProfileReducer'
+import { actionFeedTypeCount } from '../redux/reducers/feedReducer'
+import { actionFeedType } from '../redux/reducers/feedReducer'
+import { actionExploreTypeCount } from '../redux/reducers/exploreReducer'
+import { actionClearExplorePosts } from '../redux/reducers/exploreReducer'
+import { actionExploreType } from '../redux/reducers/exploreReducer'
+import { actionClearFeedPostsType } from '../redux/reducers/feedReducer'
+import {actionProfilePageDataType} from '../redux/reducers/myProfileReducer'
 import { history } from '../helpers'
 import{promiseWorker} from '../redux/saga'
 import { all, put, takeEvery, takeLatest, takeLeading, select,call } from 'redux-saga/effects'; //
@@ -273,39 +273,42 @@ mutation PostUpsert($post:PostInput){
         },
       ),
     )
-export const actionAllPosts = (userId) =>
-  actionPromise(
-    'allPostsMe',
-    gql(
-      `query allPosts($userId:String!){
-  PostFind(query:$userId){
-           owner{_id} _id title text images{_id url}
-    }
-}`,
-      {
-        userId: JSON.stringify([
-          { ___owner: userId },
+// export const actionAllPosts = (userId) =>
+//   actionPromise(
+//     'allPostsMe',
+//     gql(
+//       `query allPosts($userId:String!){
+//   PostFind(query:$userId){
+//            owner{_id} _id title text images{_id url}
+//     }
+// }`,
+//       {
+//         userId: JSON.stringify([
+//           { ___owner: userId },
 
-          {
-            sort: [{ _id: -1 }],
-            skip: [0],
-            limit: [300],
-          },
-        ]),
-      },
-    ),
-  )
+//           {
+//             sort: [{ _id: -1 }],
+//             skip: [0],
+//             limit: [300],
+//           },
+//         ]),
+//       },
+//     ),
+//   )
 
 export const actionPostsCount = (_id) =>
   actionPromise(
-    'countAllPostsUser',
+    'countPosts',
     gql(
       ` query CountAllPostsUser($_id:String!){
                 PostCount(query:$_id)
 
                 }`,
 
-      { _id: JSON.stringify([{ ___owner: { $in: [_id] } }]) },
+      {
+        _id:
+          JSON.stringify([{ ___owner: { $in: [_id] } }])
+      },
     ),
   )
 
@@ -868,7 +871,7 @@ PostFind(query:$userId){
           {
             sort: [{ _id: -1 }],
             skip: [skip || 0],
-            limit: [10],
+            limit: [12],
           },
         ]),
       },

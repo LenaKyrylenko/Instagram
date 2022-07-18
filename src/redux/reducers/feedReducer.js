@@ -1,4 +1,4 @@
-import { actionClearPromiseForName } from '../../../actions'
+import { actionClearPromiseForName } from '../../actions'
 // import { actionClearDataUserType } from '../profileUserPage/profileUserReducer'
 // import { actionProfilePageDataTypeUser } from '../profileUserPage/profileUserReducer'
 
@@ -49,6 +49,7 @@ export const feedReducer = (
   
       'ADD-COMMENT-POSTS': () => ({
         ...state,
+        
         postsFeed: postsFeed?.map((p) =>
           p._id === postId ? (p = { ...p, comments: [...newResult] }) : p,
         ),
@@ -76,7 +77,7 @@ export const actionAddLikePostInTape = (postId) =>
     likeId,
     postId,
   })
-  export const actionAddCommentPostInTape = (postId, newResult) => ({
+  export const actionAddCommentPostFeedTape = (postId, newResult) => ({
     type: 'ADD-COMMENT-POSTS',
     postId,
     newResult,
@@ -87,4 +88,7 @@ export const actionFeedType = (newPosts, newPostsFeedCount) =>
 export const actionFeedTypeCount = (postsFeedCount) => 
 ({ type: 'COUNT', postsFeedCount })
 
-
+export const actionAddCommentFeedTypeSaga = (postId, text) => ({
+  type:"FEED_POST_COMMENT", postId, text
+  
+})

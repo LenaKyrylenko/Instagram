@@ -31,15 +31,16 @@ import {
 } from '../../actions'
 import { message } from 'antd'
 
-import { actionClearAboutMeType } from '../reducers/myData/myProfileReducer'
+import { actionClearAboutMeType } from '../reducers/myProfileReducer'
 import { history } from '../../helpers'
 import {
   actionClearDataUserType,
   actionChangeFollowersType,
-  actionUserAllPostsType
+  actionUserAllPostsType,
+  actionPostsType
 
-} from '../reducers/userData/userProfileReducer'
-import { actionProfilePageDataType,actionChangeFollowingType } from '../reducers/myData/myProfileReducer'
+} from '../reducers/userProfileReducer'
+import { actionProfilePageDataType,actionChangeFollowingType } from '../reducers/myProfileReducer'
 import { actionFullAllGetPosts } from '../../actions'
 import {
   actionAddLikePostInTape,
@@ -47,11 +48,12 @@ import {
   actionAddCommentPostInTape,
   actionClearFeedPosts,
   actionFeedType,
-  actionClearFeedPostsType
-} from '../reducers/feed/feedReducer'
-import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/userData/userProfileReducer'
-import { actionRemoveDataAboutMe,actionUpdateAvatarType } from '../reducers/myData/myProfileReducer'
-import {actionExploreType,actionClearExplorePosts} from '../reducers/explore/exploreReducer'
+  actionClearFeedPostsType,
+  actionAddCommentPostFeedTape
+} from '../reducers/feedReducer'
+import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/userProfileReducer'
+import { actionRemoveDataAboutMe,actionUpdateAvatarType } from '../reducers/myProfileReducer'
+import {actionExploreType,actionClearExplorePosts} from '../reducers/exploreReducer'
 import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
 import { actionOnePostType, actionChangeLikeType } from '../../actions/types/postActionTypes'
@@ -140,7 +142,6 @@ export const actionFullProfilePageUser = (_id) =>
   
 function* fullPageAboutUserWorker({ _id }) {
   // console.log('_id ',  _id)
-
   const aboutUser = yield call(promiseWorker, actionAboutUser(_id))
   // console.log('about user',  aboutUser)
   const allPosts = yield call(promiseWorker, actionAllPostsUser(_id))
@@ -154,7 +155,8 @@ function* fullPageAboutUserWorker({ _id }) {
   }
   if (countPosts)
   yield put(actionCountPostsType(countPosts))
-}
+  }
+
 
 export function* fullPageAboutUserWatcher() {
   yield takeLeading("USER_PAGE", fullPageAboutUserWorker)
@@ -191,6 +193,31 @@ function* feedWorker() {
 export function* feedWatcher() {
   yield takeLeading("FEED_POSTS", feedWorker)
 }
+
+function* postsWorker({_id}) {
+  const {
+    userData: {aboutUser, allPosts,countPosts },
+    // myData: { aboutMe },
+    // promise:{countAllPostsUser:{payload}}
+    
+  } = yield select()
+  
+  if (allPosts?.length !== (countPosts ? countPosts : 1)) {
+    const newPosts = yield call(promiseWorker, 
+      actionAllPostsUser(_id, allPosts?.length),
+    )
+    const newPostsCount = yield call(promiseWorker, 
+      actionPostsCount(_id))
+    if (newPosts && newPostsCount) {
+      yield put(actionPostsType(newPosts, newPostsCount))
+    }
+  }
+}
+
+export function* postsWatcher() {
+  yield takeLeading("USER_POSTS_PORTION", postsWorker)
+}
+
 //explore 
 function* exploreWorker(){
   const {
@@ -198,37 +225,23 @@ function* exploreWorker(){
   } = yield select()
   console.log('explorePosts', explorePosts)
 
-
   if (explorePosts?.length !== (explorePostsCount ? explorePostsCount : 1)) {
     console.log('explorePosts', explorePosts)
 
-    const newPosts = yield fork(promiseWorker, actionExplorePosts(explorePosts?.length))
+    const newPosts = yield call(promiseWorker,
+      actionExplorePosts(explorePosts?.length))
 
     console.log('newPosts', newPosts)
 
-    const newPostsExploreCount = yield fork(promiseWorker, (actionExplorePostsCount()))
-    const [posts,exploreCount] = yield join([newPosts,newPostsExploreCount])
-    if (posts && exploreCount)
-      yield put(actionExploreType(posts, exploreCount))
+    const newPostsExploreCount = yield call(promiseWorker, (actionExplorePostsCount()))
+    if (newPosts && newPostsExploreCount)
+      yield put(actionExploreType(newPosts, newPostsExploreCount))
   }
 }
 export function* exploreWatcher() {
   yield takeLeading("EXPLORE_POSTS", exploreWorker)
 }
 
-//feed
-function* addCommentFeedWorker({ postId, newResult }) {
-  yield call(promiseWorker,actionAddComment(postId, newResult))
-  const { comments } = yield call(promiseWorker, actionGetCommentsOnePost(postId))
-  console.log('commentsss', comments)
-  if (comments)
-    yield put(actionAddCommentPostInTape(postId, newResult))
-  }
-
-export function* addCommentFeedWatcher() {
-  yield takeLeading("ADD_COMMENT_FEED", addCommentFeedWorker)
-  
-}
 // export const actionAddFullCommentFeed = (postId, newResult) => async (
 //   dispatch,
 //   getState,
@@ -260,10 +273,7 @@ yield takeLeading("ONE_POST",onePostWorker)
 //comment
 
 function* addCommentOnePostWorker({ postId, text }) {
-  // console.log('post id', postId)
-  // console.log('comment', text)
-  const add= yield call(promiseWorker, actionAddComment(postId, text))
-  // console.log('add', add)
+  yield call(promiseWorker, actionAddComment(postId, text))
   const {
     promise: {
       addComment: { status },
@@ -272,18 +282,33 @@ function* addCommentOnePostWorker({ postId, text }) {
   if (status === 'FULFILLED') {
     yield call(promiseWorker, actionOnePost(postId))
     const { comments } = yield call(promiseWorker, actionGetCommentsOnePost(postId))
-  //  console.log('add comments', comments)
     if (comments)
       yield put (actionAddCommentType(comments))
   }
 }
 export function* addCommentOnePostWatcher(){
   yield takeLeading("ONE_POST_COMMENT",addCommentOnePostWorker)
+}
+  
+
+function* addCommentFeedWorker({ postId, text }) {
+  yield call(promiseWorker, actionAddComment(postId, text))
+  const {
+    promise: {
+      addComment: { status },
+    },
+  } = yield select()
+  if (status === 'FULFILLED') {
+    yield call(promiseWorker, actionOnePost(postId))
+    const { comments } = yield call(promiseWorker,
+      actionGetCommentsOnePost(postId))
+    if (comments)
+      yield put (actionAddCommentPostFeedTape(postId,comments))
   }
-  // await dispatch(actionOnePost(postId));
-// }}
-
-
+}
+export function* addCommentFeedWatcher(){
+  yield takeLeading("FEED_POST_COMMENT",addCommentFeedWorker)
+  }
 
 // export const actionAddFullLike = (postId) => async (dispatch, getState) => {
 //     await dispatch(actionAddLike(postId))
@@ -444,22 +469,21 @@ export function* setAvatarWatcher() {
   yield takeEvery("SET_AVATAR", setAvatarWorker)
 }
 
-// export const actionUserUpdate = (user, myId) => async (dispatch, getState) => {
-//   await dispatch(actionUserUpsert(user, myId))
-//   const {
-//     promise: {
-//       userUpsert: { status },
-//     },
-//   } = getState()
-//   if (status === 'FULFILLED') {
-//     await dispatch(actionFullProfilePage(myId))
-//     await dispatch(actionFullProfilePageUser(myId))
-//   }
-// }
+function* changePasswordWorker({ file }) {
+  const {myData:{aboutMe:{_id}}}= yield select()
+  const setAvatar = yield call(promiseWorker, actionAvatar(file, _id))
+  console.log('setAvatar', setAvatar)
+  const {avatar} =yield call(promiseWorker,actionGetAvatar(_id))
+  if (setAvatar) {
+    yield call(fullPageAboutUserWorker, { _id })
+    yield put(actionUpdateAvatarType(avatar))
+    // yield call(promiseWorker,actionClearPromiseForName("setAvatar"))
+    // yield call(promiseWorker,actionClearPromiseForName("uploadFile"))
 
+  }
+}
 
 //clear user data after log out
-
 export const actionClearDataLogoutTypeSaga = () => ({
   type:"CLEAR_ALL_DATA"
 })

@@ -9,9 +9,9 @@ import { Avatar, Divider, Input, Button } from 'antd'
 import user from '../../materials/user.png'
 import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
-import { CComments, AddComment } from '../../components/Comment'
+import { CComments, CCommentsOnePost } from '../../components/comment/Comment'
 import { CPostEditor } from '../createAndEditPost'
-
+import {AddComment} from '../../components/comment/AddComment'
 import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../../actions/typeSaga/postActionSaga'
 import { CLike} from '../../components/Like'
 import { ConstructorModal } from '../../helpers'
@@ -81,14 +81,20 @@ export const PagePost = ({
           <h2> Text: {onePost?.text || ''} </h2>
           <Divider>Comments</Divider>
           <div className="Scroll">
-            <CComments
+            <CCommentsOnePost
               postId={onePost?._id}
               comments={onePost?.comments || []}
             />
           </div>
-          <div style={{ display: 'flex', margin: '40px 10px' }}>
+          <div style={{ display: 'flex', margin: '20px 0px' }}>
             <CLike likes={onePost?.likes} postId={onePost?._id} />
-            <AddComment addComment={addComment} postId={onePost?._id} />
+            <AddComment addComment={addComment}
+              style={{
+                position: 'absolute',
+                bottom: "120px", right: "30px"
+              }}
+              width={'40%'}
+              postId={onePost?._id} />
           </div>
         </Col>
       </Row>

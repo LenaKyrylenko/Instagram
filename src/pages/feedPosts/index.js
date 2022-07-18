@@ -2,8 +2,6 @@ import React, { useMemo, useState, useEffect } from 'react'
 import {
   actionAllPostsFeed,
   actionFullAllGetPosts,
-  // actionAddFullComment,
-  // actionFindSubComment,
   actionAddSubFullComment,
   actionFindLikes,
   actionGetFindLiked,
@@ -12,15 +10,8 @@ import {
   actionDeleteFullLikeForFeed,
   actionAddFullLike,
 } from '../../actions'
-import {
-  actionFullFeed,
-
-  // actionAddFullCommentFeed,
-  // actionAddFullLikeFeed,
-  // actionDeleteFullLikeFeed,
- 
-} from '../../redux/saga'
-import {actionClearFeedPostsType} from '../../redux/reducers/feed/feedReducer'
+import { actionClearFeedPostsType,actionAddCommentFeedTypeSaga } from
+  '../../redux/reducers/feedReducer'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { Upload, Button, DatePicker, Space } from 'antd'
@@ -28,11 +19,11 @@ import { Avatar, Image, Divider, Radio } from 'antd'
 import { CPost } from '../onePost'
 import { Row, Col } from 'antd'
 import LinkToUser from '../../components/LinkToUser'
-import { AddComment, Comments } from '../../components/Comment'
+import { Comments } from '../../components/comment/Comment'
+import { AddComment} from '../../components/comment/AddComment'
 import { Like, Likes } from '../../components/Like'
 import { MyCarousel } from '../../components/Carousel'
 import load from '../../materials/load.gif'
-
 const MyPostFeed = ({
   // myData,
   postsFeed = [],
@@ -42,10 +33,11 @@ const MyPostFeed = ({
   postsFeedPromise
 }) => {
   const [checkScroll, setScroll] = useState(true)
+
   useEffect(() => {
     if (checkScroll) {
        console.log('попало в новую порцию постов')
-          onPostsFeed()
+       onPostsFeed()
     }
     setScroll(false)
   }, [checkScroll])
@@ -53,7 +45,7 @@ const MyPostFeed = ({
     document.addEventListener('scroll', scrollHandler)
     return () => {
       document.removeEventListener('scroll', scrollHandler)
-    onClearFeed()
+      onClearFeed()
     }
   }, [])
 
@@ -72,9 +64,10 @@ const MyPostFeed = ({
        }
 
   return (
+
     <div style={{  marginTop: '50px'}}>
       <div className="PostsFeed" >
-        
+
         <Row>
           <Col span={12} offset={6}>
             <div>
@@ -100,21 +93,29 @@ const MyPostFeed = ({
                     <h1 className='Title'> Title: {title || ''}</h1>
                     <h1  className='Title'> Text: {text || ''}</h1>
                     <Divider>Comments</Divider>
+                    <div style={{ margin: '10px',position: 'relative' }}>
                     <div className="ScrollForFeed">
-                      {/* <CCommentsForFeed
+                      <CCommentsForFeed
                         postId={_id}
                         comments={comments || []}
-                      /> */}
+                      />
                       </div>
-                      <center>
-                      <div style={{ display: 'flex', padding: '20px', marginLeft:'100px' }}>
+                      {/* <center> */}
+                      <div style={{ display: 'flex', margin: '20px 0px' }}>
                         {/* <CLikeForFeed likes={likes} postId={_id} /> */}
 
-                        {/* <AddComment addComment={addComment} postId={_id} /> */}
-                      </div>
-                       </center>
+                          <AddComment addComment={addComment}
+                            postId={_id} style={{
+                              position: 'absolute', bottom: '70px',
+                              zIndex: '100'
+                            }} />
+                    
+                        </div>
+                        </div>
+                       {/* </center> */}
                     </div>
-                 </div>
+                  </div>
+                //  </div>
                 ),
               )}
              
@@ -123,7 +124,10 @@ const MyPostFeed = ({
         </Row>
         {(postsFeedPromise?.status == "PENDING") &&
                 
-               <img style={{display:'block', margin: '0 auto', padding:'10px' }} src={load} width="100" height="100" />
+          <img style={{
+            display: 'block',
+            margin: '0 auto', padding: '10px'
+          }} src={load} width="100" height="100" />
              }
       </div>
     </div>
@@ -150,9 +154,10 @@ export const CPostForFeed = connect(
     postsFeedPromise :state.promise?.postsFeed
   }),
   {
+
     onPostsFeed: actionFullAllGetPosts,
     onClearFeed: actionClearFeedPostsType,
-    // addComment: actionAddFullCommentFeed,
+    addComment: actionAddCommentFeedTypeSaga,
     // addCommentReply: actionAddSubFullComment,
     // addLike: actionAddFullLikeForFeed,
 

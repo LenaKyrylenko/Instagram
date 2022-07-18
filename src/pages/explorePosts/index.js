@@ -10,7 +10,7 @@ import {
   import {
     actionClearExplorePosts,
     actionAllClearExplore,
-  } from '../../redux/reducers/explore/exploreReducer'
+  } from '../../redux/reducers/exploreReducer'
 import load from '../../materials/load.gif'
   
   const ExplorePosts = ({
@@ -42,16 +42,6 @@ import load from '../../materials/load.gif'
       document.addEventListener('scroll', scrollHandler)
     }, [explorePosts.length])
 
-    // useEffect(() => {
-    //   if (explorePostsPromise?.status == "PENDING") {
-    //     console.log('explorePostsPromise?.status',explorePostsPromise?.status)
-    //     return () => (
-    //       <h1> ГРУЖУУУУУ </h1>
-    //     //  <img src={load} width="500" height="600"/>
-    //     )
-    //   }
-    
-    // }, [explorePostsPromise?.status])
   
     const scrollHandler = (e) => {
       if (
@@ -76,8 +66,6 @@ import load from '../../materials/load.gif'
                 marginTop: '50px',
               }}
             >
- 
-
               {(explorePosts || [])?.map((item) => (
                 <Card post={item} onPost={onPost} />
               ))}
@@ -98,7 +86,6 @@ import load from '../../materials/load.gif'
       countAllPostsUser: state.promise?.countAllPostsUser?.payload,
       explorePosts: state.explore?.explorePosts,
       explorePostsPromise: state.promise?.explorePosts,
-
       explorePostsCount: state.explore?.explorePostsCount,
     }),
     {

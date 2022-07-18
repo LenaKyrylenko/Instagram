@@ -1,4 +1,4 @@
-import {actionOnePost} from '../../../actions'
+import {actionOnePost} from '../../actions'
 export const postReducer = (
     state = {},
     { skip, type, newPosts = [], onePost,newResult, postsFeed, postsFeedCount },

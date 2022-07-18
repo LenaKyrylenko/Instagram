@@ -1,7 +1,7 @@
 
 export const userProfileReducer = (
     state = {},
-    { type, aboutUser, allPosts, newPosts,newResult, countPosts },
+    { type, aboutUser, allPosts, newPosts,newResult, newPostsCount, countPosts },
   ) => {
     const types = {
       'PROFILE-PAGE-USER': () => {
@@ -11,6 +11,7 @@ export const userProfileReducer = (
           // allPosts,
         }
       },
+
       'USER-POSTS': () => {
         return {
           ...state,
@@ -18,6 +19,17 @@ export const userProfileReducer = (
           // allPosts,
         }
       },
+      'ADD-USER-POSTS': () => {
+        return {
+          ...state,
+          allPosts: state?.allPosts ? [...state.allPosts, ...newPosts] : [...newPosts],
+          // postsFeed: [...postsFeed || [], ...newPosts],
+          countPosts: countPosts ? countPosts : newPostsCount
+      
+          // allPosts,
+        }
+      },
+      
       'CLEAR-DATA': () => {
         return {
           aboutUser: {},
@@ -30,11 +42,19 @@ export const userProfileReducer = (
           aboutUser,
         }
       },
+      'CLEAR_ALL_POSTS': () => {
+        
+        return {
+          ...state,
+          allPosts:[]
+        }
+      },
       'COUNT_ALL_POSTS': () => {
         
         return {
           ...state,
-          countPosts
+          countPosts: countPosts ? countPosts : state.countPosts
+
         }
       },
       'UPDATE_FOLLOWERS': () => {
@@ -69,7 +89,8 @@ export const actionProfilePageData = (id) =>
 
 export const actionUserAllPostsType = (allPosts) => 
 ({ type: 'USER-POSTS', allPosts })
-
+export const actionClearAllPostsType= () =>
+  ({ type: 'CLEAR_ALL_POSTS' })
 
 export const actionClearDataUserType = () =>
   ({ type: 'CLEAR-DATA' })
@@ -77,6 +98,8 @@ export const actionClearDataUserType = () =>
   export const actionChangeFollowersType = (newResult) => ({
     type:"UPDATE_FOLLOWERS", newResult
   })
-
-
-
+  export const actionPostsType = (newPosts, newPostsCount) => 
+  ({ type: 'ADD-USER-POSTS', newPosts, newPostsCount })
+  
+  export const actionPostsPortionTypeSaga = (_id) => 
+  ({ type: 'USER_POSTS_PORTION', _id})

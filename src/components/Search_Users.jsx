@@ -17,7 +17,10 @@ export const ResultUserFind = ({
     <div className="ResultUserFind">
       {userFind?.map(({ _id, login, avatar }) => (
        
-        <LinkToUser _id={_id} login={login} avatar={avatar} size={40} padding={'0px'} onClick={handleCancel} key={_id} />
+        <LinkToUser _id={_id} login={login}
+        
+          avatar={avatar} size={40} padding={'0px'}
+          onClick={handleCancel} key={_id} />
       ))}
       </div>
   )

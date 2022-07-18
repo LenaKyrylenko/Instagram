@@ -7,9 +7,11 @@ import { connect } from 'react-redux'
 import { Avatar, Button } from 'antd'
 import { actionFullProfilePageUser } from '../../redux/saga'
 import { Row, Col } from 'antd'
+import {actionClearAllPostsType,actionPostsPortionTypeSaga} from '../../redux/reducers/userProfileReducer'
 import { CSubscribe } from '../../components/Subscribe'
 import { CEditSetting } from '../setting'
 import { Link} from 'react-router-dom'
+import load from '../../materials/load.gif'
 
 export const PageAboutUser = ({
   match: {
@@ -20,15 +22,46 @@ export const PageAboutUser = ({
   allPosts,
   onPost,
   onAboutUser,
-  countAllPostsUser,
+  countPosts,
+  onClearPosts,
+  onUserPosts,
+  userPostPromise
 }) => {
+  const [checkScroll, setScroll] = useState(true)
   useEffect(() => {
     onAboutUser(_id)
-    // console.log('USER DATA ', login, _id)
-  }, [_id])
-  // const { _id } = useParams();
-  const checkMyId = _id === my_Id
+    }, [_id])
 
+  useEffect(() => {
+    if (checkScroll) {
+      console.log('попало в новую порцию постов')
+      onUserPosts(_id)
+    }
+    setScroll(false)
+  }, [checkScroll])
+  useEffect(() => {
+    document.addEventListener('scroll', scrollHandler)
+    return () => {
+      document.removeEventListener('scroll', scrollHandler)
+      onClearPosts()
+    }
+  }, [])
+
+  console.log('check scroll ', checkScroll)
+  useEffect(() => {
+     document.addEventListener('scroll', scrollHandler)
+     }, [allPosts?.length])
+  
+    const scrollHandler = (e) => {
+         if (e.target.documentElement.scrollHeight -
+           (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
+          console.log('SCROLL HANDLER', checkScroll)
+          setScroll(true)
+          document.removeEventListener('scroll', scrollHandler)
+         }
+       }
+
+  const checkMyId = _id === my_Id
   return (
     <>
       <Row>
@@ -62,14 +95,14 @@ export const PageAboutUser = ({
                   {new Intl.DateTimeFormat('en-GB').format(createdAt)}
                 </h3>
                 <div style={{ display: 'flex' }}>
-                  {countAllPostsUser > 0 ? (
+                  {countPosts > 0 ? (
                     <div
                       style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                       }}
                     >
-                      <h3> {countAllPostsUser} posts </h3>
+                      <h3> {countPosts} posts </h3>
                     </div>
                   ) : (
                     <h3> 0 posts </h3>
@@ -78,22 +111,21 @@ export const PageAboutUser = ({
                   <ListOfUsers
                     listResult={followers}
                     listUsers={followers}
-                                      onPageData={onAboutUser}
-                                      text={'followers'}
+                    onPageData={onAboutUser}
+                    text={'followers'}
                   />
 
                   <ListOfUsers
                    listResult={following}
                    listUsers={following}
-                                     onPageData={onAboutUser}
-                                     text={'following'}
+                  onPageData={onAboutUser}
+                    text={'following'}
                   />
                 </div>
                 <h3> nick: {nick == null ? login : nick}</h3>
                 {checkMyId ? 
-                    <CEditSetting />
+                   <CEditSetting />
                   : 
-                    
                   <CSubscribe />
                 }
               </div>
@@ -117,6 +149,13 @@ export const PageAboutUser = ({
           </div>
         </Col>
       </Row>
+      {(userPostPromise?.status == "PENDING") &&  
+        <img style={{
+          display: 'block', margin: '0 auto',
+          marginBottom: '200px', padding: '10px'
+        }}
+            src={load} width="100" height="100" />
+        }
     </>
   )
 }
@@ -125,12 +164,15 @@ export const CPageAboutUser = connect(
   (state) => ({
     my_Id: state.auth?.payload?.sub?.id,
     aboutUser: state.userData?.aboutUser,
-    countAllPostsUser: state.promise?.countAllPostsUser?.payload,
+    countPosts: state?.promise?.countPosts?.payload,
     allPosts: state.userData?.allPosts,
+    userPostPromise:state.promise?.allPosts
   }),
   {
     onAboutUser: actionFullProfilePageUser,
     onPost: actionOnePost,
+    onClearPosts: actionClearAllPostsType,
+    onUserPosts:actionPostsPortionTypeSaga
     // onPageData: actionFullProfilePageUser,
   },
 )(PageAboutUser)

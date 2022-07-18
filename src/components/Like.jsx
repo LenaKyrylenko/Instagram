@@ -55,12 +55,12 @@ console.log('like id in component', likeId)
           )}
         </h3>
         {likes.length ? (
-          <h3 style={{ cursor: 'pointer', paddingLeft: 8 }} onClick={showModal}>
+          <h3 style={{ cursor: 'pointer', padding: '3px'}} onClick={showModal}>
             {' '}
             {likes.length} likes
           </h3>
         ) : (
-          <h3 style={{ cursor: 'pointer', paddingLeft: 8 }}> 0 likes</h3>
+          <h3 style={{ cursor: 'pointer', padding: '3px' }}> 0 likes</h3>
         )}
       </div>
       <ConstructorModal

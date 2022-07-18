@@ -1,12 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { promiseReducer } from './reducers/promise/promiseReducer'
-import { authReducer } from './reducers/auth/authReducer'
-import { myProfileReducer } from './reducers/myData/myProfileReducer'
-import { userProfileReducer } from './reducers/userData/userProfileReducer'
-import { feedReducer } from './reducers/feed/feedReducer'
-import { postReducer } from './reducers/post/postReducer'
-import { exploreReducer } from './reducers/explore/exploreReducer'
+import { promiseReducer } from './reducers/promiseReducer'
+import { authReducer } from './reducers/authReducer'
+import { myProfileReducer } from './reducers/myProfileReducer'
+import { userProfileReducer } from './reducers/userProfileReducer'
+import { feedReducer } from './reducers/feedReducer'
+import { postReducer } from './reducers/postReducer'
+import { exploreReducer } from './reducers/exploreReducer'
 import {
   promiseWatcher,
   fullProfilePageWatcher,
@@ -23,7 +23,8 @@ onePostWatcher,
   userUpdateWatcher,
   setAvatarWatcher,
   clearAllDataWatcher,
-  registerWatcher
+  registerWatcher,
+  postsWatcher,
 } from './saga'
 import createSagaMiddleware from 'redux-saga' //функция по созданию middleware
 import {
@@ -64,7 +65,9 @@ function* rootSaga() {
     changeSubscribeWatcher(),
     userUpdateWatcher(),
     setAvatarWatcher(),
-    clearAllDataWatcher()
+    clearAllDataWatcher(),
+    postsWatcher(),
+    addCommentFeedWatcher()
     // addCommentFeedWatcher()
   ])
 }
