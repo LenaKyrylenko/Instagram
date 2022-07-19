@@ -48,7 +48,6 @@ export const myProfileReducer = (state = {}, { type, aboutMe, newResult }) => {
   
   export const actionChangeFollowingType = (newResult) => ({
     type:"UPDATE_FOLLOWING", newResult
-    
 })
   
 export const actionUpdateAvatarType= (newResult) => ({

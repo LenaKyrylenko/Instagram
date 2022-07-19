@@ -50,7 +50,7 @@ const EditAvatar = ({
         {fileStatus?.payload?.url && (
           <Image
             style={{
-              marginBottom: '30px',
+              // marginBottom: '30px',
               width: '200px',
               objectFit: 'cover',
               height: '150px',

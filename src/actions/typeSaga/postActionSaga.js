@@ -6,3 +6,12 @@ export const actionAddFullCommentSaga = (postId, text) => ({
     
   })
   
+export const actionAddSubCommentTypeSaga = ( commentId,
+  newResult) => ({
+  type:"POST_SUB_COMMENT",  commentId, newResult
+    
+})
+export const actionFindSubCommentTypeSaga = (commentId) => ({
+  type:"GET_SUB_COMMENT",commentId
+    
+  })

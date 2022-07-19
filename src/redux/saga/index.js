@@ -13,6 +13,7 @@ import {
   actionAuthLogout,
   actionRegister,
   actionGetAvatar,
+  actionAddSubComment,
   actionAllClearPromise,
   actionAvatar,
   actionLogin,
@@ -26,7 +27,8 @@ import {
   actionGetFollowing,
   actionGetFollowers,
   actionUserUpsert,
-  actionAllClearPromiseType
+  actionAllClearPromiseType,
+  actionFindSubComment
   // actionOnePost
 } from '../../actions'
 import { message } from 'antd'
@@ -57,8 +59,9 @@ import {actionExploreType,actionClearExplorePosts} from '../reducers/exploreRedu
 import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
 import {actionPending,actionFulfilled,actionRejected,actionExplorePosts,actionExplorePostsCount} from '../../actions'
 import { actionOnePostType, actionChangeLikeType } from '../../actions/types/postActionTypes'
-import {actionAddCommentType} from '../../actions/types/postActionTypes'
-  //promise 
+import {actionAddCommentType,actionAddSubCommentType} from '../../actions/types/postActionTypes'
+import { actionAddSubCommentTypeSaga } from '../../actions/typeSaga/postActionSaga'
+//promise 
  export function* promiseWorker(action){ //это типа actionPromise который thunk
     const {name, promise} = action
     yield put(actionPending(name)) //это как dispatch
@@ -469,20 +472,6 @@ export function* setAvatarWatcher() {
   yield takeEvery("SET_AVATAR", setAvatarWorker)
 }
 
-function* changePasswordWorker({ file }) {
-  const {myData:{aboutMe:{_id}}}= yield select()
-  const setAvatar = yield call(promiseWorker, actionAvatar(file, _id))
-  console.log('setAvatar', setAvatar)
-  const {avatar} =yield call(promiseWorker,actionGetAvatar(_id))
-  if (setAvatar) {
-    yield call(fullPageAboutUserWorker, { _id })
-    yield put(actionUpdateAvatarType(avatar))
-    // yield call(promiseWorker,actionClearPromiseForName("setAvatar"))
-    // yield call(promiseWorker,actionClearPromiseForName("uploadFile"))
-
-  }
-}
-
 //clear user data after log out
 export const actionClearDataLogoutTypeSaga = () => ({
   type:"CLEAR_ALL_DATA"
@@ -498,7 +487,34 @@ function* clearAllDataWorker() {
     
   }
 }
-
 export function* clearAllDataWatcher() {
   yield takeEvery("CLEAR_ALL_DATA", clearAllDataWorker)
+}
+//subComment
+function* addSubCommentWorker({ commentId, newResult }) {
+  yield call(promiseWorker, actionAddSubComment(commentId, newResult))
+  console.log('newResult ', newResult)
+  const {
+    promise: {
+      addSubComment: { status },
+    },
+  } = yield select()
+  if (status === 'FULFILLED') {
+    yield call(getSubCommentWorker, {commentId})
+    }
+  }
+
+export function* addSubCommentWatcher() {
+  yield takeEvery("POST_SUB_COMMENT", addSubCommentWorker)
+}
+function* getSubCommentWorker({ commentId }) {
+  const { answers } = yield call(promiseWorker,
+    actionFindSubComment(commentId))
+  if (answers) {
+      yield put(actionAddSubCommentType(commentId, answers))
+  }
+}
+
+export function* getSubCommentWatcher() {
+  yield takeEvery("GET_SUB_COMMENT", getSubCommentWorker)
 }

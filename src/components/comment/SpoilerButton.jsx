@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
-import { Input, Button } from 'antd'
-export const SpoilerButton = ({ text, close, children, style }) => {
-    const [opened, setOpened] = useState(close)
+import { Input, Button, Divider,Typography  } from 'antd'
+const { Text, Link } = Typography;
+export const SpoilerButton = ({ text, children, style }) => {
+    const [opened, setOpened] = useState(false)
     return (
       <>
-        <Button
+         <Text type="secondary" strong
           onClick={() => {
             setOpened(!opened)
           }}
           style={style}
         >
           {text}
-        </Button>
+          </Text>
+       
         {opened && children}
       </>
     )

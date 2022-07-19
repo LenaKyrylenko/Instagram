@@ -96,7 +96,7 @@ const PostEditor = ({
       state['images'] = []
       return false
     } else {
-      return <h3> {state?.images.length} / 8</h3>
+      return <h2 className='NumberPosts'> {state?.images.length} / 8</h2>
     }
   }
 
@@ -121,8 +121,10 @@ const PostEditor = ({
                     />
                   ))}
               </SortableContainer>
-           </div>
-            {checkLength()}
+      </div>
+      <div style={{textAlign:'center'}}>
+        {checkLength()}
+      </div>
           {/* </Col> */}
         {/* </Col> */}
       {/* </Row> */}

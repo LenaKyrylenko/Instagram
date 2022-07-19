@@ -1,98 +1,71 @@
-import {
-  actionAddFullComment,
-  actionFindSubComment,
-  actionAddSubFullComment,
-} from '../../actions'
-import { Tooltip } from 'antd'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-
-import { Input, Button } from 'antd'
-import { SmileOutlined,SmileFilled } from '@ant-design/icons'
-import moment from 'moment'
 import React, { useState } from 'react'
 import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
-import {  Comment,Avatar } from 'antd';
-import user from '../../materials/user.png'
-
+import { Comment, Avatar } from 'antd'
+import { CommentAction } from './Reply'
 import { CommentDate } from './CommentDate'
-export const Comments =  ({
+import {
+  actionAddSubCommentTypeSaga,
+  actionFindSubCommentTypeSaga,
+} from '../../actions/typeSaga/postActionSaga'
+import { Typography } from 'antd'
+import CommentAuthor from './CommentAuthor'
+import CommentAvatar from './CommentAvatar'
+const { Text } = Typography
+export const Comments = ({
   comments,
   postId,
-  commentsFind,
-  addCommentReply,
-  children,
-  close,
+  parentId,
   findSubComment,
-  onGetLikes,
-  onGetType
 }) => {
-  const [opened, setOpened] = useState(close)
   return (
     <>
-      {comments 
-        ? 
-        comments?.map((comment) => (
-          <Comment
-      
-            author={ <Link
-              to={`/profile/${comment?.owner?._id}`}
-            >
-                {comment?.owner?.login || 'Anon'}
-             
-            </Link>}
-        
-            avatar= 
-            {comment.owner?.avatar ? (
-              <Link
-              to={`/profile/${comment?.owner?._id}`}
-            >
-                <Avatar
-                  size={30}
-                  src={'/' + comment.owner?.avatar?.url}
-                style={{ marginLeft: '15px' }}
-                alt={comment.owner?.login || 'Anon'}
+      {comments?.length && Object.keys(comments[0])?.length > 1
+        ? comments?.map((comment) => {
+            return (
+              <Comment
+                key={comment?._id}
+                author={
+                 <CommentAuthor owner={comment?.owner}/>
+                }
+                actions={[<CommentAction commentId={comment?._id} />]}
+                avatar={
+                 <CommentAvatar owner={comment?.owner}/>
+                }
+                content={<p>{comment?.text}</p>}
+                datetime={<CommentDate createdAt={comment?.createdAt} />}
+              >
+                <Comments
+                  postId={postId}
+                  comments={comment?.answers}
+                  parentId={comment?._id}
+                  findSubComment={findSubComment}
                 />
-                </Link>
-            ) : (
-              <Link
-              to={`/profile/${comment?.owner?._id}`}
+              </Comment>
+            )
+          })
+        : comments?.length && (
+            <Text
+              type="secondary"
+              strong
+              style={{ margin: '0 auto' }}
+              onClick={() => findSubComment(parentId)}
             >
-                <Avatar size={30}
-                  src={user}
-                  style={{ marginLeft: '15px' }}
-                  alt={comment.owner?.login || 'Anon'}
-                  />
-              </Link>
-              )}
-  
-            content=
-            {
-              <p>
-                {comment?.text}
-                </p>
-            }
-           
-            datetime={
-              <CommentDate createdAt={comment?.createdAt} />
-            }
-          />
-
-            
-     )) : <h3> No comments </h3>}
-    </>)
+              __ View answers ({comments.length})
+            </Text>
+          )}
+    </>
+  )
 }
-
 export const CCommentsOnePost = connect(
   (state) => ({
     postId: state.promise.onePost?.payload?._id,
+    comments: state?.post.onePost?.comments,
     addComment: state.promise?.addComment?.payload,
     addSubComment: state.promise?.addSubComment,
   }),
   {
-    addCommentReply: actionAddSubFullComment,
-    findSubComment: actionFindSubComment,
+    findSubComment: actionFindSubCommentTypeSaga,
   },
 )(Comments)
 

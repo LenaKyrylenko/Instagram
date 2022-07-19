@@ -355,22 +355,27 @@ export const actionOnePost = (_id) =>
     gql(
       `query OneFind($post:String){
         PostFindOne(query:$post){
-       _id title text images{_id url}
-       owner{_id login avatar{_id url}}
-       createdAt
-       comments{
-         _id, createdAt, text  owner{_id login avatar{_id url}}
-         answers{
-           _id, createdAt, text owner{_id login  avatar{_id url}}
-         }
-       owner{_id login avatar{_id url}}}
-       likes{
-         _id
-         owner{				
-            _id login avatar {_id url}
-           }
-     }}}
-
+          _id createdAt title text 
+          images{_id url originalFileName}
+          comments {
+              _id createdAt text 
+              likes { _id owner {_id}}   
+              owner {_id login nick
+                      avatar {url}
+                  }
+              answers{
+                  _id  
+                  }
+                 answerTo{_id} 
+              }
+          likes{ _id
+              owner{_id}
+          }
+          owner {_id login nick
+              avatar {url}
+              }
+          }
+      }
       `,
       {
         post: JSON.stringify([{ _id }]),
@@ -473,7 +478,7 @@ export const actionGetCommentsOnePost = (postId) =>
     }`, { id: JSON.stringify([{ _id: postId }]) }))
 
 
-export const actionAddSubComment = (commentId, comment) =>
+export const actionAddSubComment = (commentId, newResult) =>
     actionPromise(
       'addSubComment',
       gql(
@@ -490,7 +495,7 @@ export const actionAddSubComment = (commentId, comment) =>
             answerTo: {
               _id: commentId,
             },
-            text: comment,
+            text: newResult,
           },
         },
       ),
@@ -519,21 +524,6 @@ export const actionAddSubComment = (commentId, comment) =>
 //   // await dispatch(actionOnePost(postId));
 // }
 
-export const actionAddSubFullComment = (postId, commentId, comment) => async (
-  dispatch,
-  getState,
-) => {
-  await dispatch(actionAddSubComment(commentId, comment))
-  const {
-    promise: {
-      addSubComment: { status },
-    },
-  } = getState()
-  if (status === 'FULFILLED') {
-    await dispatch(actionOnePost(postId))
-  }
-  // await dispatch(actionOnePost(postId));
-}
 // export const actionAddlike = _id =>
 //             actionPromise("addLike", gql(`mutation AddLike($like:LikeInput){
 //               LikeUpsert(like:$like){

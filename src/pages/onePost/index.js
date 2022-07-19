@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
 import { CComments, CCommentsOnePost } from '../../components/comment/Comment'
 import { CPostEditor } from '../createAndEditPost'
-import {AddComment} from '../../components/comment/AddComment'
+import  AddComment from '../../components/comment/AddComment'
 import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../../actions/typeSaga/postActionSaga'
 import { CLike} from '../../components/Like'
 import { ConstructorModal } from '../../helpers'
@@ -63,7 +63,6 @@ export const PagePost = ({
         </Col>
         <Col span={8}>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop:'100px' }}>
-            
             <LinkToUser
               _id={onePost?.owner?._id}
               login={onePost?.owner?.login}
@@ -81,10 +80,11 @@ export const PagePost = ({
           <h2> Text: {onePost?.text || ''} </h2>
           <Divider>Comments</Divider>
           <div className="Scroll">
-            <CCommentsOnePost
+            {/* <CCommentsOnePost
               postId={onePost?._id}
               comments={onePost?.comments || []}
-            />
+            /> */}
+            <CCommentsOnePost/>
           </div>
           <div style={{ display: 'flex', margin: '20px 0px' }}>
             <CLike likes={onePost?.likes} postId={onePost?._id} />

@@ -330,7 +330,7 @@ main {
 .ScrollForFeed {
   display: block;
   flex-direction: column;
-  height: 150px;
+  height: 20s0px;
   overflow-y: scroll;
 }
 .button {
@@ -364,6 +364,12 @@ main {
   margin: 20px;
 }
 
+.NumberPosts{
+  text-shadow: 1px 1px 1px rgb(81, 77, 77), 
+  3px 3px 5px rgb(72, 72, 76); 
+  // box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+
+}
 .Avatar {
   margin-left: 20px;
   width: 100px;
