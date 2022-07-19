@@ -1,5 +1,5 @@
 
-import { CLogout } from '../../components/LoginRegisterLogout'
+import { CLogout } from '../../components/authorization/LogOut'
 import { CSearch } from '../../components/Search_Users'
 import { Feed, AddPost, Explore, CUser } from '../../components/HeaderButtons'
 import { connect } from 'react-redux'

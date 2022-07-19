@@ -53,34 +53,15 @@ export const AddPost = ({ children }) => {
 export const LogOut = ({onClick}) => 
   <ImportOutlined className="Links" onClick={onClick} />
 
-// export const Feed = () => {
-//   return (
-//     <>
-//       <Link to={`/feed`}  onClick={()=>console.log('щас фид')}>
-//         <a className="button"> Feed </a>
-//       </Link>
-//     </>
-//   )
-// }
 
-// export const Explore = () => (
-//   <Link to={`/explore`}>
-//     <a size="large" className="button">
-//       {' '}
-//       Explore{' '}
-//     </a>
-//   </Link>
-// )
-
-const User = ({ my_Id, aboutMe: { _id, login, avatar } = {}, onMyPage }) => {
-  // console.log('_id in user', _id)
+const User = ({ my_Id, aboutMe: { _id, avatar } = {}, onMyPage }) => {
   
   useEffect(() => {
     if (my_Id)
       onMyPage(my_Id)
   }, [my_Id])
   return (
-    <Link to={`/profile/${_id}`} onClick={()=>console.log('щас юзер')}>
+    <Link to={`/profile/${_id}`}>
       {avatar?.url ? (
         <Avatar src={'/' + avatar?.url} size={50} className="Avatar" />
       ) : (

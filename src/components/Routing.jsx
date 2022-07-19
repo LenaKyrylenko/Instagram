@@ -1,4 +1,4 @@
-import { InputForm, CRegisterForm, CLoginForm } from './LoginRegisterLogout'
+// import { InputForm, CRegisterForm, CLoginForm } from './LoginRegisterLogout'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { CExplorePosts } from '../pages/explorePosts'
 import { CPostForFeed, Feed } from '../pages/feedPosts'
@@ -6,6 +6,8 @@ import { CPostEditor,CPostCreator } from '../pages/createAndEditPost'
 import { CPageAboutUser } from '../pages/profilePage'
 import { CPost } from '../pages/onePost'
 import { Provider, connect } from 'react-redux'
+import { LoginPageForm } from '../pages/login'
+import { RegisterPageForm } from '../pages/login'
 
 const Routing = ({ token }) => {
 
@@ -22,15 +24,15 @@ const Routing = ({ token }) => {
         </Switch>
         :
         <Switch>
-          <Route path="/login" exact component={CLoginForm} />
-          <Route path="/register" component={CRegisterForm} />
+          <Route path="/login" exact component={LoginPageForm} />
+          <Route path="/register" component={RegisterPageForm} />
           {/* <Route path="/input" component={InputForm} /> */}
           <Redirect from="/*" to="/login" />
           <CProtectedRoute
             roles={['anon']}
             fallback="/*"
-            path="/input"
-            component={InputForm}
+            path="/login"
+            component={LoginPageForm}
           />
         </Switch>
       }
