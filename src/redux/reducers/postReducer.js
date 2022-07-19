@@ -1,26 +1,27 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { actionOnePost } from '../../actions'
 
-const addAnswers = (comments, id, newResult, field) =>
+const addAnswers = (comments, commentId, newResult) =>
 comments.map(comment => {
-    if (comment._id === id) {
-        return { ...comment, [field]: newResult }
-    } else if (comment?.answers?.length) {
+  if (comment._id === commentId)
+  {
+        return { ...comment, 'answers': newResult }
+  }
+  else if (comment?.answers?.length) {
         return {
             ...comment,
-            answers: addAnswers(comment.answers, id, newResult, field)
+            answers: addAnswers(comment.answers, commentId, newResult)
         }
-    } else {
+  }
+  else {
         return { ...comment }
-    }
+  }
+  
 })
-
-
-
 
 export const postReducer = (
     state = {},
-    { skip, type, newPosts = [], onePost,newResult, commentId, answers,postsFeed, postsFeedCount },
+    { type, onePost,newResult, commentId},
   ) => {
   const types = {
     'POST': () => {
@@ -54,7 +55,7 @@ export const postReducer = (
       onePost: ({
         ...state?.onePost,
         comments:  addAnswers(state.onePost.comments,
-          commentId, newResult, 'answers')
+          commentId, newResult)
       }),
     })
   

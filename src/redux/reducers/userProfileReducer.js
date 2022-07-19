@@ -8,7 +8,6 @@ export const userProfileReducer = (
         return {
           ...state,
           aboutUser,
-          // allPosts,
         }
       },
 
@@ -16,17 +15,13 @@ export const userProfileReducer = (
         return {
           ...state,
           allPosts,
-          // allPosts,
         }
       },
       'ADD-USER-POSTS': () => {
         return {
           ...state,
           allPosts: state?.allPosts ? [...state.allPosts, ...newPosts] : [...newPosts],
-          // postsFeed: [...postsFeed || [], ...newPosts],
           countPosts: countPosts ? countPosts : newPostsCount
-      
-          // allPosts,
         }
       },
       
