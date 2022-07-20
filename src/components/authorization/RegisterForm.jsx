@@ -9,8 +9,8 @@ import {
   actionRegisterTypeSaga,
 } from '../../redux/saga'
 import InitialForm from './InitialForm'
-
-const RegisterForm = ({ onLogin, children, register }) => {
+import { actionClearPromiseForName } from '../../actions'
+const RegisterForm = ({ onLogin, children, register,onClearPromise }) => {
  
     useEffect(() => {
         if (register?.status === 'FULFILLED' && register?.payload === null) {
@@ -20,6 +20,7 @@ const RegisterForm = ({ onLogin, children, register }) => {
               marginTop: '80px',
             },
           })
+          &&onClearPromise("register")
         }
       }, [register])
 
@@ -37,5 +38,7 @@ export const CRegisterForm = connect(
     }),
     {
       onLogin: actionRegisterTypeSaga,
+      onClearPromise:actionClearPromiseForName
+
     },
   )(RegisterForm)

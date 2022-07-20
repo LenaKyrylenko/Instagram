@@ -11,8 +11,8 @@ import {
   actionRegisterTypeSaga,
 } from '../../redux/saga'
 import InitialForm from './InitialForm'
-
-const LoginForm = ({ onLogin, children, auth }) => {
+import {actionClearPromiseForName} from '../../actions/index'
+const LoginForm = ({ onLogin, children, auth, onClearPromise }) => {
  
   useEffect(() => {
     if (auth?.status === 'FULFILLED' && auth?.payload === null) {
@@ -22,8 +22,9 @@ const LoginForm = ({ onLogin, children, auth }) => {
           marginTop: '80px',
         },
       })
-
+ && onClearPromise('auth')
     }
+   
   }, [auth])
 
  
@@ -35,11 +36,12 @@ const LoginForm = ({ onLogin, children, auth }) => {
 }
 export const CLoginForm = connect(
     (state) => ({
-      children: `Sign In`,
+      // children: `Sign In`,
       auth: state.promise?.auth,
     }),
     {
       onLogin: actionLoginTypeSaga,
+      onClearPromise:actionClearPromiseForName
   
     },
   )(LoginForm)

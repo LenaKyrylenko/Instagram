@@ -251,7 +251,7 @@ const EditSetting = ({
                   : true
               }
               onClick={saveNewPassword}
-              size="large"
+              size="x-large"
               type="primary"
             >
               Save new password

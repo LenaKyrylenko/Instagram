@@ -90,7 +90,7 @@ export const LinkWithSubscribe =  ({
         console.log('my_id', myId)}
       
        { myId == _id ?
-          console.log('DDDDDDDDDD') :
+          null :
         <div style={{
             right: '0',
     position: 'absolute', marginRight:'20px'}}>

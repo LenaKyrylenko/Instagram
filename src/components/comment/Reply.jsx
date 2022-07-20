@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { Input, Button } from 'antd'
 import { connect } from 'react-redux'
 import { actionAddSubCommentTypeSaga } from '../../actions/typeSaga/postActionSaga'
-import { SpoilerButton } from './SpoilerButton'
+import { ReplyButton } from './SpoilerButton'
 export const CommentAction = ({ commentId }) => {
   return (
     <>
       <div style={{ flexDirection: 'column' }}>
-        <SpoilerButton text={'Reply to'}
+        <ReplyButton text={'Reply to'}
         
           style={{margin:'0 auto', padding:'0 auto'}}>
           <CCommentsForReply  commentId={commentId}  />
-        </SpoilerButton>
+        </ReplyButton>
       </div>
     </>
   )

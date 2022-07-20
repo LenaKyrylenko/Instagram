@@ -44,7 +44,7 @@ const InitialForm = ({ onLogin, children }) => {
             },
           ]}
           style={{
-            margin: '0 auto',
+            // margin: '0 auto',
 
             // textAlign: 'center',
           }}
@@ -54,15 +54,14 @@ const InitialForm = ({ onLogin, children }) => {
             value={login}
             size="medium"
             onChange={(e) => setLogin(e.target.value)}
+          
           />
-              </Form.Item>
-              <div style={{textAlign:'left', marginLeft:'30px', margin:'10px' }}>
-              
-        <Text type="secondary" style={{color:'rgb(35, 60, 107)'}} >
+
+           <Text type="secondary" style={{color:'rgb(35, 60, 107)', margin:'20px 5px'}} >
           {' '}
           Login must be at least 5 characters{' '}
         </Text>
-</div>
+              </Form.Item>
         <Form.Item
           label="Password"
           name="password"
@@ -73,25 +72,23 @@ const InitialForm = ({ onLogin, children }) => {
               message: 'Please input your password!',
             },
           ]}
-          style={{
-            margin: '0 auto',
+          // style={{
+          //   margin: '0 auto',
 
-            // textAlign: 'center',
-          }}
+          //   // textAlign: 'center',
+          // }}
         >
           <Input
             size="medium"
             type={checked ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          />
-              </Form.Item>
-              <div style={{textAlign:'left', marginLeft:'30px',margin:'10px' }}>
-        <Text type="secondary"  style={{color:'rgb(35, 60, 107)'}}>
+          /> <Text type="secondary"  style={{color:'rgb(35, 60, 107)', margin:'20px 0px'}}>
           Password must contain at least eight characters, include letters,
           numbers and special symbols{' '}
         </Text>
-</div>
+              </Form.Item>
+            
         <Form.Item
           name="checked"
           valuePropName="checked"

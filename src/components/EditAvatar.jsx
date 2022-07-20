@@ -25,11 +25,9 @@ const EditAvatar = ({
     fileStatus?.status == 'FULFILLED' &&
       setState({
         ...state,
-        // ...state?.avatar?._id,
         ...fileStatus?.payload,
       })
   }, [fileStatus])
-  // onSaveAvatar(state?._id, myId)&&
   const saveAvatar = () => {
     if (fileStatus)
       onSaveAvatar(state?._id, myId) &&
@@ -50,7 +48,6 @@ const EditAvatar = ({
         {fileStatus?.payload?.url && (
           <Image
             style={{
-              // marginBottom: '30px',
               width: '200px',
               objectFit: 'cover',
               height: '150px',

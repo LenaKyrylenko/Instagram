@@ -22,20 +22,9 @@ const DefaultLink = ({link, tag}) =>
 }
 export const Feed = () =>
   <DefaultLink link={"/feed"} tag={<HomeOutlined />} />
-{/* <HomeOutlined /> */ }
 export const Explore = () =>
   <DefaultLink link={"/explore"} tag={<CompassOutlined />} />
 
-{/* <CompassOutlined /> */}
-// export const Feed = () => {
-//   return (
-//     <>
-//       <Link to={`/feed`}  onClick={()=>console.log('щас фид')}>
-//         <a className="button"> Feed </a>
-//       </Link>
-//     </>
-//   )
-// } 
 
 export const AddPost = ({ children }) => {
   const [state, setState] = useState(false)
@@ -61,7 +50,7 @@ const User = ({ my_Id, aboutMe: { _id, avatar } = {}, onMyPage }) => {
       onMyPage(my_Id)
   }, [my_Id])
   return (
-    <Link to={`/profile/${_id}`}>
+    <Link to={`/profile/${my_Id}`}>
       {avatar?.url ? (
         <Avatar src={'/' + avatar?.url} size={50} className="Avatar" />
       ) : (

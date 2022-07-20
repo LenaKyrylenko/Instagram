@@ -122,12 +122,13 @@ export const PageAboutUser = ({
                     text={'following'}
                   />
                 </div>
-                <h3> nick: {nick == null ? login : nick}</h3>
+                <h3> nick: {nick == null ? login : nick}</h3>  
+              
                 {checkMyId ? 
                    <CEditSetting />
                   : 
                   <CSubscribe />
-                }
+                  }
               </div>
             </Row>
           </section>

@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import { Row, Col,Avatar, Input,  Popover } from 'antd'
 import user from '../materials/user.png'
 import { actionSearchUser } from '../actions'
-import {UserOutlined } from '@ant-design/icons'
+import {UserOutlined,SearchOutlined } from '@ant-design/icons'
 
 import { actionFullProfilePageUser } from '../redux/saga'
-import { LinkWithSubscribe } from './LinkToUser'
+import LinkToUser from './LinkToUser'
 export const ResultUserFind = ({
   userFind = [],
   handleCancel, 
@@ -17,7 +17,7 @@ export const ResultUserFind = ({
     <div className="ResultUserFind">
       {userFind?.map(({ _id, login, avatar }) => (
        
-        <LinkWithSubscribe _id={_id} login={login}
+        <LinkToUser _id={_id} login={login}
         
           avatar={avatar} size={40} padding={'0px'}
           onClick={handleCancel} key={_id} />
@@ -43,6 +43,7 @@ const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {
           />
         }
       >
+        
         <Search
           // style={{ width: '25%' }}
           placeholder="Enter search user"
@@ -50,7 +51,7 @@ const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {
           prefix={<UserOutlined />}
           enterButton="Search"
           size="large"
-          onSearch={onSearchUser}
+          onSearch={onSearchUser} 
         />
       </Popover>
     </>

@@ -5,16 +5,33 @@ export const SpoilerButton = ({ text, children, style }) => {
     const [opened, setOpened] = useState(false)
     return (
       <>
-         <Text type="secondary" strong
+         <Button
           onClick={() => {
             setOpened(!opened)
           }}
           style={style}
         >
           {text}
-          </Text>
+          </Button>
        
         {opened && children}
       </>
     )
-  }
+}
+export const ReplyButton = ({ text, children, style }) => {
+  const [opened, setOpened] = useState(false)
+  return (
+    <>
+       <Text type="secondary" strong
+        onClick={() => {
+          setOpened(!opened)
+        }}
+        style={style}
+      >
+        {text}
+        </Text>
+     
+      {opened && children}
+    </>
+  )
+}

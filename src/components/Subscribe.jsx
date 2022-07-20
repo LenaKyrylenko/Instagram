@@ -19,18 +19,19 @@ const Subscribe = ({
   console.log('check following in subscribe component', checkFollowId)
     return (
       <>
-        <div style={{ display: 'flex' }} onClick={()=>changeSubscribe(followId,checkFollowId)}>
+        <div style={{ display: 'flex', alignItems:'center' }} onClick={()=>changeSubscribe(followId,checkFollowId)}>
           {checkFollowId ?
           
             (
-            <Button
+            <Button style={{width:'120px'}}
               size="large" type="primary"
                danger
             >
               Unsubscribe
             </Button>
           ) : (
-            <Button
+              <Button
+              style={{width:'120px'}}
               size="large"
                 type="primary"
                 primary
