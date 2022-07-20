@@ -25,7 +25,7 @@ import { SmileOutlined, SmileFilled } from '@ant-design/icons'
       )}
       <Input
         style={{
-          display: 'flex',
+          display: 'block',
           width,
           margin: '0 10px',
         }}

@@ -27,6 +27,11 @@ import  AddComment from '../../components/comment/AddComment'
 // import { Like, Likes } from '../../components/like/Like'
 import { MyCarousel } from '../../components/post/Carousel'
 import load from '../../materials/load.gif'
+import {
+  actionAddSubCommentTypeSaga,
+  actionFindSubCommentTypeSaga,
+} from '../../actions/typeSaga/postActionSaga'
+import { CLikeFeed } from '../../components/like/Like'
 const MyPostFeed = ({
   // myData,
   postsFeed = [],
@@ -75,14 +80,12 @@ const MyPostFeed = ({
           <Col span={12} offset={6}>
             <div>
               {postsFeed?.length == 0 && (
-                <div>
-                <center>
+                <div style={{textAlign:'center'}}>
                   <h1> You have no posts to feed! </h1>
                   <h1>
                     {' '}
                     Post and follow other users!{' '}
                     </h1>
-                  </center>
                 </div>
               )}
               {(postsFeed || []).map(
@@ -93,25 +96,27 @@ const MyPostFeed = ({
                       size={50} />
                     <MyCarousel images={images} />
                     <div style={{margin:"0 10%"}}>
-                    <h1 className='Title'> Title: {title || ''}</h1>
-                    <h1  className='Title'> Text: {text || ''}</h1>
+                    <h2 className='Title'> Title: {title || ''}</h2>
+                    <h2  className='Title'> Text: {text || ''}</h2>
                     <Divider>Comments</Divider>
                     <div style={{ margin: '10px',position: 'relative' }}>
                     <div className="ScrollForFeed">
                       <CCommentsForFeed
                         postId={_id}
-                        comments={comments || []}
+                        comments={comments}
                       />
                       </div>
-                      {/* <center> */}
                       <div style={{ display: 'flex', margin: '20px 0px' }}>
-                        {/* <CLikeForFeed likes={likes} postId={_id} /> */}
+                      <CLikeFeed likes={likes} postId={_id}/>
+                          {/* <CLikeForFeed likes={likes} postId={_id} /> */}
 
                           <AddComment addComment={addComment}
                             postId={_id} style={{
                               position: 'absolute', bottom: '70px',
                               zIndex: '100'
-                            }} />
+                            }}
+                          width={'300px'}
+                          />
                     
                         </div>
                         </div>
@@ -139,10 +144,16 @@ const MyPostFeed = ({
 
 const CCommentsForFeed = connect(
   (state) => ({
+    // postId: state.promise.onePost?.payload?._id,
+    addSubComment: state.promise?.addSubComment,
     addComment: state.promise?.addComment?.payload,
+
+    // addComment: state.promise?.addComment?.payload,
     // addSubComment: state.promise?.addSubComment,
   }),
   {
+    findSubComment: actionFindSubCommentTypeSaga,
+
     // addComment: actionAddFullCommentFeed,
     // addCommentReply: actionAddSubFullComment,
     // findSubComment: actionFindSubComment,

@@ -84,14 +84,12 @@ const PostEditor = ({
     })
   const disabledBtn =
     state?.images && state?.title && state?.text ? false : true
-  console.log('STATEEE IDDDD', state?._id)
   const savePost = () =>
     onSave(state) &&
     message.success(`Post published success!`) &&
     history.push(`/profile/${myId}`)
   const checkLength = () => {
     if (state?.images?.length > 8) {
-      console.log('state?.images?.length', state?.images?.length)
       message.error('Error, please, upload maximum 8 elements')
       state['images'] = []
       return false
@@ -122,20 +120,20 @@ const PostEditor = ({
                   ))}
               </SortableContainer>
       </div>
-      <div style={{textAlign:'center'}}>
+      
         {checkLength()}
-      </div>
+     
           {/* </Col> */}
         {/* </Col> */}
       {/* </Row> */}
 
-      <h1 className="Title"> Title </h1>
+      <h2 className="Title"> Title </h2>
       <CustomInput
         state={state?.title || ''}
         className="Input"
         onChangeText={onChangeTitle}
       />
-      <h1 className="Title"> Text </h1>
+      <h2 className="Title"> Text </h2>
 
       <CustomInput
         state={state?.text || ''}
@@ -147,7 +145,7 @@ const PostEditor = ({
         <Button
           style={{
             display: 'flex',
-            margin: '10px',
+            marginTop: '30px',
             alignItems: 'center',
             alignContent: 'center',
             justifyContent: 'center',

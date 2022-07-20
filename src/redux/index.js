@@ -26,7 +26,8 @@ onePostWatcher,
   registerWatcher,
   postsWatcher,
   addSubCommentWatcher,
-  getSubCommentWatcher
+  getSubCommentWatcher,
+  changeLikePostFeedWatcher
 } from './saga'
 import createSagaMiddleware from 'redux-saga' //функция по созданию middleware
 import {
@@ -71,7 +72,8 @@ function* rootSaga() {
     postsWatcher(),
     addCommentFeedWatcher(),
     addSubCommentWatcher(),
-    getSubCommentWatcher()
+    getSubCommentWatcher(),
+    changeLikePostFeedWatcher()
     // addCommentFeedWatcher()
   ])
 }

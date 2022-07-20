@@ -34,19 +34,12 @@ export const feedReducer = (
         postsFeedCount: 0,
     }),
   
-      'ADD-LIKE-POSTS': () => ({
+      'LIKE-POST-FEED': () => ({
         ...state,
         postsFeed: postsFeed?.map((p) =>
           p._id === postId ? (p = { ...p, likes: [...newResult] }) : p,
         ),
       }),
-      'DELETE-LIKE-POSTS': () => ({
-        ...state,
-        postsFeed: postsFeed?.map((p) =>
-          p._id === postId ? (p = { ...p, likes: [...newResult] }) : p,
-        ),
-      }),
-  
       'ADD-COMMENT-POSTS': () => ({
         ...state,
         
@@ -69,15 +62,11 @@ export const actionClearFeedPostsType= () =>
   ({ type: 'CLEAR_POSTS' })
 
 //type
-export const actionAddLikePostInTape = (postId) =>
- ({ type: 'ADD-LIKE-POSTS', postId })
+export const actionAddLikePostFeedType = (newResult) =>
+ ({ type: 'LIKE-POST-FEED',newResult })
 
- export const actionDeleteLikePostInTape = (likeId, postId) => ({
-    type: 'DELETE-LIKE-POSTS',
-    likeId,
-    postId,
-  })
-  export const actionAddCommentPostFeedTape = (postId, newResult) => ({
+
+  export const actionAddCommentPostFeedType = (postId, newResult) => ({
     type: 'ADD-COMMENT-POSTS',
     postId,
     newResult,

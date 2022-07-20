@@ -2,12 +2,7 @@ import { useDropzone } from 'react-dropzone'
 import React, { useEffect } from 'react'
 import { Button,Image } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import { sortableContainer, SortableElement, sortableElement, SortableHandle } from 'react-sortable-hoc'
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
-import { Upload } from "antd";
-import { uploadFileType } from '../actions'
-import { Row, Col } from 'antd'
-
 export function Dropzone({ onLoad }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
   const files = acceptedFiles.map((file) => (
@@ -15,8 +10,6 @@ export function Dropzone({ onLoad }) {
       {file.path} - {file.size} bytes
     </li>
   ))
-  // console.log('acceptedFiles name', acceptedFiles[0]?.name)
-  // console.log('acceptedFiles',acceptedFiles)
   useEffect(() => {
     if (acceptedFiles) onLoad(acceptedFiles)
   }, [acceptedFiles])
@@ -24,7 +17,7 @@ export function Dropzone({ onLoad }) {
     <section className="container">
       <div {...getRootProps({ className: 'Dropzone' })}>
         <input {...getInputProps()} />
-        <Button type="default" size="large" icon={<UploadOutlined />}>
+        <Button type="dashed" size="large" icon={<UploadOutlined />}>
           Drag 'n' drop some files here, or click to select files
         </Button>
       </div>

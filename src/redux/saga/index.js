@@ -51,7 +51,8 @@ import {
   actionClearFeedPosts,
   actionFeedType,
   actionClearFeedPostsType,
-  actionAddCommentPostFeedTape
+  actionAddCommentPostFeedType,
+  actionAddLikePostFeedType
 } from '../reducers/feedReducer'
 import { actionProfilePageDataTypeUser,actionCountPostsType } from '../reducers/userProfileReducer'
 import { actionRemoveDataAboutMe,actionUpdateAvatarType } from '../reducers/myProfileReducer'
@@ -86,6 +87,7 @@ function* loginWorker({login, password}){ //обработчик экшона FU
   if (token) {
       yield put(actionAuthLogin(token));
   }
+  
 }
 export function* loginWatcher() {
 yield takeEvery("FULL_LOGIN", loginWorker)
@@ -306,7 +308,7 @@ function* addCommentFeedWorker({ postId, text }) {
     const { comments } = yield call(promiseWorker,
       actionGetCommentsOnePost(postId))
     if (comments)
-      yield put (actionAddCommentPostFeedTape(postId,comments))
+      yield put (actionAddCommentPostFeedType(postId,comments))
   }
 }
 export function* addCommentFeedWatcher(){
@@ -331,8 +333,10 @@ export const actionChangeLike = (likeId, postId) =>
 ({
     type:"CHANGE_LIKE_POST", likeId,postId
 })
+
+
   
-function* changeLikePostWorker({ likeId, postId }) {
+function* changeLikeWorker({ likeId, postId }) {
   console.log('likeId', likeId)
   console.log('postId', postId)
 
@@ -340,20 +344,42 @@ function* changeLikePostWorker({ likeId, postId }) {
     likeId ? actionDeleteLike(likeId, postId) : actionAddLike(postId)
 
   yield call(promiseWorker, changeOneLike())
-  const { likes } = yield call(promiseWorker, actionFindLikes(postId))
-  console.log('likes in worker', likes)
+  return yield call(promiseWorker, actionFindLikes(postId))
   
+}
+
+function* changeLikePostWorker({ likeId, postId }) {
+ 
+  const { likes } = yield call(changeLikeWorker, {likeId, postId})
   if (likes) {
   
-    yield call(promiseWorker, actionOnePost(postId))
+    // yield call(promiseWorker, actionOnePost(postId))
     yield put(actionChangeLikeType(likes))
   }
 }
 
+function* changeLikePostFeedWorker({ likeId, postId }) {
+  const { likes } = yield call(changeLikeWorker, {likeId, postId})
+  if (likes) {
+  
+    // yield call(promiseWorker, actionOnePost(postId))
+    yield put(actionAddLikePostFeedType(likes))
+  }
+}
 
 
 export function* changeLikePostWatcher() {
   yield takeLeading("CHANGE_LIKE_POST", changeLikePostWorker)
+}
+
+//change like in post feed
+export const actionChangeFeedLike = (likeId, postId) =>
+({
+    type:"CHANGE_LIKE_POST_FEED", likeId,postId
+})
+
+export function* changeLikePostFeedWatcher() {
+  yield takeLeading("CHANGE_LIKE_POST_FEED", changeLikePostFeedWorker)
 }
 
 // create and edit post
@@ -480,10 +506,14 @@ function* clearAllDataWorker() {
   const logOut = yield put (actionAuthLogout())
   if (logOut) {
     history.push('/input')
-      yield put(actionClearDataUserType())
-      yield put(actionClearFeedPostsType())
-      yield put(actionClearAboutMeType())
-      yield put(actionAllClearPromiseType())
+    yield all([
+
+       put(actionClearDataUserType()),
+       put(actionClearFeedPostsType()),
+       put(actionClearAboutMeType()),
+       put(actionAllClearPromiseType())
+    ])
+      
     
   }
 }

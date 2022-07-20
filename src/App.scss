@@ -17,9 +17,9 @@ body {
   padding: 10px;
   border-width: 2px;
   border-radius: 2px;
-  background-color: #74d2e7;
+  // background-color: #74d2e7;
   color: #1d5b78;
-  outline: none;
+  // outline: none;
   transition: border 0.24s ease-in-out;
   font-size: medium;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -92,7 +92,7 @@ body {
   margin: 0 auto;
   background-color: white;
   border: 6px solid #dbebfa;
-  padding: 10px;
+  padding: 30px;
   border-radius: 25px;
   display: 'flex';
   align-items: 'center';
@@ -117,18 +117,20 @@ main {
 }
 .Title {
   text-align: left;
-  margin: 10px;
+  margin: 20px 0px;
 }
 .Input {
   display: flex;
-  width: 90%;
   padding: 5px;
-  border-radius: 20px;
+  margin:10px;
+  width: 80%;
+  border-radius: 5px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 30px;
+  font-size: 20px;
 }
 .container {
-  padding: 10px;
+  margin: 10px;
+  background-color: rgb(84, 132, 222);
   margin-top: 20px;
 }
 .AboutMe {
@@ -192,6 +194,7 @@ main {
   margin-bottom: 20px;
 }
 .PostFeed {
+
   border-width: 20;
   border-color: #ffffff;
   background: #edf8f89e;
@@ -215,6 +218,7 @@ main {
    rgba(29,253,182,1) 100%);
   transition: 0.3s;
   right:0;
+  
 }
 .LoginPage{
   margin:150px;
@@ -318,9 +322,8 @@ main {
 }
 
 .NumberPosts{
-  text-shadow: 1px 1px 1px rgb(81, 77, 77), 
-  3px 3px 5px rgb(72, 72, 76); 
-  // box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+float: right;
+margin-bottom: 10px;
 
 }
 .Avatar {
