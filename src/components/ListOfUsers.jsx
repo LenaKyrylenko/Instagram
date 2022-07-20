@@ -1,6 +1,7 @@
 import { ConstructorModal } from '../helpers'
 import { ResultUserFind } from './Search_Users'
 import React, { useState } from 'react'
+import LinkToUser, {LinkWithSubscribe} from '../components/LinkToUser'
 export const ListOfUsers = ({
   listResult,
   listUsers,
@@ -33,12 +34,22 @@ export const ListOfUsers = ({
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
       >
-        <ResultUserFind
+         
+     <div className="">
+      {listUsers?.map(({ _id, login, avatar }) => (
+       
+        <LinkToUser _id={_id} login={login}
+        
+          avatar={avatar} size={40} padding={'0px'}
+          onClick={handleCancel} />
+      ))}
+      </div>
+        {/* <ResultUserFind
           size={'40px'}
           onPageData={onPageData}
           handleCancel={handleCancel}
           userFind={listResult}
-        />
+        /> */}
       </ConstructorModal>
     </>
   )

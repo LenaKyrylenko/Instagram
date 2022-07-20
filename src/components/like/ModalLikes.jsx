@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ConstructorModal } from '../../helpers'
 import LikeList from './LikeList'
-const ModalLikes = ({ likes }) => {
+const ModalLikes = ({ likes, myId }) => {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const showModal = () => {
       setIsModalVisible(true)
@@ -22,7 +22,7 @@ const ModalLikes = ({ likes }) => {
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
         >
-          <LikeList likes={likes} />
+                <LikeList likes={likes} myId={myId} />
         </ConstructorModal>
       </>
     )

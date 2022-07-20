@@ -34,7 +34,7 @@ console.log('like id in component', likeId)
             <HeartOutlined className='UnLike' />
           )}
         </h3>
-        <ModalLikes likes={likes}/>
+        <ModalLikes likes={likes} myId={ my_Id} />
       </div>
     </>
   )

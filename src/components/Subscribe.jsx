@@ -49,5 +49,15 @@ export const CSubscribe = connect((state) => ({
 }),
     {
       changeSubscribe:actionChangeSubscribeSaga
-    }
+  }
+)(Subscribe)
+
+export const CSubscribeLinkUser = connect((state) => ({
+  myId: state.auth?.payload?.sub?.id,
+  aboutMeFollowing: state.myData?.aboutMe?.following,
+  // followId: state.userData?.aboutUser?._id,
+}),
+  {
+    changeSubscribe:actionChangeSubscribeSaga
+  }
 )(Subscribe)

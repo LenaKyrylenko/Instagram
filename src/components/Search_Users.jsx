@@ -6,7 +6,7 @@ import { actionSearchUser } from '../actions'
 import {UserOutlined } from '@ant-design/icons'
 
 import { actionFullProfilePageUser } from '../redux/saga'
-import LinkToUser from './LinkToUser'
+import { LinkWithSubscribe } from './LinkToUser'
 export const ResultUserFind = ({
   userFind = [],
   handleCancel, 
@@ -17,7 +17,7 @@ export const ResultUserFind = ({
     <div className="ResultUserFind">
       {userFind?.map(({ _id, login, avatar }) => (
        
-        <LinkToUser _id={_id} login={login}
+        <LinkWithSubscribe _id={_id} login={login}
         
           avatar={avatar} size={40} padding={'0px'}
           onClick={handleCancel} key={_id} />
