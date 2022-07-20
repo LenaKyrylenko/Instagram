@@ -32,7 +32,7 @@ export const ConstructorModal = ({
   )
 }
 
-export function Basic({ onLoad }) {
+export function Dropzone({ onLoad }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
   const files = acceptedFiles.map((file) => (
     <li key={file.path}>

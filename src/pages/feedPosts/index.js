@@ -10,7 +10,10 @@ import {
   actionDeleteFullLikeForFeed,
   actionAddFullLike,
 } from '../../actions'
-import { actionClearFeedPostsType,actionAddCommentFeedTypeSaga } from
+import {
+  actionClearFeedPostsType,
+  actionAddCommentFeedTypeSaga
+} from
   '../../redux/reducers/feedReducer'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
@@ -21,8 +24,8 @@ import { Row, Col } from 'antd'
 import LinkToUser from '../../components/LinkToUser'
 import { Comments } from '../../components/comment/Comment'
 import  AddComment from '../../components/comment/AddComment'
-import { Like, Likes } from '../../components/Like'
-import { MyCarousel } from '../../components/Carousel'
+// import { Like, Likes } from '../../components/like/Like'
+import { MyCarousel } from '../../components/post/Carousel'
 import load from '../../materials/load.gif'
 const MyPostFeed = ({
   // myData,
@@ -164,25 +167,25 @@ export const CPostForFeed = connect(
   },
 )(MyPostFeed)
 
-const AllLikeComp = ({ my_Id, addLike, deleteLike, likes, postId }) => (
-  <Like
-    my_Id={my_Id}
-    addLike={addLike}
-    deleteLike={deleteLike}
-    likes={likes}
-    postId={postId}
-  >
-    <Likes likes={likes} />
-  </Like>
-)
-export const CLikeForFeed = connect(
-  (state) => ({
-    my_Id: state.auth?.payload?.sub?.id || '',
-    addLike: state.promise?.addLike?.payload,
-    deleteLike: state.promise?.deleteLike?.payload,
-  }),
-  {
-    // addLike: actionAddFullLikeFeed,
-    // deleteLike: actionDeleteFullLikeFeed,
-  },
-)(AllLikeComp)
+// const AllLikeComp = ({ my_Id, addLike, deleteLike, likes, postId }) => (
+//   <Like
+//     my_Id={my_Id}
+//     addLike={addLike}
+//     deleteLike={deleteLike}
+//     likes={likes}
+//     postId={postId}
+//   >
+//     <Likes likes={likes} />
+//   </Like>
+// )
+// export const CLikeForFeed = connect(
+//   (state) => ({
+//     my_Id: state.auth?.payload?.sub?.id || '',
+//     addLike: state.promise?.addLike?.payload,
+//     deleteLike: state.promise?.deleteLike?.payload,
+//   }),
+//   {
+//     // addLike: actionAddFullLikeFeed,
+//     // deleteLike: actionDeleteFullLikeFeed,
+//   },
+// )(AllLikeComp)

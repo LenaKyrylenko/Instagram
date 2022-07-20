@@ -1,7 +1,7 @@
 import { actionOnePost, actionUploadFile } from '../../actions'
 import user from '../../materials/user.png'
 import React, { useState, useEffect } from 'react'
-import { Card } from '../../components/PostCard'
+import { Card } from '../../components/post/PostCard'
 import ListOfUsers from '../../components/ListOfUsers'
 import { connect } from 'react-redux'
 import { Avatar, Button } from 'antd'

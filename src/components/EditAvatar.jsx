@@ -7,7 +7,7 @@ import {
   actionUserUpdate,
 } from '../actions'
 import React, { useState, useEffect } from 'react'
-import { Basic, ConstructorModal } from '../helpers'
+import { Dropzone, ConstructorModal } from '../helpers'
 import { Input } from './Input'
 import {actionSetAvatarTypeSaga} from '../redux/saga'
 const EditAvatar = ({
@@ -45,7 +45,7 @@ const EditAvatar = ({
           flexDirection: 'column',
         }}
       >
-        <Basic onLoad={onFileDrop} />
+        <Dropzone onLoad={onFileDrop} />
 
         {fileStatus?.payload?.url && (
           <Image

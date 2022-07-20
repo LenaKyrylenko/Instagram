@@ -4,7 +4,7 @@ import {
     actionFullExplorePosts,
   } from '../../actions'
   import { Row, Col } from 'antd'
-  import { Card } from '../../components/PostCard'
+  import { Card } from '../../components/post/PostCard'
   import React, { useEffect, useState } from 'react'
   import { connect } from 'react-redux'
   import {

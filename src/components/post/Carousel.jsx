@@ -1,6 +1,6 @@
 import { Carousel } from 'antd'
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
-import photoNotFound from '../materials/photoNotFound.png'
+import defaultPhoto from '../../materials/default-photo.png'
 
 const SampleNextArrow = (props) => {
     const { onClick } = props
@@ -54,7 +54,7 @@ const SampleNextArrow = (props) => {
               )
             ) : (
               <div >
-                <img className="PostImage" src={photoNotFound} />
+                <img className="PostImage" src={defaultPhoto} />
               </div>
             )}
           </Carousel>

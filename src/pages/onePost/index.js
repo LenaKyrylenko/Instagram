@@ -13,14 +13,14 @@ import { CComments, CCommentsOnePost } from '../../components/comment/Comment'
 import { CPostEditor } from '../createAndEditPost'
 import  AddComment from '../../components/comment/AddComment'
 import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../../actions/typeSaga/postActionSaga'
-import { CLike} from '../../components/Like'
+import { CLike} from '../../components/like/Like'
 import { ConstructorModal } from '../../helpers'
 import React, { useState, useEffect } from 'react'
 import {
   actionAddFullCommentFeed,
 } from '../../redux/saga'
 import { LinkToUser } from '../../components/LinkToUser'
-import { MyCarousel } from '../../components/Carousel'
+import { MyCarousel } from '../../components/post/Carousel'
 import {EditMyPostButton} from '../../components/EditPostButton'
 
 

@@ -359,7 +359,7 @@ export const actionOnePost = (_id) =>
           images{_id url originalFileName}
           comments {
               _id createdAt text 
-              likes { _id owner {_id}}   
+              likes { _id owner {_id login nick avatar {url} }}   
               owner {_id login nick
                       avatar {url}
                   }
@@ -368,9 +368,12 @@ export const actionOnePost = (_id) =>
                   }
                  answerTo{_id} 
               }
-          likes{ _id
-              owner{_id}
-          }
+              likes{
+                _id
+                owner{				
+                   _id login avatar {url}
+                  }
+            }
           owner {_id login nick
               avatar {url}
               }
