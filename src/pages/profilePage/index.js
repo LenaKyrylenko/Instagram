@@ -1,11 +1,11 @@
-import { actionOnePost, actionUploadFile } from '../../actions'
+import {actionOnePost} from '../../actions/query/postQuery'
 import user from '../../materials/user.png'
 import React, { useState, useEffect } from 'react'
 import { Card } from '../../components/post/PostCard'
 import ListOfUsers from '../../components/ListOfUsers'
 import { connect } from 'react-redux'
 import { Avatar, Button } from 'antd'
-import { actionFullProfilePageUser } from '../../redux/saga'
+import { actionFullProfilePageUserTypeSaga } from '../../actions/typeSaga/userTypesSaga'
 import { Row, Col } from 'antd'
 import {actionClearAllPostsType,actionPostsPortionTypeSaga} from '../../redux/reducers/userProfileReducer'
 import { CSubscribe } from '../../components/Subscribe'
@@ -170,7 +170,7 @@ export const CPageAboutUser = connect(
     userPostPromise:state.promise?.allPosts
   }),
   {
-    onAboutUser: actionFullProfilePageUser,
+    onAboutUser: actionFullProfilePageUserTypeSaga,
     onPost: actionOnePost,
     onClearPosts: actionClearAllPostsType,
     onUserPosts:actionPostsPortionTypeSaga

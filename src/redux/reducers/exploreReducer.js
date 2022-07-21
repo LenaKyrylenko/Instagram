@@ -34,19 +34,3 @@ export const exploreReducer = (
     }
     return state
 }
-// export const actionAllClearExplore = () => async (dispatch) => {
-//   Promise.all([
-//     await dispatch(actionClearPromiseForName('explorePosts')),
-//     await dispatch(actionClearPromiseForName('explorePostsCount')),
-//       await dispatch(actionClearExplorePosts())
-//   ])
-
-// }
-export const actionClearExplorePosts = () =>
-  ({ type: 'CLEAR_EXPLORE_POSTS' })
-
-export const actionExploreType = (newPosts,newPostsExploreCount) => 
-  ({ type: 'ADD-EXPLORE-POSTS', newPosts, newPostsExploreCount })
-  
-  export const actionExploreTypeCount = (explorePostsCount) => 
-  ({ type: 'EXPLORE-COUNT', explorePostsCount })

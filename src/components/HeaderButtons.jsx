@@ -1,5 +1,5 @@
 import user from '../materials/user.png'
-import { actionFullProfilePageUser } from '../redux/saga'
+import { actionFullProfilePageUserTypeSaga } from '../actions/typeSaga/userTypesSaga'
 import { Avatar, Button } from 'antd'
 import { CSearch } from './Search_Users'
 import { Link} from 'react-router-dom'
@@ -65,5 +65,5 @@ export const CUser = connect(
     my_Id: state.auth?.payload?.sub?.id,
     aboutMe: state.myData.aboutMe,
   }),
-  { onMyPage: actionFullProfilePageUser },
+  { onMyPage: actionFullProfilePageUserTypeSaga },
 )(User)

@@ -1,7 +1,7 @@
 import { HeartOutlined, HeartFilled } from '@ant-design/icons'
 import {
-  actionChangeLike, actionChangeFeedLike
-} from '../../redux/saga'
+  actionChangeLikeTypeSaga, actionChangeFeedLikeTypeSaga
+} from '../../actions/typeSaga/likeTypesSaga'
 import { connect } from 'react-redux'
 import ModalLikes from './ModalLikes'
 export const Like = ({
@@ -46,7 +46,7 @@ export const CLike = connect(
     my_Id: state.auth?.payload?.sub?.id || '',
   }),
   {
-    changeLike: actionChangeLike
+    changeLike: actionChangeLikeTypeSaga
   },
 )(AllLikes)
 
@@ -55,7 +55,7 @@ export const CLikeFeed = connect(
     my_Id: state.auth?.payload?.sub?.id || '',
   }),
   {
-    changeLike: actionChangeFeedLike
+    changeLike: actionChangeFeedLikeTypeSaga
   },
 )(AllLikes)
 

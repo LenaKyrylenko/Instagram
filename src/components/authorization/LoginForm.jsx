@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom'
 import { message } from 'antd'
 import { useEffect } from 'react'
 import { ImportOutlined } from '@ant-design/icons'
-import {
-  actionClearDataLogoutTypeSaga,
-  actionLoginTypeSaga,
-  actionRegisterTypeSaga,
-} from '../../redux/saga'
+// import {
+//   actionClearDataLogoutTypeSaga,
+//   actionRegisterTypeSaga,
+// } from '../../redux/saga'
 import InitialForm from './InitialForm'
-import {actionClearPromiseForName} from '../../actions/index'
+import { actionClearPromiseForName } from '../../actions/types/promiseTypes'
+import { actionLoginTypeSaga } from '../../actions/typeSaga/loginTypesSaga'
 const LoginForm = ({ onLogin, children, auth, onClearPromise }) => {
  
   useEffect(() => {
@@ -36,7 +36,6 @@ const LoginForm = ({ onLogin, children, auth, onClearPromise }) => {
 }
 export const CLoginForm = connect(
     (state) => ({
-      // children: `Sign In`,
       auth: state.promise?.auth,
     }),
     {

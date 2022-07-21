@@ -1,16 +1,12 @@
-import {
-    actionOnePost,
-    actionExplorePosts,
-    actionFullExplorePosts,
-  } from '../../actions'
+
+import {actionOnePost} from '../../actions/query/postQuery'
+  import {actionFullExplorePostsTypeSaga} from '../../actions/typeSaga/exploreTypesSaga'
   import { Row, Col } from 'antd'
   import { Card } from '../../components/post/PostCard'
   import React, { useEffect, useState } from 'react'
   import { connect } from 'react-redux'
-  import {
-    actionClearExplorePosts,
-    actionAllClearExplore,
-  } from '../../redux/reducers/exploreReducer'
+
+import { actionClearExplorePostsType } from '../../actions/types/exploreTypes'
 import load from '../../materials/load.gif'
   
   const ExplorePosts = ({
@@ -89,9 +85,9 @@ import load from '../../materials/load.gif'
       explorePostsCount: state.explore?.explorePostsCount,
     }),
     {
-      onExlorePosts: actionFullExplorePosts,
+      onExlorePosts: actionFullExplorePostsTypeSaga,
       onPost: actionOnePost,
-      onClearExplore: actionClearExplorePosts,
+      onClearExplore: actionClearExplorePostsType,
     },
   )(ExplorePosts)
   

@@ -2,14 +2,11 @@ import { connect } from 'react-redux'
 import { message, Image, Button } from 'antd'
 import {
   actionUploadFile,
-  actionSetAvatar,
-  actionUserUpsert,
-  actionUserUpdate,
-} from '../actions'
+} from '../actions/query/uploadFilesQuery'
 import React, { useState, useEffect } from 'react'
 import { Dropzone, ConstructorModal } from '../helpers'
 import { Input } from './Input'
-import {actionSetAvatarTypeSaga} from '../redux/saga'
+import {actionSetAvatarTypeSaga} from '../actions/typeSaga/myDataTypesSaga'
 const EditAvatar = ({
   info,
   onSaveAvatar,

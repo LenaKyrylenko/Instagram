@@ -1,20 +1,11 @@
 import React, { useMemo, useState, useEffect } from 'react'
+
+import { actionFullAllGetPostsSaga } from '../../actions/typeSaga/feedTypesSaga'
 import {
-  actionAllPostsFeed,
-  actionFullAllGetPosts,
-  actionAddSubFullComment,
-  actionFindLikes,
-  actionGetFindLiked,
-  actionDeleteFullLike,
-  actionAddFullLikeForFeed,
-  actionDeleteFullLikeForFeed,
-  actionAddFullLike,
-} from '../../actions'
-import {
-  actionClearFeedPostsType,
   actionAddCommentFeedTypeSaga
 } from
-  '../../redux/reducers/feedReducer'
+  '../../actions/typeSaga/commentTypesSaga'
+import {actionClearFeedPostsType} from '../../actions/types/feedTypes'
 import { Link } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 import { Upload, Button, DatePicker, Space } from 'antd'
@@ -30,7 +21,7 @@ import load from '../../materials/load.gif'
 import {
   actionAddSubCommentTypeSaga,
   actionFindSubCommentTypeSaga,
-} from '../../actions/typeSaga/postActionSaga'
+} from '../../actions/typeSaga/postTypesSaga'
 import { CLikeFeed } from '../../components/like/Like'
 const MyPostFeed = ({
   // myData,
@@ -108,8 +99,7 @@ const MyPostFeed = ({
                       </div>
                       <div style={{ display: 'flex', margin: '20px 0px' }}>
                       <CLikeFeed likes={likes} postId={_id}/>
-                          {/* <CLikeForFeed likes={likes} postId={_id} /> */}
-
+                  
                           <AddComment addComment={addComment}
                             postId={_id} style={{
                               position: 'absolute', bottom: '70px',
@@ -120,10 +110,8 @@ const MyPostFeed = ({
                     
                         </div>
                         </div>
-                       {/* </center> */}
                     </div>
                   </div>
-                //  </div>
                 ),
               )}
              
@@ -169,7 +157,7 @@ export const CPostForFeed = connect(
   }),
   {
 
-    onPostsFeed: actionFullAllGetPosts,
+    onPostsFeed: actionFullAllGetPostsSaga,
     onClearFeed: actionClearFeedPostsType,
     addComment: actionAddCommentFeedTypeSaga,
     // addCommentReply: actionAddSubFullComment,

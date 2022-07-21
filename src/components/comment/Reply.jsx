@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Input, Button } from 'antd'
 import { connect } from 'react-redux'
-import { actionAddSubCommentTypeSaga } from '../../actions/typeSaga/postActionSaga'
+import { actionAddSubCommentTypeSaga } from '../../actions/typeSaga/postTypesSaga'
 import { ReplyButton } from './SpoilerButton'
 export const CommentAction = ({ commentId }) => {
   return (

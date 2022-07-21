@@ -1,9 +1,4 @@
 import { Link } from 'react-router-dom'
-import {
-  actionAddSubFullComment,
-  actionDeleteFullLike,
-  actionAddFullLike,
-} from '../../actions'
 
 import { Avatar, Divider, Input, Button } from 'antd'
 import user from '../../materials/user.png'
@@ -12,13 +7,11 @@ import { Row, Col } from 'antd'
 import { CComments, CCommentsOnePost } from '../../components/comment/Comment'
 import { CPostEditor } from '../createAndEditPost'
 import  AddComment from '../../components/comment/AddComment'
-import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../../actions/typeSaga/postActionSaga'
+import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../../actions/typeSaga/postTypesSaga'
 import { CLike} from '../../components/like/Like'
 import { ConstructorModal } from '../../helpers'
 import React, { useState, useEffect } from 'react'
-import {
-  actionAddFullCommentFeed,
-} from '../../redux/saga'
+
 import { LinkToUser } from '../../components/LinkToUser'
 import { MyCarousel } from '../../components/post/Carousel'
 import {EditMyPostButton} from '../../components/EditPostButton'
@@ -80,10 +73,7 @@ export const PagePost = ({
           <h2> Text: {onePost?.text || ''} </h2>
           <Divider>Comments</Divider>
           <div className="Scroll">
-            {/* <CCommentsOnePost
-              postId={onePost?._id}
-              comments={onePost?.comments || []}
-            /> */}
+
             <CCommentsOnePost/>
           </div>
           <div style={{ display: 'flex', margin: '20px 0px' }}>

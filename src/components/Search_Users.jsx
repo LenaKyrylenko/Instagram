@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Row, Col,Avatar, Input,  Popover } from 'antd'
 import user from '../materials/user.png'
-import { actionSearchUser } from '../actions'
+import { actionSearchUser } from '../actions/query/searchUserQuery'
 import {UserOutlined,SearchOutlined } from '@ant-design/icons'
 
-import { actionFullProfilePageUser } from '../redux/saga'
+import { actionFullProfilePageUserTypeSaga } from '../actions/typeSaga/userTypesSaga'
 import LinkToUser from './LinkToUser'
 export const ResultUserFind = ({
   userFind = [],
@@ -66,6 +66,6 @@ export const CSearch = connect(
 
   {
     onSearch: actionSearchUser,
-    onPageData: actionFullProfilePageUser,
+    onPageData: actionFullProfilePageUserTypeSaga,
   },
 )(SearchUser)

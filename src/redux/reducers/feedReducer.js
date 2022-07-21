@@ -1,6 +1,3 @@
-import { actionClearPromiseForName } from '../../actions'
-// import { actionClearDataUserType } from '../profileUserPage/profileUserReducer'
-// import { actionProfilePageDataTypeUser } from '../profileUserPage/profileUserReducer'
 
 export const feedReducer = (
     state = {},
@@ -11,9 +8,7 @@ export const feedReducer = (
         return {
           ...state,
           postsFeed: state?.postsFeed ? [...state.postsFeed, ...newPosts] : [...newPosts],
-          // postsFeed: [...postsFeed || [], ...newPosts],
           postsFeedCount: postsFeedCount ? postsFeedCount : newPostsFeedCount
-         // postsFeed: postsFeed ? [...postsFeed, ...newPosts] : [...newPosts],
         }
       },
       'COUNT': () => {
@@ -34,13 +29,13 @@ export const feedReducer = (
         postsFeedCount: 0,
     }),
   
-      'LIKE-POST-FEED': () => ({
+      'LIKE_POST_FEED': () => ({
         ...state,
         postsFeed: postsFeed?.map((p) =>
           p._id === postId ? (p = { ...p, likes: [...newResult] }) : p,
         ),
       }),
-      'ADD-COMMENT-POSTS': () => ({
+      'ADD_COMMENT_POSTS': () => ({
         ...state,
         
         postsFeed: postsFeed?.map((p) =>
@@ -54,30 +49,3 @@ export const feedReducer = (
     return state
 }
 
-// export const actionFullClearFeedPosts = () => (dispatch) => {
-//   return dispatch(actionClearFeedPosts())
-// }
-
-export const actionClearFeedPostsType= () =>
-  ({ type: 'CLEAR_POSTS' })
-
-//type
-export const actionAddLikePostFeedType = (newResult) =>
- ({ type: 'LIKE-POST-FEED',newResult })
-
-
-  export const actionAddCommentPostFeedType = (postId, newResult) => ({
-    type: 'ADD-COMMENT-POSTS',
-    postId,
-    newResult,
-  })
-
-export const actionFeedType = (newPosts, newPostsFeedCount) => 
-({ type: 'ADD-POSTS', newPosts,newPostsFeedCount })
-export const actionFeedTypeCount = (postsFeedCount) => 
-({ type: 'COUNT', postsFeedCount })
-
-export const actionAddCommentFeedTypeSaga = (postId, text) => ({
-  type:"FEED_POST_COMMENT", postId, text
-  
-})

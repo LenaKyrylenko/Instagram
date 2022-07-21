@@ -7,7 +7,7 @@ import { CommentDate } from './CommentDate'
 import {
   actionAddSubCommentTypeSaga,
   actionFindSubCommentTypeSaga,
-} from '../../actions/typeSaga/postActionSaga'
+} from '../../actions/typeSaga/postTypesSaga'
 import { Typography } from 'antd'
 import CommentAuthor from './CommentAuthor'
 import CommentAvatar from './CommentAvatar'

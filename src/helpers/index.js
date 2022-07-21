@@ -2,9 +2,6 @@ import { Modal,Button } from 'antd'
 import { useDropzone } from 'react-dropzone'
 import React, {useEffect } from 'react'
 import { UploadOutlined } from '@ant-design/icons'
-import createHistory from 'history/createBrowserHistory'
-
-export const history = createHistory()
 
 export const ConstructorModal = ({
   title,

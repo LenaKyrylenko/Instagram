@@ -7,9 +7,9 @@ import { useEffect } from 'react'
 import { ImportOutlined } from '@ant-design/icons'
 import {
   actionRegisterTypeSaga,
-} from '../../redux/saga'
+} from '../../actions/typeSaga/registerTypesSaga'
 import InitialForm from './InitialForm'
-import { actionClearPromiseForName } from '../../actions'
+import { actionClearPromiseForName } from '../../actions/types/promiseTypes'
 const RegisterForm = ({ onLogin, children, register,onClearPromise }) => {
  
     useEffect(() => {

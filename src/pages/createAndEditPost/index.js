@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
   actionUploadFiles,
-  actionPostUpsert,
-  actionClearPromise,
-} from '../../actions'
-import { actionClearOnePostType } from '../../actions/types/postActionTypes'
+
+} from '../../actions/query/uploadFilesQuery'
+import { actionClearOnePostType } from '../../actions/types/postTypes'
 import { Button, message } from 'antd'
 import {
   Dropzone
@@ -17,10 +16,11 @@ import {
 } from '../../components/Sortable'
 import { arrayMoveImmutable } from 'array-move'
 import { Row, Col } from 'antd'
-import { history } from '../../helpers'
+import history  from '../../helpers/history'
 import { CustomInput } from '../../components/Input'
-import {actionCreateEditPost} from '../../redux/saga'
+import {actionCreateEditPostTypeSaga} from '../../actions/typeSaga/postTypesSaga'
 
+  import {actionClearPromiseForName} from '../../actions/types/promiseTypes'
 const checkRoute = ({ match }) => {
   console.log('match route', match)
 }
@@ -122,11 +122,7 @@ const PostEditor = ({
       </div>
       
         {checkLength()}
-     
-          {/* </Col> */}
-        {/* </Col> */}
-      {/* </Row> */}
-
+    
       <h2 className="Title"> Title </h2>
       <CustomInput
         state={state?.title || ''}
@@ -185,10 +181,10 @@ export const CPostCreator = connect(
     newPost:true
   }),
   {
-    onSave: actionCreateEditPost,
+    onSave: actionCreateEditPostTypeSaga,
     onFileDrop: actionUploadFiles,
     clearPostOne: actionClearOnePostType,
-    clearPromise: actionClearPromise,
+    clearPromise: actionClearPromiseForName,
   },
 )(PostEditor)
 
@@ -199,7 +195,7 @@ export const CPostEditor = connect(
     myId: state?.myData?.aboutMe?._id,
   }),
   {
-    onSave: actionCreateEditPost,
+    onSave: actionCreateEditPostTypeSaga,
     onFileDrop: actionUploadFiles,
     clearPostOne: actionClearOnePostType,
     // clearPromise: actionClearPromise,

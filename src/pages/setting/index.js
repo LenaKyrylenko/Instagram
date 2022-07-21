@@ -4,17 +4,12 @@ import { CustomInput } from '../../components/Input'
 import { message, Image, Button } from 'antd'
 import { connect } from 'react-redux'
 import {
-  actionUploadFile,
-  actionSetAvatar,
-  actionUserUpsert,
-  actionUserUpdate,
   actionChangePassword,
-  actionClearPromiseForName,
-} from '../../actions'
-
+} from '../../actions/query/aboutMeQuery'
+import {actionClearPromiseForName} from '../../actions/types/promiseTypes'
 import { Basic, ConstructorModal } from '../../helpers'
 import { SpoilerButton } from '../../components/comment/SpoilerButton'
-import { actionUserUpdateTypeSaga } from '../../redux/saga'
+import { actionUserUpdateTypeSaga } from '../../actions/typeSaga/myDataTypesSaga'
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons'
 export const EditAccount = ({ showModalEdit }) => {
   return (

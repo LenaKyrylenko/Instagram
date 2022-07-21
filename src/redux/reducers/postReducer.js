@@ -1,5 +1,3 @@
-import { PlusOutlined } from '@ant-design/icons'
-import { actionOnePost } from '../../actions'
 
 const addAnswers = (comments, commentId, newResult) =>
 comments.map(comment => {
