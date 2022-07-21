@@ -1,11 +1,11 @@
-import { gql } from "../../helpers/getGQL";
-import { actionPromise } from "../types/promiseTypes";
+import { gql } from '../../helpers/getGQL'
+import { actionPromise } from '../types/promiseTypes'
 
 export const actionOnePost = (_id) =>
-actionPromise(
-  'onePost',
-  gql(
-    `query OneFind($post:String){
+  actionPromise(
+    'onePost',
+    gql(
+      `query OneFind($post:String){
       PostFindOne(query:$post){
         _id createdAt title text 
         images{_id url originalFileName}
@@ -32,28 +32,27 @@ actionPromise(
         }
     }
     `,
-    {
-      post: JSON.stringify([{ _id }]),
-    },
-  ),
-    )
-    export const actionPostUpsert = (post, postId) => 
-    actionPromise(
-      'postUpsert',
-      gql(
-        `
+      {
+        post: JSON.stringify([{ _id }]),
+      },
+    ),
+  )
+export const actionPostUpsert = (post, postId) =>
+  actionPromise(
+    'postUpsert',
+    gql(
+      `
 mutation PostUpsert($post:PostInput){
   PostUpsert(post:$post){
     _id title text images{_id url}
   }
 }`,
-        {
-          post: {
-            ...post,
-            _id:postId,
-            images: post.images.map(({ _id }) => ({ _id })),
-          },
+      {
+        post: {
+          ...post,
+          _id: postId,
+          images: post.images.map(({ _id }) => ({ _id })),
         },
-      ),
-    )
-
+      },
+    ),
+  )

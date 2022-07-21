@@ -1,8 +1,6 @@
-import { LinkToUser, LinkWithSubscribe } from '../LinkToUser'
-import { CSubscribe } from '../Subscribe'
-
+import { LinkWithSubscribe } from '../LinkToUser'
 const LikeList = ({ likes, myId }) => {
-    console.log('likes ', likes)
+  console.log('likes ', likes)
   return (
     <>
       <div className="Modal">
@@ -13,12 +11,10 @@ const LikeList = ({ likes, myId }) => {
               login={login}
               avatar={avatar}
               size={50}
-                  padding={'0px'}
-                  myId={myId}
-              />
-              
+              padding={'0px'}
+              myId={myId}
+            />
           ))}
-            
       </div>
     </>
   )

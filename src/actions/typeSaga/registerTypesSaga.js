@@ -1,2 +1,5 @@
-export const actionRegisterTypeSaga = (login, password) => 
-({type: 'REGISTER', login, password})
+export const actionRegisterTypeSaga = (login, password) => ({
+  type: 'REGISTER',
+  login,
+  password,
+})

@@ -1,8 +1,15 @@
-import { put, takeLeading, call } from 'redux-saga/effects'; 
-import { actionProfilePageDataUserType } from '../../../actions/types/userTypes';
+import { put, takeLeading, call } from 'redux-saga/effects'
+import { actionProfilePageDataUserType } from '../../../actions/types/userTypes'
 import { promiseWorker } from '../promise'
-import {actionUserAllPostsType,actionCountPostsType} from '../../../actions/types/postTypes'
-import {actionAboutUser, actionAllPostsUser, actionPostsCount} from '../../../actions/query/aboutUserQuery'
+import {
+  actionUserAllPostsType,
+  actionCountPostsType,
+} from '../../../actions/types/postTypes'
+import {
+  actionAboutUser,
+  actionAllPostsUser,
+  actionPostsCount,
+} from '../../../actions/query/aboutUserQuery'
 export function* fullPageAboutUserWorker({ _id }) {
   const aboutUser = yield call(promiseWorker, actionAboutUser(_id))
   const allPosts = yield call(promiseWorker, actionAllPostsUser(_id))

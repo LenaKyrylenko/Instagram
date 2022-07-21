@@ -1,10 +1,5 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { Button, Input, Checkbox, Form, Row, Col } from 'antd'
-import { Link } from 'react-router-dom'
-import { message } from 'antd'
-import { useEffect } from 'react'
-import { ImportOutlined } from '@ant-design/icons'
+import { Button, Input, Checkbox, Form } from 'antd'
 import { Typography } from 'antd'
 
 const { Text } = Typography
@@ -25,7 +20,6 @@ const InitialForm = ({ onLogin, children }) => {
           margin: '0 auto',
           margin: '50px',
           padding: '20px',
-          // textAlign: 'center',
         }}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 13 }}
@@ -43,25 +37,20 @@ const InitialForm = ({ onLogin, children }) => {
               message: 'Please input login!',
             },
           ]}
-          style={{
-            // margin: '0 auto',
-
-            // textAlign: 'center',
-          }}
-              >
-            
+        >
           <Input
             value={login}
             size="medium"
             onChange={(e) => setLogin(e.target.value)}
-          
           />
-
-           <Text type="secondary" style={{color:'rgb(35, 60, 107)', margin:'20px 5px'}} >
+        </Form.Item>
+        <Text
+          type="secondary"
+          style={{ color: 'rgb(35, 60, 107)', margin: '20px 5px' }}
+        >
           {' '}
           Login must be at least 5 characters{' '}
         </Text>
-              </Form.Item>
         <Form.Item
           label="Password"
           name="password"
@@ -72,23 +61,20 @@ const InitialForm = ({ onLogin, children }) => {
               message: 'Please input your password!',
             },
           ]}
-          // style={{
-          //   margin: '0 auto',
-
-          //   // textAlign: 'center',
-          // }}
         >
           <Input
             size="medium"
             type={checked ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          /> <Text type="secondary"  style={{color:'rgb(35, 60, 107)', margin:'20px 0px'}}>
-          Password must contain at least eight characters, include letters,
-          numbers and special symbols{' '}
-        </Text>
-              </Form.Item>
-            
+          />
+        </Form.Item>
+        <div style={{ width: '250px', marginLeft: '90px' }}>
+          <Text type="secondary" style={{ color: 'rgb(35, 60, 107)' }}>
+            Password must contain at least eight characters, include letters,
+            numbers and special symbols{' '}
+          </Text>
+        </div>
         <Form.Item
           name="checked"
           valuePropName="checked"
@@ -112,7 +98,6 @@ const InitialForm = ({ onLogin, children }) => {
             htmlType="submit"
             primary
             style={{ width: '100%' }}
-            className="Btn"
             disabled={
               login.length < 5 ||
               !/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9!@#$%^&*a-zA-Z]{8,}/g.test(
@@ -124,12 +109,6 @@ const InitialForm = ({ onLogin, children }) => {
             {children}
           </Button>
         </Form.Item>
-        {/* <div style={{textAlign:'left'}}>
-                Rules:
-                <h4> Login must be at least 5 characters </h4>
-
-          <h4>Password must contain at least eight characters, include letters, numbers and special symbols </h4>
-             </div>    */}
       </Form>
     </>
   )

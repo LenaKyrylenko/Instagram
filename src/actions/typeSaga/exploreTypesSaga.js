@@ -1,5 +1,3 @@
 export const actionFullExplorePostsTypeSaga = () => ({
-    type:"EXPLORE_POSTS"
-  })
-  
-  
+  type: 'EXPLORE_POSTS',
+})

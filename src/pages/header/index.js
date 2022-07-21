@@ -1,6 +1,6 @@
 import { CLogout } from '../../components/authorization/LogOut'
 import { CSearch } from '../../components/Search_Users'
-import { Feed, AddPost, Explore, CUser } from '../../components/HeaderButtons'
+import { Feed, AddPost, Explore, CUser } from '../../components/buttons/HeaderButtons'
 import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
 

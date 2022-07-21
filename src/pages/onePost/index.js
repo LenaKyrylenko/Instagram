@@ -4,18 +4,20 @@ import { Avatar, Divider, Input, Button } from 'antd'
 import user from '../../materials/user.png'
 import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
-import { CComments, CCommentsOnePost } from '../../components/comment/Comment'
+import { CCommentsOnePost } from '../../components/comment/Comment'
 import { CPostEditor } from '../createAndEditPost'
-import  AddComment from '../../components/comment/AddComment'
-import { actionFullOnePostSaga,actionAddFullCommentSaga } from '../../actions/typeSaga/postTypesSaga'
-import { CLike} from '../../components/like/Like'
+import AddComment from '../../components/comment/AddComment'
+import {
+  actionFullOnePostSaga,
+  actionAddFullCommentSaga,
+} from '../../actions/typeSaga/postTypesSaga'
+import { CLike } from '../../components/like/Like'
 import { ConstructorModal } from '../../helpers'
 import React, { useState, useEffect } from 'react'
 
 import { LinkToUser } from '../../components/LinkToUser'
 import { MyCarousel } from '../../components/post/Carousel'
-import {EditMyPostButton} from '../../components/EditPostButton'
-
+import { EditMyPostButton } from '../../components/buttons/EditPostButton'
 
 export const PagePost = ({
   my_Id,
@@ -24,19 +26,17 @@ export const PagePost = ({
   match: {
     params: { _id },
   },
-  aboutUser = {},
   onPost,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   useEffect(() => {
     onPost(_id)
-    console.log('ONE POST _ID', onePost?._id)
   }, [_id])
 
   return (
     <>
       <Row>
-        <Col span={14} style={{marginTop:'100px'}}>
+        <Col span={14} style={{ marginTop: '100px' }}>
           <ConstructorModal
             title={'Edit post'}
             isModalVisible={isModalVisible}
@@ -45,7 +45,8 @@ export const PagePost = ({
             <CPostEditor />
           </ConstructorModal>
 
-          <MyCarousel key={onePost?._id}
+          <MyCarousel
+            key={onePost?._id}
             style={{ position: 'absolute' }}
             images={onePost?.images}
           />
@@ -55,13 +56,21 @@ export const PagePost = ({
           </h3>
         </Col>
         <Col span={8}>
-          <div style={{ display: 'flex', flexDirection: 'row', marginTop:'100px' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              marginTop: '100px',
+            }}
+          >
             <LinkToUser
               _id={onePost?.owner?._id}
               login={onePost?.owner?.login}
               avatar={onePost?.owner?.avatar}
               key={_id}
-            size={50} padding={'0px'} />
+              size={50}
+              padding={'0px'}
+            />
             <Row span={1}>
               {my_Id === onePost?.owner?._id && <EditMyPostButton _id={_id} />}
             </Row>
@@ -73,18 +82,20 @@ export const PagePost = ({
           <h2> Text: {onePost?.text || ''} </h2>
           <Divider>Comments</Divider>
           <div className="Scroll">
-
-            <CCommentsOnePost/>
+            <CCommentsOnePost />
           </div>
           <div style={{ display: 'flex', margin: '20px 0px' }}>
             <CLike likes={onePost?.likes} postId={onePost?._id} />
-            <AddComment addComment={addComment}
+            <AddComment
+              addComment={addComment}
               style={{
                 position: 'absolute',
-                bottom: "120px", right: "30px"
+                bottom: '120px',
+                right: '30px',
               }}
               width={'40%'}
-              postId={onePost?._id} />
+              postId={onePost?._id}
+            />
           </div>
         </Col>
       </Row>
@@ -100,8 +111,6 @@ export const CPost = connect(
   }),
   {
     addComment: actionAddFullCommentSaga,
-    // addCommentReply: actionAddSubFullComment,
     onPost: actionFullOnePostSaga,
   },
 )(PagePost)
-

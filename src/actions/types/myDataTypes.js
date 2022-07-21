@@ -1,15 +1,11 @@
 export const actionProfilePageDataType = (aboutMe) => ({
-    type: 'PROFILE-PAGE',
-    aboutMe,
-  })
-
-export const actionClearAboutMeType = () => 
-({ type: 'REMOVE-DATA' })
-
-export const actionChangeFollowingType = (newResult) => ({
-  type:"UPDATE_FOLLOWING", newResult
+  type: 'PROFILE-PAGE',
+  aboutMe,
 })
 
-export const actionUpdateAvatarType= (newResult) => ({
-type:"UPDATE_AVATAR", newResult
+export const actionClearAboutMeType = () => ({ type: 'REMOVE-DATA' })
+
+export const actionUpdateAvatarType = (newResult) => ({
+  type: 'UPDATE_AVATAR',
+  newResult,
 })

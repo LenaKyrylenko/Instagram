@@ -1,3 +1,3 @@
 export const actionFullAllGetPostsSaga = () => ({
-    type:"FEED_POSTS"
-  })
+  type: 'FEED_POSTS',
+})

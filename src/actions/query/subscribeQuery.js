@@ -1,7 +1,7 @@
-import { gql } from "../../helpers/getGQL";
-import { actionPromise } from "../types/promiseTypes";
+import { gql } from '../../helpers/getGQL'
+import { actionPromise } from '../types/promiseTypes'
 
-  export const actionChangeSubscribe = (oldFollowing) =>
+export const actionChangeSubscribe = (oldFollowing) =>
   actionPromise(
     'changeSubscribe',
     gql(
@@ -12,12 +12,10 @@ import { actionPromise } from "../types/promiseTypes";
       }
       `,
       {
-        user: 
-         oldFollowing 
-        ,
+        user: oldFollowing,
       },
     ),
-    )
+  )
 export const actionGetFollowing = (_id) =>
   actionPromise(
     'getFollowing',
@@ -34,8 +32,7 @@ export const actionGetFollowing = (_id) =>
     ),
   )
 
-
-  export const actionGetFollowers = (userId) =>
+export const actionGetFollowers = (userId) =>
   actionPromise(
     'getFollowers',
     gql(
@@ -47,7 +44,7 @@ export const actionGetFollowing = (_id) =>
       }
     }`,
       {
-        userId: JSON.stringify([{ _id:userId }]),
+        userId: JSON.stringify([{ _id: userId }]),
       },
     ),
   )

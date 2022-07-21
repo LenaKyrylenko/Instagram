@@ -1,4 +1,3 @@
-
 import { actionPromise } from '../types/promiseTypes'
 
 export const uploadFile = (file) => {

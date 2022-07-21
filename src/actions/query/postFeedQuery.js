@@ -1,11 +1,11 @@
-import { gql } from "../../helpers/getGQL";
-import { actionPromise } from "../types/promiseTypes";
+import { gql } from '../../helpers/getGQL'
+import { actionPromise } from '../types/promiseTypes'
 
 export const actionPostsFeed = (myFollowing, skip) =>
-actionPromise(
-  'postsFeed',
-  gql(
-    `query PostsFeed($ownerId:String){
+  actionPromise(
+    'postsFeed',
+    gql(
+      `query PostsFeed($ownerId:String){
         PostFind(query:$ownerId){
         owner{_id login avatar{url}}
         images{_id url} title text
@@ -25,40 +25,40 @@ actionPromise(
     }
 }
 }`,
-    {
-      ownerId: JSON.stringify([
-        {
-          ___owner: {
-            $in: myFollowing,
+      {
+        ownerId: JSON.stringify([
+          {
+            ___owner: {
+              $in: myFollowing,
+            },
           },
-        },
-        {
-          sort: [{ _id: -1 }],
-          skip: [skip || 0],
-          limit: [10],
-        },
-      ]),
-    },
-  ),
-    )
+          {
+            sort: [{ _id: -1 }],
+            skip: [skip || 0],
+            limit: [10],
+          },
+        ]),
+      },
+    ),
+  )
 
-    export const actionPostsFeedCount = (myFollowing) =>
-    actionPromise(
-      'postsFeedCount',
-      gql(
-        ` query CountAllPostsFeed($_id:String!){
+export const actionPostsFeedCount = (myFollowing) =>
+  actionPromise(
+    'postsFeedCount',
+    gql(
+      ` query CountAllPostsFeed($_id:String!){
                   PostCount(query:$_id)
   
                   }`,
-  
-        {
-          _id: JSON.stringify([
-            {
-              ___owner: {
-                $in: myFollowing,
-              },
+
+      {
+        _id: JSON.stringify([
+          {
+            ___owner: {
+              $in: myFollowing,
             },
-          ]),
-        },
-      ),
-    )
+          },
+        ]),
+      },
+    ),
+  )

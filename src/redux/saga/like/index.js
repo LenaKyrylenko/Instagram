@@ -1,7 +1,14 @@
-import { put, call, takeLeading} from 'redux-saga/effects'; 
-import { actionAddLike,actionDeleteLike,actionFindLikes } from '../../../actions/query/likeQuery';
-import {actionChangeLikeType,actionAddLikePostFeedType} from '../../../actions/types/likeTypes'
-import { promiseWorker } from "../promise";
+import { put, call, takeLeading } from 'redux-saga/effects'
+import {
+  actionAddLike,
+  actionDeleteLike,
+  actionFindLikes,
+} from '../../../actions/query/likeQuery'
+import {
+  actionChangeLikeType,
+  actionAddLikePostFeedType,
+} from '../../../actions/types/likeTypes'
+import { promiseWorker } from '../promise'
 
 function* changeLikeWorker({ likeId, postId }) {
   const changeOneLike = () =>

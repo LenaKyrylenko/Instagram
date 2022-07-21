@@ -1,18 +1,19 @@
-import {actionOnePost} from '../../actions/query/postQuery'
+import { actionOnePost } from '../../actions/query/postQuery'
 import user from '../../materials/user.png'
 import React, { useState, useEffect } from 'react'
 import { Card } from '../../components/post/PostCard'
 import ListOfUsers from '../../components/ListOfUsers'
 import { connect } from 'react-redux'
-import { Avatar, Button } from 'antd'
-import { actionFullProfilePageUserTypeSaga } from '../../actions/typeSaga/userTypesSaga'
+import { Avatar } from 'antd'
+import {
+  actionFullProfilePageUserTypeSaga,
+  actionPostsPortionTypeSaga,
+} from '../../actions/typeSaga/userTypesSaga'
+import { actionClearAllPostsType } from '../../actions/types/postTypes'
 import { Row, Col } from 'antd'
-import {actionClearAllPostsType,actionPostsPortionTypeSaga} from '../../redux/reducers/userProfileReducer'
 import { CSubscribe } from '../../components/Subscribe'
 import { CEditSetting } from '../setting'
-import { Link} from 'react-router-dom'
 import load from '../../materials/load.gif'
-
 export const PageAboutUser = ({
   match: {
     params: { _id },
@@ -25,16 +26,15 @@ export const PageAboutUser = ({
   countPosts,
   onClearPosts,
   onUserPosts,
-  userPostPromise
+  userPostPromise,
 }) => {
   const [checkScroll, setScroll] = useState(true)
   useEffect(() => {
     onAboutUser(_id)
-    }, [_id])
+  }, [_id])
 
   useEffect(() => {
     if (checkScroll) {
-      console.log('попало в новую порцию постов')
       onUserPosts(_id)
     }
     setScroll(false)
@@ -47,19 +47,20 @@ export const PageAboutUser = ({
     }
   }, [])
 
-  console.log('check scroll ', checkScroll)
   useEffect(() => {
-     document.addEventListener('scroll', scrollHandler)
-     }, [allPosts?.length])
-  
-    const scrollHandler = (e) => {
-         if (e.target.documentElement.scrollHeight -
-           (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
-          console.log('SCROLL HANDLER', checkScroll)
-          setScroll(true)
-          document.removeEventListener('scroll', scrollHandler)
-         }
-       }
+    document.addEventListener('scroll', scrollHandler)
+  }, [allPosts?.length])
+
+  const scrollHandler = (e) => {
+    if (
+      e.target.documentElement.scrollHeight -
+        (e.target.documentElement.scrollTop + window.innerHeight) <
+      200
+    ) {
+      setScroll(true)
+      document.removeEventListener('scroll', scrollHandler)
+    }
+  }
 
   const checkMyId = _id === my_Id
   return (
@@ -116,19 +117,15 @@ export const PageAboutUser = ({
                   />
 
                   <ListOfUsers
-                   listResult={following}
-                   listUsers={following}
-                  onPageData={onAboutUser}
+                    listResult={following}
+                    listUsers={following}
+                    onPageData={onAboutUser}
                     text={'following'}
                   />
                 </div>
-                <h3> nick: {nick == null ? login : nick}</h3>  
-              
-                {checkMyId ? 
-                   <CEditSetting />
-                  : 
-                  <CSubscribe />
-                  }
+                <h3> nick: {nick == null ? login : nick}</h3>
+
+                {checkMyId ? <CEditSetting /> : <CSubscribe />}
               </div>
             </Row>
           </section>
@@ -140,7 +137,6 @@ export const PageAboutUser = ({
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              // padding: '20px',
               margin: '20px',
             }}
           >
@@ -150,13 +146,9 @@ export const PageAboutUser = ({
           </div>
         </Col>
       </Row>
-      {(userPostPromise?.status == "PENDING") &&  
-        <img style={{
-          display: 'block', margin: '0 auto',
-          marginBottom: '200px', padding: '10px'
-        }}
-            src={load} width="100" height="100" />
-        }
+      {userPostPromise?.status == 'PENDING' && (
+        <img className="Preloader" src={load} width="100" height="100" />
+      )}
     </>
   )
 }
@@ -167,13 +159,12 @@ export const CPageAboutUser = connect(
     aboutUser: state.userData?.aboutUser,
     countPosts: state?.promise?.countPosts?.payload,
     allPosts: state.userData?.allPosts,
-    userPostPromise:state.promise?.allPosts
+    userPostPromise: state.promise?.allPosts,
   }),
   {
     onAboutUser: actionFullProfilePageUserTypeSaga,
     onPost: actionOnePost,
     onClearPosts: actionClearAllPostsType,
-    onUserPosts:actionPostsPortionTypeSaga
-    // onPageData: actionFullProfilePageUser,
+    onUserPosts: actionPostsPortionTypeSaga,
   },
 )(PageAboutUser)

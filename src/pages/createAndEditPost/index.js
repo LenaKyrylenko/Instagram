@@ -1,30 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {
-  actionUploadFiles,
-
-} from '../../actions/query/uploadFilesQuery'
+import { actionUploadFiles } from '../../actions/query/uploadFilesQuery'
 import { actionClearOnePostType } from '../../actions/types/postTypes'
 import { Button, message } from 'antd'
-import {
-  Dropzone
-} from '../../components/UploadFiles'
-import {
-  SortableContainer,
-  SortableItem
-} from '../../components/Sortable'
+import { Dropzone } from '../../components/UploadFiles'
+import { SortableContainer, SortableItem } from '../../components/Sortable'
 import { arrayMoveImmutable } from 'array-move'
-import { Row, Col } from 'antd'
-import history  from '../../helpers/history'
+import { Col } from 'antd'
+import history from '../../helpers/history'
 import { CustomInput } from '../../components/Input'
-import {actionCreateEditPostTypeSaga} from '../../actions/typeSaga/postTypesSaga'
-
-  import {actionClearPromiseForName} from '../../actions/types/promiseTypes'
-const checkRoute = ({ match }) => {
-  console.log('match route', match)
-}
-
+import { actionCreateEditPostTypeSaga } from '../../actions/typeSaga/postTypesSaga'
+import { actionClearPromiseForName } from '../../actions/types/promiseTypes'
 const PostEditor = ({
   match: {
     params: { _id },
@@ -34,9 +20,6 @@ const PostEditor = ({
   onFileDrop,
   post,
   fileStatus,
-  clearPostOne,
-  clearPromise,
-  newPost
 }) => {
   post = {
     _id: post?._id || '',
@@ -44,11 +27,7 @@ const PostEditor = ({
     text: post?.text || '',
     images: post?.images || [],
   }
-  console.log('post after', post)
-  console.log('post _id', _id)
   const [state, setState] = useState(post)
-  console.log('state after change', state)
-  console.log('post', post)
   useEffect(() => {
     if (fileStatus?.status === 'FULFILLED' && fileStatus?.payload != [])
       setState({
@@ -57,8 +36,6 @@ const PostEditor = ({
       })
     else if (fileStatus?.status === 'REJECTED') message.error('Error')
   }, [fileStatus])
-
-  console.log('images ', state?.images)
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     setState({
@@ -94,35 +71,30 @@ const PostEditor = ({
       state['images'] = []
       return false
     } else {
-      return <h2 className='NumberPosts'> {state?.images.length} / 8</h2>
+      return <h2 className="NumberPosts"> {state?.images.length} / 8</h2>
     }
   }
 
   return (
     <section className="Post">
-      {/* <Row> */}
-        {/* <Col span={12} offset={6}> */}
-          <Dropzone onLoad={onFileDrop} />
-          {/* <Col offset={1}> */}
+      <Dropzone onLoad={onFileDrop} />
       <div style={{}}>
-              <SortableContainer
-                onSortEnd={onSortEnd}
-                >
-                {state?.images?.length <= 8 &&
-                  (state?.images || []).map(({ _id, url }, index) => (
-                    <SortableItem
-                      key={`item-${_id}`}
-                      url={url}
-                      index={index}
-                      onRemoveImage={onRemoveImage}
-                      _id={_id}
-                    />
-                  ))}
-              </SortableContainer>
+        <SortableContainer onSortEnd={onSortEnd}>
+          {state?.images?.length <= 8 &&
+            (state?.images || []).map(({ _id, url }, index) => (
+              <SortableItem
+                key={`item-${_id}`}
+                url={url}
+                index={index}
+                onRemoveImage={onRemoveImage}
+                _id={_id}
+              />
+            ))}
+        </SortableContainer>
       </div>
-      
-        {checkLength()}
-    
+
+      {checkLength()}
+
       <h2 className="Title"> Title </h2>
       <CustomInput
         state={state?.title || ''}
@@ -158,27 +130,10 @@ const PostEditor = ({
     </section>
   )
 }
-
-// export const CPostEditor = connect(
-//   (state) => ({
-//     fileStatus: state.promise?.uploadFiles,
-//     post: state?.post?.onePost,
-//     myId: state?.myData?.aboutMe?._id,
-//   }),
-//   {
-//     onSave: actionCreateEditPost,
-//     onFileDrop: actionUploadFiles,
-//     clearPostOne: actionClearOnePostType,
-//     // clearPromise: actionClearPromise,
-//   },
-// )(PostEditor)
-
 export const CPostCreator = connect(
   (state) => ({
     fileStatus: state.promise?.uploadFiles,
-    // post: state?.post?.onePost,
     myId: state?.myData?.aboutMe?._id,
-    newPost:true
   }),
   {
     onSave: actionCreateEditPostTypeSaga,
@@ -198,6 +153,5 @@ export const CPostEditor = connect(
     onSave: actionCreateEditPostTypeSaga,
     onFileDrop: actionUploadFiles,
     clearPostOne: actionClearOnePostType,
-    // clearPromise: actionClearPromise,
   },
 )(PostEditor)

@@ -45,7 +45,7 @@ export const Comments = ({
             )
           })
         : comments?.length && (
-            <Text
+            <Text className='ButtonComment'
               type="secondary"
               strong
               style={{ margin: '0 auto' }}

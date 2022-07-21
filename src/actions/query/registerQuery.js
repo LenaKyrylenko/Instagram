@@ -1,5 +1,5 @@
-import { gql } from '../../helpers/getGQL';
-import { actionPromise } from "../types/promiseTypes";
+import { gql } from '../../helpers/getGQL'
+import { actionPromise } from '../types/promiseTypes'
 
 const actionRegister = (login, password) =>
   actionPromise(
@@ -12,5 +12,5 @@ const actionRegister = (login, password) =>
               }`,
       { login, password },
     ),
-    )
-  export default actionRegister
+  )
+export default actionRegister

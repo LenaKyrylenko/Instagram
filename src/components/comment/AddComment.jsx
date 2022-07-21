@@ -25,7 +25,7 @@ import { SmileOutlined, SmileFilled } from '@ant-design/icons'
       )}
       <Input
         style={{
-          display: 'block',
+          display: 'flex',
           width,
           margin: '0 10px',
         }}
@@ -35,24 +35,18 @@ import { SmileOutlined, SmileFilled } from '@ant-design/icons'
         onChange={(e) => {
           setComment(e.target.value)
         }}
-        onPressEnter={(e) => {
+        onPressEnter={(e) => 
           setComment(e.target.value)
-        }}
+       }
       />
       {!showEmojiPicker ? (
         <SmileOutlined
-          className="smile-btn"
-          style={{ fontSize: 'xx-large', marginRight: '15px' }}
+          className="SmileBtn"
           onClick={handleOK}
         />
       ) : (
         <SmileFilled
-          className="smile-btn"
-          style={{
-            color: '#108ee9',
-            fontSize: 'xx-large',
-            marginRight: '30px',
-          }}
+          className="SmileBtnFilled"
           onClick={handleOK}
         />
       )}

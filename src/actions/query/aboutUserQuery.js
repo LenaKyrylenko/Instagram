@@ -1,11 +1,11 @@
-import { gql } from "../../helpers/getGQL";
-import { actionPromise } from "../types/promiseTypes";
+import { gql } from '../../helpers/getGQL'
+import { actionPromise } from '../types/promiseTypes'
 
 export const actionAboutUser = (_id) =>
-actionPromise(
-  'aboutUser',
-  gql(
-    `query AboutMe($userId:String){
+  actionPromise(
+    'aboutUser',
+    gql(
+      `query AboutMe($userId:String){
     UserFindOne(query:$userId)
     {
       _id createdAt login nick avatar{_id url} 
@@ -13,12 +13,11 @@ actionPromise(
       following{_id login nick avatar{_id url}}
     }
   }`,
-    {
-      userId: JSON.stringify([{ _id }]),
-    },
-  ),
-)
-
+      {
+        userId: JSON.stringify([{ _id }]),
+      },
+    ),
+  )
 
 export const actionAllPostsUser = (userId, skip) =>
   actionPromise(
@@ -43,7 +42,7 @@ PostFind(query:$userId){
     ),
   )
 
-  export const actionPostsCount = (_id) =>
+export const actionPostsCount = (_id) =>
   actionPromise(
     'countPosts',
     gql(
@@ -53,8 +52,7 @@ PostFind(query:$userId){
                 }`,
 
       {
-        _id:
-          JSON.stringify([{ ___owner: { $in: [_id] } }])
+        _id: JSON.stringify([{ ___owner: { $in: [_id] } }]),
       },
     ),
   )

@@ -1,11 +1,11 @@
-import { gql } from "../../helpers/getGQL";
-import { actionPromise } from "../types/promiseTypes";
+import { gql } from '../../helpers/getGQL'
+import { actionPromise } from '../types/promiseTypes'
 
 export const actionExplorePosts = (skip) =>
-actionPromise(
-  'explorePosts',
-  gql(
-    ` query PostsFeed($_id:String){
+  actionPromise(
+    'explorePosts',
+    gql(
+      ` query PostsFeed($_id:String){
       PostFind(query:$_id){
       owner{_id login avatar{url}}
       images{_id url} title text
@@ -26,29 +26,29 @@ actionPromise(
   }
 }
           }`,
-    {
-      _id: JSON.stringify([
-        {},
-        {
-          sort: [{ _id: -1 }],
-          skip: [skip || 0],
-          limit: [12],
-        },
-      ]),
-    },
-  ),
-)
+      {
+        _id: JSON.stringify([
+          {},
+          {
+            sort: [{ _id: -1 }],
+            skip: [skip || 0],
+            limit: [12],
+          },
+        ]),
+      },
+    ),
+  )
 export const actionExplorePostsCount = () =>
-actionPromise(
-  'explorePostsCount',
-  gql(
-    ` query CountAllPosts($_id:String!){
+  actionPromise(
+    'explorePostsCount',
+    gql(
+      ` query CountAllPosts($_id:String!){
               PostCount(query:$_id)
 
               }`,
 
-    {
-      _id: JSON.stringify([{}]),
-    },
-  ),
-)
+      {
+        _id: JSON.stringify([{}]),
+      },
+    ),
+  )

@@ -1,4 +1,4 @@
-import { Button, Input, Checkbox, Form, Row, Col } from 'antd'
+import { Input } from 'antd'
 
 export const CustomInput = ({ state, onChangeText, checked }) => (
     <Input

@@ -1,22 +1,4 @@
-
-const addAnswers = (comments, commentId, newResult) =>
-comments.map(comment => {
-  if (comment._id === commentId)
-  {
-        return { ...comment, 'answers': newResult }
-  }
-  else if (comment?.answers?.length) {
-        return {
-            ...comment,
-            answers: addAnswers(comment.answers, commentId, newResult)
-        }
-  }
-  else {
-        return { ...comment }
-  }
-  
-})
-
+import { addAnswers } from "../../actions/types/commentTypes"
 export const postReducer = (
     state = {},
     { type, onePost,newResult, commentId},

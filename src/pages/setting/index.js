@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { CEditAvatar } from '../../components/EditAvatar'
 import { CustomInput } from '../../components/Input'
-import { message, Image, Button } from 'antd'
+import { message, Button } from 'antd'
 import { connect } from 'react-redux'
-import {
-  actionChangePassword,
-} from '../../actions/query/aboutMeQuery'
-import {actionClearPromiseForName} from '../../actions/types/promiseTypes'
+import { actionChangePassword } from '../../actions/query/aboutMeQuery'
+import { actionClearPromiseForName } from '../../actions/types/promiseTypes'
 import { Basic, ConstructorModal } from '../../helpers'
 import { SpoilerButton } from '../../components/comment/SpoilerButton'
 import { actionUserUpdateTypeSaga } from '../../actions/typeSaga/myDataTypesSaga'
@@ -31,7 +29,6 @@ const EditSetting = ({
   info,
   myId,
   onSaveUserUpsert,
-  onClearPromise,
   onSaveNewPassword,
   changePassword,
 }) => {
@@ -40,8 +37,6 @@ const EditSetting = ({
   const [isModalVisibleEdit, setIsModalVisibleEdit] = useState(false)
   const [checked1, setChecked1] = useState(true)
   const [checked2, setChecked2] = useState(true)
-
-  console.log('checked ', checked2)
 
   const showModalEdit = () => {
     setIsModalVisibleEdit(true)
@@ -78,7 +73,6 @@ const EditSetting = ({
     onSaveUserUpsert(state, myId) &&
       message.success(`Successfully saved changed new login!`) &&
       setIsModalVisibleEdit(false)
-    // &&onClearPromise('userUpsert')
   }
   const saveNewPassword = () => {
     onSaveNewPassword(
@@ -88,11 +82,9 @@ const EditSetting = ({
     )
     if (changePassword?.payload == null && changePass.login != info?.login) {
       message.error(`You entered wrong login/password! Try again!`)
-      // onClearPromise('newPassword')
     } else {
       message.success(`Successfully saved changed new password!`) &&
         setIsModalVisibleEdit(false)
-      // && onClearPromise('newPassword')
     }
   }
   console.log('save pass', changePass?.login != info?.login)
@@ -126,7 +118,7 @@ const EditSetting = ({
               size="large"
               style={{ margin: '10px' }}
               onClick={saveChange}
-              disabled={state?.login ? false : true}
+              disabled={state?.login && state?.login.length >= 5 ? false : true}
               type="primary"
             >
               {' '}
@@ -150,7 +142,7 @@ const EditSetting = ({
             />
             <Button
               style={{ margin: '10px' }}
-              disabled={state?.nick ? false : true}
+              disabled={state?.nick && state?.nick.length >= 5 ? false : true}
               onClick={saveChange}
               size="large"
               type="primary"
@@ -201,7 +193,6 @@ const EditSetting = ({
               />
             )}
           </div>
-          {console.log('ckeck тутааа', checked1)}
           <h3> New password</h3>
           <div
             style={{
@@ -212,12 +203,10 @@ const EditSetting = ({
           >
             <CustomInput
               state={changePass?.newPassword || ''}
-              // type={checkEye1 ? 'password' : 'text'}
               checked={checked2}
-
               onChangeText={onChangePassNew}
             />
-               {checked2 ? (
+            {checked2 ? (
               <EyeInvisibleOutlined
                 onClick={() => setChecked2(!checked2)}
                 style={{ marginLeft: '5px', fontSize: 'xx-large' }}
@@ -241,7 +230,9 @@ const EditSetting = ({
               disabled={
                 changePass?.login &&
                 changePass?.password &&
-                changePass?.newPassword
+                /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9!@#$%^&*a-zA-Z]{8,}/g.test(
+                  changePass?.newPassword,
+                )
                   ? false
                   : true
               }

@@ -1,28 +1,25 @@
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Row, Col,Avatar, Input,  Popover } from 'antd'
-import user from '../materials/user.png'
+import { Input, Popover } from 'antd'
 import { actionSearchUser } from '../actions/query/searchUserQuery'
-import {UserOutlined,SearchOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
 
 import { actionFullProfilePageUserTypeSaga } from '../actions/typeSaga/userTypesSaga'
 import LinkToUser from './LinkToUser'
-export const ResultUserFind = ({
-  userFind = [],
-  handleCancel, 
- 
-}) => { 
-    console.log('user find', userFind) 
+export const ResultUserFind = ({ userFind = [], handleCancel }) => {
   return (
     <div className="ResultUserFind">
       {userFind?.map(({ _id, login, avatar }) => (
-       
-        <LinkToUser _id={_id} login={login}
-        
-          avatar={avatar} size={40} padding={'0px'}
-          onClick={handleCancel} key={_id} />
+        <LinkToUser
+          _id={_id}
+          login={login}
+          avatar={avatar}
+          size={40}
+          padding={'0px'}
+          onClick={handleCancel}
+          key={_id}
+        />
       ))}
-      </div>
+    </div>
   )
 }
 const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {
@@ -43,15 +40,13 @@ const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {
           />
         }
       >
-        
         <Search
-          // style={{ width: '25%' }}
           placeholder="Enter search user"
           allowClear
           prefix={<UserOutlined />}
           enterButton="Search"
           size="large"
-          onSearch={onSearchUser} 
+          onSearch={onSearchUser}
         />
       </Popover>
     </>

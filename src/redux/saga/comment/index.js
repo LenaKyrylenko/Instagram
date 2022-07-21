@@ -1,73 +1,79 @@
-import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
-import { promiseWorker } from '../promise';
+import { put, takeEvery, takeLeading, select, call } from 'redux-saga/effects' //
+import { promiseWorker } from '../promise'
 import {
-    actionAddComment, actionGetCommentsOnePost,
-    actionAddSubComment, actionFindSubComment
+  actionAddComment,
+  actionGetCommentsOnePost,
+  actionAddSubComment,
+  actionFindSubComment,
 } from '../../../actions/query/commentQuery'
 import { actionOnePost } from '../../../actions/query/postQuery'
-import {actionAddCommentPostFeedType, actionAddCommentType, actionAddSubCommentType} from '../../../actions/types/commentTypes'
+import {
+  actionAddCommentPostFeedType,
+  actionAddCommentType,
+  actionAddSubCommentType,
+} from '../../../actions/types/commentTypes'
 
-// actionAddCommentFeedTypeSaga
 function* addCommentOnePostWorker({ postId, text }) {
-    yield call(promiseWorker, actionAddComment(postId, text))
-    const {
-      promise: {
-        addComment: { status },
-      },
-    } = yield select()
-    if (status === 'FULFILLED') {
-      yield call(promiseWorker, actionOnePost(postId))
-      const { comments } = yield call(promiseWorker, actionGetCommentsOnePost(postId))
-      if (comments)
-        yield put (actionAddCommentType(comments))
-    }
+  yield call(promiseWorker, actionAddComment(postId, text))
+  const {
+    promise: {
+      addComment: { status },
+    },
+  } = yield select()
+  if (status === 'FULFILLED') {
+    yield call(promiseWorker, actionOnePost(postId))
+    const { comments } = yield call(
+      promiseWorker,
+      actionGetCommentsOnePost(postId),
+    )
+    if (comments) yield put(actionAddCommentType(comments))
   }
-  export function* addCommentOnePostWatcher(){
-    yield takeLeading("ONE_POST_COMMENT",addCommentOnePostWorker)
-  }
+}
+export function* addCommentOnePostWatcher() {
+  yield takeLeading('ONE_POST_COMMENT', addCommentOnePostWorker)
+}
 
-  function* addCommentFeedWorker({ postId, text }) {
-    yield call(promiseWorker, actionAddComment(postId, text))
-    const {
-      promise: {
-        addComment: { status },
-      },
-    } = yield select()
-    if (status === 'FULFILLED') {
-      yield call(promiseWorker, actionOnePost(postId))
-      const { comments } = yield call(promiseWorker,
-        actionGetCommentsOnePost(postId))
-      if (comments)
-        yield put (actionAddCommentPostFeedType(postId,comments))
-    }
+function* addCommentFeedWorker({ postId, text }) {
+  yield call(promiseWorker, actionAddComment(postId, text))
+  const {
+    promise: {
+      addComment: { status },
+    },
+  } = yield select()
+  if (status === 'FULFILLED') {
+    yield call(promiseWorker, actionOnePost(postId))
+    const { comments } = yield call(
+      promiseWorker,
+      actionGetCommentsOnePost(postId),
+    )
+    if (comments) yield put(actionAddCommentPostFeedType(postId, comments))
   }
-  export function* addCommentFeedWatcher(){
-    yield takeLeading("FEED_POST_COMMENT",addCommentFeedWorker)
+}
+export function* addCommentFeedWatcher() {
+  yield takeLeading('FEED_POST_COMMENT', addCommentFeedWorker)
 }
 function* addSubCommentWorker({ commentId, newResult }) {
-    yield call(promiseWorker, actionAddSubComment(commentId, newResult))
-    console.log('newResult ', newResult)
-    const {
-      promise: {
-        addSubComment: { status },
-      },
-    } = yield select()
-    if (status === 'FULFILLED') {
-      yield call(getSubCommentWorker, {commentId})
-      }
-    }
-  
-  export function* addSubCommentWatcher() {
-    yield takeEvery("POST_SUB_COMMENT", addSubCommentWorker)
+  yield call(promiseWorker, actionAddSubComment(commentId, newResult))
+  const {
+    promise: {
+      addSubComment: { status },
+    },
+  } = yield select()
+  if (status === 'FULFILLED') {
+    yield call(getSubCommentWorker, { commentId })
   }
-  function* getSubCommentWorker({ commentId }) {
-    const { answers } = yield call(promiseWorker,
-      actionFindSubComment(commentId))
-    if (answers) {
-        yield put(actionAddSubCommentType(commentId, answers))
-    }
+}
+
+export function* addSubCommentWatcher() {
+  yield takeEvery('POST_SUB_COMMENT', addSubCommentWorker)
+}
+function* getSubCommentWorker({ commentId }) {
+  const { answers } = yield call(promiseWorker, actionFindSubComment(commentId))
+  if (answers) {
+    yield put(actionAddSubCommentType(commentId, answers))
   }
-  
-  export function* getSubCommentWatcher() {
-    yield takeEvery("GET_SUB_COMMENT", getSubCommentWorker)
-  }
+}
+
+export function* getSubCommentWatcher() {
+  yield takeEvery('GET_SUB_COMMENT', getSubCommentWorker)
+}

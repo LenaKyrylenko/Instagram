@@ -1,45 +1,34 @@
-import React, { useMemo, useState, useEffect } from 'react'
-
+import React, { useState, useEffect } from 'react'
 import { actionFullAllGetPostsSaga } from '../../actions/typeSaga/feedTypesSaga'
-import {
-  actionAddCommentFeedTypeSaga
-} from
-  '../../actions/typeSaga/commentTypesSaga'
-import {actionClearFeedPostsType} from '../../actions/types/feedTypes'
-import { Link } from 'react-router-dom'
+import { actionAddCommentFeedTypeSaga } from '../../actions/typeSaga/commentTypesSaga'
+import { actionClearFeedPostsType } from '../../actions/types/feedTypes'
 import { Provider, connect } from 'react-redux'
-import { Upload, Button, DatePicker, Space } from 'antd'
-import { Avatar, Image, Divider, Radio } from 'antd'
+import { Divider } from 'antd'
 import { CPost } from '../onePost'
 import { Row, Col } from 'antd'
 import LinkToUser from '../../components/LinkToUser'
 import { Comments } from '../../components/comment/Comment'
-import  AddComment from '../../components/comment/AddComment'
-// import { Like, Likes } from '../../components/like/Like'
+import AddComment from '../../components/comment/AddComment'
 import { MyCarousel } from '../../components/post/Carousel'
 import load from '../../materials/load.gif'
-import {
-  actionAddSubCommentTypeSaga,
-  actionFindSubCommentTypeSaga,
-} from '../../actions/typeSaga/postTypesSaga'
+import { actionFindSubCommentTypeSaga } from '../../actions/typeSaga/postTypesSaga'
 import { CLikeFeed } from '../../components/like/Like'
 const MyPostFeed = ({
-  // myData,
   postsFeed = [],
   onPostsFeed,
   addComment,
   onClearFeed,
-  postsFeedPromise
+  postsFeedPromise,
 }) => {
   const [checkScroll, setScroll] = useState(true)
 
   useEffect(() => {
     if (checkScroll) {
-       console.log('попало в новую порцию постов')
-       onPostsFeed()
+      onPostsFeed()
     }
     setScroll(false)
   }, [checkScroll])
+
   useEffect(() => {
     document.addEventListener('scroll', scrollHandler)
     return () => {
@@ -48,83 +37,87 @@ const MyPostFeed = ({
     }
   }, [])
 
-  console.log('check scroll ', checkScroll)
   useEffect(() => {
-     document.addEventListener('scroll', scrollHandler)
-     }, [postsFeed.length])
-  
-    const scrollHandler = (e) => {
-         if (e.target.documentElement.scrollHeight -
-           (e.target.documentElement.scrollTop + window.innerHeight) < 200) {
-          console.log('SCROLL HANDLER', checkScroll)
-          setScroll(true)
-          document.removeEventListener('scroll', scrollHandler)
-         }
-       }
+    document.addEventListener('scroll', scrollHandler)
+  }, [postsFeed.length])
+
+  const scrollHandler = (e) => {
+    if (
+      e.target.documentElement.scrollHeight -
+        (e.target.documentElement.scrollTop + window.innerHeight) <
+      200
+    ) {
+      setScroll(true)
+      document.removeEventListener('scroll', scrollHandler)
+    }
+  }
 
   return (
-
-    <div style={{  marginTop: '50px'}}>
-      <div className="PostsFeed" >
-
+    <div style={{ marginTop: '50px' }}>
+      <div className="PostsFeed">
         <Row>
           <Col span={12} offset={6}>
             <div>
               {postsFeed?.length == 0 && (
-                <div style={{textAlign:'center'}}>
+                <div style={{ textAlign: 'center' }}>
                   <h1> You have no posts to feed! </h1>
-                  <h1>
-                    {' '}
-                    Post and follow other users!{' '}
-                    </h1>
+                  <h1> Post and follow other users! </h1>
                 </div>
               )}
               {(postsFeed || []).map(
                 ({ _id, images, title, text, owner, comments, likes }) => (
-                  <div className='PostFeed'>
-                    <LinkToUser _id={owner?._id} key={_id} style={{marginLeft:"50px"}}
-                      login={owner?.login} avatar={owner?.avatar}
-                      size={50} />
+                  <div className="PostFeed">
+                    <LinkToUser
+                      _id={owner?._id}
+                      key={_id}
+                      style={{ marginLeft: '50px' }}
+                      login={owner?.login}
+                      avatar={owner?.avatar}
+                      size={50}
+                    />
                     <MyCarousel images={images} />
-                    <div style={{margin:"0 10%"}}>
-                    <h2 className='Title'> Title: {title || ''}</h2>
-                    <h2  className='Title'> Text: {text || ''}</h2>
-                    <Divider>Comments</Divider>
-                    <div style={{ margin: '10px',position: 'relative' }}>
-                    <div className="ScrollForFeed">
-                      <CCommentsForFeed
-                        postId={_id}
-                        comments={comments}
-                      />
-                      </div>
-                      <div style={{ display: 'flex', margin: '20px 0px' }}>
-                      <CLikeFeed likes={likes} postId={_id}/>
-                  
-                          <AddComment addComment={addComment}
-                            postId={_id} style={{
-                              position: 'absolute', bottom: '70px',
-                              zIndex: '100'
+                    <div style={{ margin: '0 10%' }}>
+                      <h2 className="Title"> Title: {title || ''}</h2>
+                      <h2 className="Title"> Text: {text || ''}</h2>
+                      <Divider>Comments</Divider>
+                      <div style={{ margin: '10px', position: 'relative' }}>
+                        <div className="ScrollForFeed">
+                          <CCommentsForFeed postId={_id} comments={comments} />
+                        </div>
+                        <div style={{ display: 'flex', margin: '20px 0px' }}>
+                          <CLikeFeed likes={likes} postId={_id} />
+
+                          <AddComment
+                            addComment={addComment}
+                            postId={_id}
+                            style={{
+                              position: 'absolute',
+                              bottom: '70px',
+                              zIndex: '100',
                             }}
-                          width={'300px'}
+                            width={'300px'}
                           />
-                    
                         </div>
-                        </div>
+                      </div>
                     </div>
                   </div>
                 ),
               )}
-             
             </div>
           </Col>
         </Row>
-        {(postsFeedPromise?.status == "PENDING") &&
-                
-          <img style={{
-            display: 'block',
-            margin: '0 auto', padding: '10px'
-          }} src={load} width="100" height="100" />
-             }
+        {postsFeedPromise?.status == 'PENDING' && (
+          <img
+            style={{
+              display: 'block',
+              margin: '0 auto',
+              padding: '10px',
+            }}
+            src={load}
+            width="100"
+            height="100"
+          />
+        )}
       </div>
     </div>
   )
@@ -132,59 +125,23 @@ const MyPostFeed = ({
 
 const CCommentsForFeed = connect(
   (state) => ({
-    // postId: state.promise.onePost?.payload?._id,
     addSubComment: state.promise?.addSubComment,
     addComment: state.promise?.addComment?.payload,
-
-    // addComment: state.promise?.addComment?.payload,
-    // addSubComment: state.promise?.addSubComment,
   }),
   {
     findSubComment: actionFindSubCommentTypeSaga,
-
-    // addComment: actionAddFullCommentFeed,
-    // addCommentReply: actionAddSubFullComment,
-    // findSubComment: actionFindSubComment,
   },
 )(Comments)
 
 export const CPostForFeed = connect(
   (state) => ({
-    // myData:  state?.myData.aboutMe || '',
     postsFeed: state.feed?.postsFeed || [],
     addComment: state.promise?.addComment?.payload,
-    postsFeedPromise :state.promise?.postsFeed
+    postsFeedPromise: state.promise?.postsFeed,
   }),
   {
-
     onPostsFeed: actionFullAllGetPostsSaga,
     onClearFeed: actionClearFeedPostsType,
     addComment: actionAddCommentFeedTypeSaga,
-    // addCommentReply: actionAddSubFullComment,
-    // addLike: actionAddFullLikeForFeed,
-
   },
 )(MyPostFeed)
-
-// const AllLikeComp = ({ my_Id, addLike, deleteLike, likes, postId }) => (
-//   <Like
-//     my_Id={my_Id}
-//     addLike={addLike}
-//     deleteLike={deleteLike}
-//     likes={likes}
-//     postId={postId}
-//   >
-//     <Likes likes={likes} />
-//   </Like>
-// )
-// export const CLikeForFeed = connect(
-//   (state) => ({
-//     my_Id: state.auth?.payload?.sub?.id || '',
-//     addLike: state.promise?.addLike?.payload,
-//     deleteLike: state.promise?.deleteLike?.payload,
-//   }),
-//   {
-//     // addLike: actionAddFullLikeFeed,
-//     // deleteLike: actionDeleteFullLikeFeed,
-//   },
-// )(AllLikeComp)

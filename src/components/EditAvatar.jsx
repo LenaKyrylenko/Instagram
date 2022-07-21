@@ -1,12 +1,9 @@
 import { connect } from 'react-redux'
 import { message, Image, Button } from 'antd'
-import {
-  actionUploadFile,
-} from '../actions/query/uploadFilesQuery'
+import { actionUploadFile } from '../actions/query/uploadFilesQuery'
 import React, { useState, useEffect } from 'react'
 import { Dropzone, ConstructorModal } from '../helpers'
-import { Input } from './Input'
-import {actionSetAvatarTypeSaga} from '../actions/typeSaga/myDataTypesSaga'
+import { actionSetAvatarTypeSaga } from '../actions/typeSaga/myDataTypesSaga'
 const EditAvatar = ({
   info,
   onSaveAvatar,
@@ -17,7 +14,6 @@ const EditAvatar = ({
 }) => {
   const [state, setState] = useState({})
 
-  console.log('state my ', state)
   useEffect(() => {
     fileStatus?.status == 'FULFILLED' &&
       setState({
@@ -33,36 +29,30 @@ const EditAvatar = ({
   }
 
   return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
-        <Dropzone onLoad={onFileDrop} />
+    <div className="EditAvatar">
+      <Dropzone onLoad={onFileDrop} />
 
-        {fileStatus?.payload?.url && (
-          <Image
-            style={{
-              width: '200px',
-              objectFit: 'cover',
-              height: '150px',
-            }}
-            src={'/' + fileStatus?.payload?.url}
-          />
-        )}
-        <br />
-        <Button
-          style={{ width: '200px' }}
-          disabled={fileStatus ? false : true}
-          onClick={saveAvatar}
-          size="large"
-          type="primary"
-        >
-          Save avatar
-        </Button>
-      </div>
+      {fileStatus?.payload?.url && (
+        <Image
+          style={{
+            width: '200px',
+            objectFit: 'cover',
+            height: '150px',
+          }}
+          src={'/' + fileStatus?.payload?.url}
+        />
+      )}
+      <br />
+      <Button
+        style={{ width: '200px' }}
+        disabled={fileStatus ? false : true}
+        onClick={saveAvatar}
+        size="large"
+        type="primary"
+      >
+        Save avatar
+      </Button>
+    </div>
   )
 }
 export const CEditAvatar = connect(
