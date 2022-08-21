@@ -1,6 +1,7 @@
 import { Carousel } from 'antd'
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
 import defaultPhoto from '../../materials/default-photo.png'
+import backendURL from '../../helpers/backendUrl'
 
 const SampleNextArrow = (props) => {
   const { onClick } = props
@@ -20,7 +21,7 @@ const SamplePrevArrow = (props) => {
   )
 }
 
-export const MyCarousel = ({ images = [] }) => {
+export const MyCarousel = ({ images = [],carouselWidth,carouselHeight }) => {
   return (
     <>
       <div className="MyCarousel">
@@ -35,13 +36,18 @@ export const MyCarousel = ({ images = [] }) => {
               (i, index) =>
                 i?.url && (
                   <div key={index}>
-                    <img key={index} className="PostImage" src={'/' + i?.url} />
+                    <img key={index} className="PostImage"
+                      // style={{width:carouselWidth, height: carouselHeight }}
+                      src={backendURL+'/' + i?.url} />
                   </div>
                 ),
             )
           ) : (
             <div>
-              <img className="PostImage" src={defaultPhoto} />
+                <img className="PostImage"
+                      style={{width:carouselWidth, height: carouselHeight }}
+                  
+                  src={defaultPhoto} />
             </div>
           )}
         </Carousel>

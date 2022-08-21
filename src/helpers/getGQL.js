@@ -1,3 +1,5 @@
+import backendURL from './backendUrl'
+
 export const getGQL = (url) => (query, variables) =>
   fetch(url, {
     method: 'POST',
@@ -18,4 +20,4 @@ export const getGQL = (url) => (query, variables) =>
       }
     })
 
-export const gql = getGQL('/graphql')
+export const gql = getGQL(backendURL+'/graphql')

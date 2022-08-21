@@ -13,14 +13,14 @@ export const ListOfUsers = ({ listUsers, text }) => {
   return (
     <>
       {listUsers?.length > 0 ? (
-        <h3
+        <p
           style={{ cursor: 'pointer', marginLeft: '20px' }}
           onClick={showModal}
         >
           {listUsers.length} {text}{' '}
-        </h3>
+        </p>
       ) : (
-        <h3 style={{ marginLeft: '20px' }}> 0 {text} </h3>
+        <p style={{ marginLeft: '20px' }}> 0 {text} </p>
       )}
 
       <ConstructorModal

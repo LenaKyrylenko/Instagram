@@ -16,9 +16,17 @@ export const actionOnePost = (_id) =>
                     avatar {url}
                 }
             answers{
-                _id  
+                _id  createdAt text 
+                owner {_id login nick
+                  avatar {url}
+              }
                 }
-               answerTo{_id} 
+               answerTo{_id
+                createdAt text 
+                owner {_id login nick
+                  avatar {url}
+              }
+              } 
             }
             likes{
               _id

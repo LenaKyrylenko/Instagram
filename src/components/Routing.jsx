@@ -7,7 +7,7 @@ import { CPost } from '../pages/onePost'
 import { connect } from 'react-redux'
 import { LoginPageForm } from '../pages/login'
 import { RegisterPageForm } from '../pages/login'
-
+import {CSearchMobileVersion} from '../pages/search'
 const Routing = ({ token }) => {
 
     return <>
@@ -19,6 +19,8 @@ const Routing = ({ token }) => {
           <Route path="/edit/post/:_id" component={CPostEditor} />
           <Route path="/post/:_id" component={CPost} />
           <Route path="/feed" component={CPostForFeed} />
+          <Route path="/search" component={CSearchMobileVersion} />
+
           <Redirect from="/*" to="/feed" />
         </Switch>
         :

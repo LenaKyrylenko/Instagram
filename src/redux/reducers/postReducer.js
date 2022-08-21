@@ -34,7 +34,7 @@ export const postReducer = (
       ...state,
       onePost: ({
         ...state?.onePost,
-        comments:  addAnswers(state.onePost.comments,
+        comments:  addAnswers(state?.onePost?.comments,
           commentId, newResult)
       }),
     })

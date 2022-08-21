@@ -2,6 +2,8 @@ import user from '../materials/user.png'
 import { Link } from 'react-router-dom'
 import { Avatar, Col, Row } from 'antd'
 import { CSubscribeLinkUser } from '../components/Subscribe'
+import backendURL from '../helpers/backendUrl'
+
 export const LinkToUser = ({
   _id,
   avatar,
@@ -13,7 +15,7 @@ export const LinkToUser = ({
   key,
 }) => {
   return (
-    <Row style={{ margin: '10px', marginBottom: '20px' }}>
+    <Row style={{ marginBottom:'5px'}}>
       <Link
         to={`/profile/${_id}`}
         style={{
@@ -21,6 +23,8 @@ export const LinkToUser = ({
           padding: padding,
           flexDirection: 'row',
           fontSize: font,
+          fontWeight: 'bold',
+          color: 'black'
         }}
         onClick={onClick}
         key={key}
@@ -29,14 +33,16 @@ export const LinkToUser = ({
           {avatar ? (
             <Avatar
               size={size}
-              src={'/' + avatar?.url}
-              style={{ marginRight: '3px' }}
+              src={backendURL+'/' + avatar?.url}
+             
             />
           ) : (
-            <Avatar size={size} src={user} style={{ marginRight: '3px' }} />
+              <Avatar size={size} src={user}
+                // style={{ marginRight: '3px' }}
+              />
           )}
         </Col>
-        <Col offset={2} style={{ marginTop: '5px' }}>
+        <Col offset={3} style={{ marginTop: '5px' }}>
           <h3> {login || 'Anon'}</h3>
         </Col>
       </Link>
@@ -58,12 +64,15 @@ export const LinkWithSubscribe = ({
   return (
     <Row style={{ margin: '10px', marginBottom: '20px' }}>
       <Link
-        to={`/profile/${_id}`}
+        to={`/profile/${_id}`} 
+
         style={{
           display: 'flex',
           padding: padding,
           flexDirection: 'row',
           fontSize: font,
+          fontWeight: 'bold',
+          color: 'black'
         }}
         onClick={onClick}
         key={key}
@@ -72,7 +81,7 @@ export const LinkWithSubscribe = ({
           {avatar ? (
             <Avatar
               size={size}
-              src={'/' + avatar?.url}
+              src={backendURL+'/' + avatar?.url}
               style={{ marginRight: '3px' }}
             />
           ) : (

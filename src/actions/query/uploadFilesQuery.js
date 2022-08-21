@@ -1,9 +1,9 @@
 import { actionPromise } from '../types/promiseTypes'
-
+import backendURL from '../../helpers/backendUrl'
 export const uploadFile = (file) => {
   const myForm = new FormData()
   myForm.append('photo', file)
-  return fetch('/upload', {
+  return fetch(backendURL+'/upload', {
     method: 'POST',
     headers: localStorage.authToken
       ? { Authorization: 'Bearer ' + localStorage.authToken }

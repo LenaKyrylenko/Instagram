@@ -9,14 +9,16 @@ export const Like = ({ my_Id, postId, likes = [], changeLike }) => {
   const likeId = likes.find((like) => like?.owner?._id === my_Id)?._id
   return (
     <>
-      <div style={{ display: 'flex' }}>
-        <h3 onClick={() => changeLike(likeId, postId)}>
+      <div className='OneLike'>
+        <p onClick={() => changeLike(likeId, postId)}
+          style={{ margin: '0 auto' }}>
           {likeId ? (
-            <HeartFilled style={{ color: 'red' }} className="Like" />
+            <HeartFilled style={{ color: 'red' }}
+              className="Like" />
           ) : (
-            <HeartOutlined className="UnLike" />
+            <HeartOutlined className="Like" />
           )}
-        </h3>
+        </p>
         <ModalLikes likes={likes} myId={my_Id} />
       </div>
     </>

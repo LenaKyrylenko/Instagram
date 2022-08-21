@@ -8,13 +8,14 @@ const ModalLikes = ({ likes, myId }) => {
   }
   return (
     <>
-      {likes.length ? (
-        <h3 className='LikeStyle' onClick={showModal}>
+      {likes.length ?
+        (
+        <h3 className="LikeStyle" style={{margin:'0 auto'}} onClick={showModal}>
           {' '}
           {likes.length} likes
         </h3>
       ) : (
-        <h3 className='LikeStyle'> 0 likes</h3>
+        <h3 className="LikeStyle"> 0 likes</h3>
       )}
 
       <ConstructorModal

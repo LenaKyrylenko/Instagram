@@ -11,7 +11,14 @@ import { Comments } from '../../components/comment/Comment'
 import AddComment from '../../components/comment/AddComment'
 import { MyCarousel } from '../../components/post/Carousel'
 import load from '../../materials/load.gif'
-import { actionFindSubCommentTypeSaga } from '../../actions/typeSaga/postTypesSaga'
+import {
+  actionFullOnePostSaga,
+  actionAddFullCommentSaga,
+} from '../../actions/typeSaga/postTypesSaga'
+import {
+  actionFindSubCommentTypeSaga,
+  actionFindSubCommentFeedTypeSaga,
+} from '../../actions/typeSaga/postTypesSaga'
 import { CLikeFeed } from '../../components/like/Like'
 const MyPostFeed = ({
   postsFeed = [],
@@ -53,72 +60,83 @@ const MyPostFeed = ({
   }
 
   return (
-    <div style={{ marginTop: '50px' }}>
-      <div className="PostsFeed">
-        <Row>
-          <Col span={12} offset={6}>
-            <div>
-              {postsFeed?.length == 0 && (
-                <div style={{ textAlign: 'center' }}>
-                  <h1> You have no posts to feed! </h1>
-                  <h1> Post and follow other users! </h1>
-                </div>
-              )}
-              {(postsFeed || []).map(
-                ({ _id, images, title, text, owner, comments, likes }) => (
-                  <div className="PostFeed">
+    <div className="PostsFeed">
+      <Row>
+        <Col
+          xl={{ offset: 6, span: 12 }}
+          lg={{ offset: 6, span: 15 }}
+          md={{ offset: 3, span: 17 }}
+          sm={{ offset: 3, span: 20 }}
+          xs={{ offset: 1, span: 22 }}
+        >
+          <div>
+            {postsFeed?.length == 0 && (
+              <div style={{ textAlign: 'center' }}>
+                <h1> You have no posts to feed! </h1>
+                <h1> Post and follow other users! </h1>
+              </div>
+            )}
+            {(postsFeed || []).map(
+              ({ _id, images, title, text, owner, comments, likes }) => (
+                <div className="PostsFeed-one">
+                  <Col
+                    xl={{ offset: 1, span: 12 }}
+                    lg={{ offset: 1, span: 15 }}
+                  >
                     <LinkToUser
+                      className="Owner"
                       _id={owner?._id}
                       key={_id}
-                      style={{ marginLeft: '50px' }}
                       login={owner?.login}
                       avatar={owner?.avatar}
-                      size={50}
+                      size={40}
                     />
-                    <MyCarousel images={images} />
-                    <div style={{ margin: '0 10%' }}>
-                      <h2 className="Title"> Title: {title || ''}</h2>
-                      <h2 className="Title"> Text: {text || ''}</h2>
-                      <Divider>Comments</Divider>
-                      <div style={{ margin: '10px', position: 'relative' }}>
-                        <div className="ScrollForFeed">
-                          <CCommentsForFeed postId={_id} comments={comments} />
-                        </div>
-                        <div style={{ display: 'flex', margin: '20px 0px' }}>
-                          <CLikeFeed likes={likes} postId={_id} />
-
-                          <AddComment
-                            addComment={addComment}
-                            postId={_id}
-                            style={{
-                              position: 'absolute',
-                              bottom: '70px',
-                              zIndex: '100',
-                            }}
-                            width={'300px'}
-                          />
-                        </div>
+                  </Col>
+                  <MyCarousel
+                    images={images}
+                    carouselWidth={'600px'}
+                    carouselHeight={'400px'}
+                  />
+                  <div style={{ margin: '0 7%' }}>
+                    <p className="Title"> Title: {title || ''}</p>
+                    <p className="Title"> Text: {text || ''}</p>
+                    <Divider>Comments</Divider>
+                    <div style={{ margin: '10px', position: 'relative' }}>
+                      <CCommentsForFeed postId={_id} comments={comments} />
+                      <div style={{ display: 'flex', margin: '20px 0px' }}>
+                        <CLikeFeed likes={likes} postId={_id} />
+                        <AddComment
+                          addComment={addComment}
+                          postId={_id}
+                          style={{
+                            position: 'absolute',
+                            // bottom: '70px',
+                            // zIndex: '100',
+                            // height:'30px'
+                          }}
+                          // width={'300px'}
+                        />
                       </div>
                     </div>
                   </div>
-                ),
-              )}
-            </div>
-          </Col>
-        </Row>
-        {postsFeedPromise?.status == 'PENDING' && (
-          <img
-            style={{
-              display: 'block',
-              margin: '0 auto',
-              padding: '10px',
-            }}
-            src={load}
-            width="100"
-            height="100"
-          />
-        )}
-      </div>
+                </div>
+              ),
+            )}
+          </div>
+        </Col>
+      </Row>
+      {postsFeedPromise?.status == 'PENDING' && (
+        <img
+          style={{
+            display: 'block',
+            margin: '0 auto',
+            padding: '10px',
+          }}
+          src={load}
+          width="100"
+          height="100"
+        />
+      )}
     </div>
   )
 }
@@ -129,7 +147,7 @@ const CCommentsForFeed = connect(
     addComment: state.promise?.addComment?.payload,
   }),
   {
-    findSubComment: actionFindSubCommentTypeSaga,
+    findSubComment: actionFindSubCommentFeedTypeSaga,
   },
 )(Comments)
 

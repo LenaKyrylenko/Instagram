@@ -97,11 +97,11 @@ const EditSetting = ({
         setIsModalVisible={setIsModalVisibleEdit}
         handleCancel={handleCancelEdit}
       >
-        <h2> Edit avatar </h2>
+        <h3> Edit avatar </h3>
         <SpoilerButton text={'Change avatar'} style={{ width: '100%' }}>
           <CEditAvatar setIsModalVisibleEdit={setIsModalVisibleEdit} />
         </SpoilerButton>
-        <h2> Edit login </h2>
+        <h3> Edit login </h3>
         <SpoilerButton text={'Change login'} style={{ width: '100%' }}>
           <div
             style={{
@@ -127,7 +127,7 @@ const EditSetting = ({
           </div>
         </SpoilerButton>
 
-        <h2> Edit nick </h2>
+        <h3> Edit nick </h3>
         <SpoilerButton text={'Change nick'} style={{ width: '100%' }}>
           <div
             style={{
@@ -151,7 +151,7 @@ const EditSetting = ({
             </Button>
           </div>
         </SpoilerButton>
-        <h2> Edit password </h2>
+        <h3> Edit password </h3>
         <SpoilerButton text={'Change password'} style={{ width: '100%' }}>
           <h3> Login</h3>
           <div

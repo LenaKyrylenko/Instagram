@@ -4,6 +4,8 @@ import { actionUploadFile } from '../actions/query/uploadFilesQuery'
 import React, { useState, useEffect } from 'react'
 import { Dropzone, ConstructorModal } from '../helpers'
 import { actionSetAvatarTypeSaga } from '../actions/typeSaga/myDataTypesSaga'
+import backendURL from '../helpers/backendUrl'
+
 const EditAvatar = ({
   info,
   onSaveAvatar,
@@ -39,7 +41,7 @@ const EditAvatar = ({
             objectFit: 'cover',
             height: '150px',
           }}
-          src={'/' + fileStatus?.payload?.url}
+          src={backendURL + '/' + fileStatus?.payload?.url}
         />
       )}
       <br />

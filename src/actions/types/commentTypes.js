@@ -13,6 +13,12 @@ export const actionAddSubCommentType = (commentId, newResult) => ({
   newResult,
 })
 
+export const actionAddSubCommentFeedType = (commentId, newResult) => ({
+  type: 'FEED-ANSWERS-COMMENT',
+  commentId,
+  newResult,
+})
+
 export const addAnswers = (comments, commentId, newResult) =>
   comments.map((comment) => {
     if (comment._id === commentId) {

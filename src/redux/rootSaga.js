@@ -16,6 +16,8 @@ import {
   addCommentOnePostWatcher,
   addSubCommentWatcher,
   getSubCommentWatcher,
+  getSubCommentFeedWatcher,
+  addSubCommentFeedWatcher
 } from './saga/comment'
 import { onePostWatcher, postsWatcher } from './saga/post'
 import { changeLikePostWatcher, changeLikePostFeedWatcher } from './saga/like'
@@ -43,7 +45,10 @@ function* rootSaga() {
     addSubCommentWatcher(),
     getSubCommentWatcher(),
     changeLikePostFeedWatcher(),
+    getSubCommentFeedWatcher(),
+    addSubCommentFeedWatcher()
   ])
+
 }
 
 export default rootSaga

@@ -14,6 +14,8 @@ import { Row, Col } from 'antd'
 import { CSubscribe } from '../../components/Subscribe'
 import { CEditSetting } from '../setting'
 import load from '../../materials/load.gif'
+import backendURL from '../../helpers/backendUrl'
+
 export const PageAboutUser = ({
   match: {
     params: { _id },
@@ -66,35 +68,32 @@ export const PageAboutUser = ({
   return (
     <>
       <Row>
-        <Col span={12} offset={6}>
+        <Col xl={{ span: 12, offset: 6 }}
+          md={{ span: 20, offset: 3 }}
+          sm={{ offset: 3, span: 15 }}
+          xs={{ offset: 2, span: 20 }}
+        >
           <section className="AboutMe">
             <Row>
               {avatar?.url ? (
                 <Avatar
-                  style={{
-                    marginRight: '20px',
-                    width: '150px',
-                    height: '150px',
-                  }}
-                  src={'/' + avatar?.url}
+                  
+        className='ProfileAvatar'
+                  src={backendURL+'/' + avatar?.url}
                 />
               ) : (
                 <Avatar
-                  style={{
-                    marginRight: '20px',
-                    width: '150px',
-                    height: '150px',
-                  }}
+                className='ProfileAvatar'
                   src={user}
                 />
               )}
               <div className="Info">
-                {login ? <h1> {login}</h1> : <h1> {'Anon'}</h1>}
+                {login ? <p className='Login'> {login}</p> : <p className='Login'> {'Anon'}</p>}
 
-                <h3>
+                <p>
                   Created Account:{' '}
                   {new Intl.DateTimeFormat('en-GB').format(createdAt)}
-                </h3>
+                </p>
                 <div style={{ display: 'flex' }}>
                   {countPosts > 0 ? (
                     <div
@@ -103,10 +102,10 @@ export const PageAboutUser = ({
                         justifyContent: 'space-between',
                       }}
                     >
-                      <h3> {countPosts} posts </h3>
+                      <p> {countPosts} posts </p>
                     </div>
                   ) : (
-                    <h3> 0 posts </h3>
+                    <p> 0 posts </p>
                   )}
 
                   <ListOfUsers
@@ -123,7 +122,7 @@ export const PageAboutUser = ({
                     text={'following'}
                   />
                 </div>
-                <h3> nick: {nick == null ? login : nick}</h3>
+                <p> nick: {nick == null ? login : nick}</p>
 
                 {checkMyId ? <CEditSetting /> : <CSubscribe />}
               </div>
@@ -132,13 +131,16 @@ export const PageAboutUser = ({
         </Col>
       </Row>
       <Row>
-        <Col span={17} offset={4}>
+
+        <Col xl={{ span: 17, offset: 4 }}
+          lg={{ offset: 4, span: 20 }}
+          md={{ offset: 4, span: 20}}
+          sm={{ offset: 3, span: 15 }}
+          xs={{ offset: 1, span: 24 }}
+        //  md={{ span: 1 }}
+        >
           <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              margin: '20px',
-            }}
+            className='ProfilePage'
           >
             {(allPosts || [])?.map((item) => (
               <Card post={item} onPost={onPost} />

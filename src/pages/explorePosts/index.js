@@ -47,7 +47,15 @@ const ExplorePosts = ({
   return (
     <>
       <Row>
-        <Col span={18} offset={4}>
+        <Col
+          xl={{ offset: 4, span: 18 }}
+          lg={{ offset: 2, span: 20 }}
+          md={{ offset: 2, span: 20 }}
+          sm={{ offset: 2, span: 22 }}
+          xs={{offset:3, span: 20 }}
+          // span={18} offset={4}
+        
+        >
           <div className="Explore">
             {(explorePosts || [])?.map((item) => (
               <Card post={item} onPost={onPost} />

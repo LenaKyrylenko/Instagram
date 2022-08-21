@@ -11,26 +11,33 @@ import {
 import { Typography } from 'antd'
 import CommentAuthor from './CommentAuthor'
 import CommentAvatar from './CommentAvatar'
+import { ViewComment } from './SpoilerButton'
 const { Text } = Typography
+
 export const Comments = ({
   comments,
   postId,
   parentId,
+
   findSubComment,
 }) => {
   return (
     <>
       {comments?.length && Object.keys(comments[0])?.length > 1
-        ? comments?.map((comment) => {
+        ?
+        <ViewComment text={'View all '} count={comments?.length}
+          style={{ overflowY: 'none' }}
+          textClosed={'Hide comments'}>
+          {comments?.map((comment) => {
             return (
               <Comment
                 key={comment?._id}
                 author={
-                 <CommentAuthor owner={comment?.owner}/>
+                  <CommentAuthor owner={comment?.owner} />
                 }
                 actions={[<CommentAction commentId={comment?._id} />]}
                 avatar={
-                 <CommentAvatar owner={comment?.owner}/>
+                  <CommentAvatar owner={comment?.owner} />
                 }
                 content={<p>{comment?.text}</p>}
                 datetime={<CommentDate createdAt={comment?.createdAt} />}
@@ -43,24 +50,28 @@ export const Comments = ({
                 />
               </Comment>
             )
-          })
-        : comments?.length && (
+          })}
+        </ViewComment>
+        : 
+     comments?.length && (
             <Text className='ButtonComment'
               type="secondary"
               strong
               style={{ margin: '0 auto' }}
               onClick={() => findSubComment(parentId)}
             >
-              __ View answers ({comments.length})
+              {/* __ View answers ({comments.length}) */}
             </Text>
           )}
+      
+      
     </>
   )
 }
 export const CCommentsOnePost = connect(
   (state) => ({
     postId: state.promise.onePost?.payload?._id,
-    comments: state?.post.onePost?.comments,
+    // comments: state?.post.onePost?.comments,
     addComment: state.promise?.addComment?.payload,
     addSubComment: state.promise?.addSubComment,
   }),

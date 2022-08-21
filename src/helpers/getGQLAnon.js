@@ -1,3 +1,4 @@
+import backendURL from './backendUrl'
 
 export const getGQLAnon = (url) => (query, variables) =>
 fetch(url, {
@@ -16,4 +17,4 @@ fetch(url, {
     }
   })
 
-export const gqlAnon = getGQLAnon('/graphql')
+export const gqlAnon = getGQLAnon(backendURL+'/graphql')

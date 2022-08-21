@@ -1,3 +1,4 @@
+import { addAnswers } from "../../actions/types/commentTypes"
 export const feedReducer = (
   state = {},
   {
@@ -8,6 +9,7 @@ export const feedReducer = (
     postsFeedCount,
     newPostsFeedCount,
     newResult,
+    commentId
   },
 ) => {
   const types = {
@@ -47,9 +49,24 @@ export const feedReducer = (
       ...state,
 
       postsFeed: postsFeed?.map((p) =>
-        p._id === postId ? (p = { ...p, comments: [...newResult] }) : p,
+        p._id === postId ? (p = { ...p, comments: 
+          [...newResult] }) : p,
       ),
     }),
+    'FEED-ANSWERS-COMMENT': () => ({
+      ...state,
+      postsFeed: ({
+        ...state?.postsFeed?.map((p) =>
+          p._id === postId && (p = {
+            ...p, comments:
+              addAnswers(state?.postsFeed?.p?.comments,
+                commentId, newResult)
+          })
+        )
+      })
+    })
+          
+    
   }
   if (type in types) {
     return types[type]()

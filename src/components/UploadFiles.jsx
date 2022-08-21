@@ -17,7 +17,10 @@ export function Dropzone({ onLoad }) {
     <section className="container">
       <div {...getRootProps({ className: 'Dropzone' })}>
         <input {...getInputProps()} />
-        <Button type="dashed" size="large" icon={<UploadOutlined />}>
+        <Button type="dashed" xl={{ size: 'large' }}
+          sm={{size:'small'}}
+          // size="large"
+          icon={<UploadOutlined />}>
           Drag 'n' drop some files here, or click to select files
         </Button>
       </div>

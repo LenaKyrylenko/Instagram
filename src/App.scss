@@ -61,17 +61,7 @@ body {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   font-size: 20px;
 }
-.Links {
-  margin: 10px;
-  font-size: xx-large;
-  color: black;
-  transition: 0.3s;
-}
-.Links:hover {
-  color: white;
 
-  opacity: 0.7;
-}
 .Link {
   color: white;
   margin-left: 5px;
@@ -81,9 +71,6 @@ body {
   color: rgb(241, 69, 155);
 }
 
-.Links:active {
-  transform: scale(1.1);
-}
 .Header {
   display: flex;
   position: fixed;
@@ -95,6 +82,21 @@ body {
   transition: 0.3s;
   box-shadow: 0 5px 10px rgba(73, 80, 83, 0.25),
     0 10px 5px rgba(191, 194, 196, 0.22);
+  .Links {
+    margin: 0 10px;
+    font-size: xx-large;
+    color: black;
+    transition: 0.3s;
+    padding: 0 5px;
+    &:hover {
+      color: white;
+
+      opacity: 0.7;
+    }
+    &:active {
+      transform: scale(1.1);
+    }
+  }
 }
 
 .Recomendations {
@@ -149,11 +151,14 @@ main {
 }
 .Title {
   text-align: left;
-  margin: 20px 0px;
+  font-size: 18px;
+  margin: 10px 0px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 .Input {
   display: flex;
-  padding: 5px;
+  // padding: 5px;
   margin: 10px;
   width: 80%;
   border-radius: 5px;
@@ -172,12 +177,29 @@ main {
   margin-top: 100px;
   display: flex;
   justify-content: center;
+  .ProfileAvatar{
+  margin-right: 20px;
+  width: 150px;
+  height: 150px;
+  }
+  .Info {
+    .Login{
+      font-weight: 600;
+      font-size: 18px;
+    }
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    p{font-size: 16px;
+      font-weight: 400;
+
+    padding:0 auto;
+margin-bottom: 3px;
+    }
+  }
 }
-.Info {
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-}
+
 .Card {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   width: 250px;
@@ -229,60 +251,74 @@ main {
   filter: brightness(50%);
 }
 
-.Like {
-  cursor: pointer;
-  font-size: xx-large;
-  color: red;
+// .Like {
+//   cursor: pointer;
+//   font-size: xx-large;
+//   color: red;
+// }
+// .Like:active {
+//   transform: scale(1.1);
+// }
+.OneLike {
+  display: flex;
+  .Like {
+    cursor: pointer;
+    font-size: xx-large;
+    color: black;
+    transition: filter 0.3s;
+    &:active {
+      transform: scale(1.1);
+    }
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+  .LikeStyle {
+    cursor: pointer;
+    padding: 3px;
+  }
 }
-.Like:active {
-  transform: scale(1.1);
-}
-.UnLike {
-  cursor: pointer;
-  font-size: xx-large;
-  color: white;
-  transition: filter 0.3s;
-}
-.UnLike:hover {
-  opacity: 0.6;
-}
+// .UnLike:hover {
+//   opacity: 0.6;
+// }
 
-.MyCarousel {
-  display: block;
-  object-fit: cover;
-  background: #84898987;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
-  background-color: white;
-  border: 6px solid #dbebfa;
-  margin: 0 10%;
-  border-radius: 5px;
-}
+// .MyCarousel {
+//   display: block;
+//   object-fit: cover;
+//   background: #84898987;
+//   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+//   box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
+//   background-color: white;
+//   border: 6px solid #dbebfa;
+//   margin: 0 10%;
+//   border-radius: 5px;
+
+// }
 .Modal {
   font-size: medium;
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
-.PostFeed {
-  border-width: 20;
-  border-color: #ffffff;
-  background: #edf8f89e;
-  border-radius: 5px;
-  border-style: solid;
-  margin-bottom: 40px;
-  transition: 0.3s;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
+// .PostFeed {
+//   border-width: 20;
+//   border-color: #ffffff;
+//   background: #edf8f89e;
+//   border-radius: 5px;
+//   border-style: solid;
+//   margin-bottom: 40px;
+//   transition: 0.3s;
+//   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+// }
 
 .NextArrow {
-  font-size: 50px;
-  color: #41607d;
+  font-size: 35px;
+  color: rgb(84, 132, 222);
   position: absolute;
   left: 100%;
   top: 50%;
   margin: auto;
-  padding-left: 20px;
+  padding-left: 10px;
   text-shadow: black 1px 0 10px;
   transition: opacity 0.3s;
 }
@@ -293,13 +329,13 @@ main {
   transform: scale(1.1);
 }
 .PreviousArrow {
-  color: #41607d;
-  font-size: 50px;
+  color: rgb(84, 132, 222);
+  font-size: 35px;
   position: absolute;
   margin: auto;
   right: 100%;
   top: 50%;
-  padding-right: 20px;
+  padding-right: 10px;
 }
 .PreviousArrow:hover {
   opacity: 0.6;
@@ -307,18 +343,9 @@ main {
 .PreviousArrow:active {
   transform: scale(1.1);
 }
-.PostImage {
-  display: flex;
-  align-items: center;
-  width: 700px;
-  height: 500px;
-  object-fit: cover;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.22);
-}
+
 .LoginForm {
-  margin: 100px;
+  margin: 120px;
   padding: 10px;
   background: rgba(58, 100, 180, 1);
   border-radius: 15px;
@@ -327,16 +354,18 @@ main {
   justify-content: center;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.22);
   p {
-    font-size: large;
+    font-size: x-large;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
       sans-serif;
+    text-align: center;
+    margin: 0 auto;
   }
   .LoginForm-Form {
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.22);
     background: rgb(142, 199, 239);
     border-radius: 10px;
-    margin: 40px;
-    padding: 20px;
+    margin: 21px;
+    padding: 20px 50px;
 
     Button {
       margin: 10px 0px;
@@ -381,17 +410,22 @@ main {
   }
 }
 
-.LikeStyle {
-  cursor: pointer;
-  padding: 3px;
-}
+// .LikeStyle {
+//   cursor: pointer;
+//   padding: 3px;
+// }
+
 .SmileBtn {
   font-size: xx-large;
-  margin-right: 15px;
+  // margin-right: 15px;
+}
+.Send{
+  font-size: xx-large;
+margin-bottom: 10px;
 }
 .SmileBtnFilled {
   font-size: xx-large;
-  margin-right: 15px;
+  // margin-right: 15px;
   color: #108ee9;
 }
 .Comments {
@@ -400,6 +434,12 @@ main {
   margin: 20px;
   width: 30%;
   padding: 10px;
+}
+.WithOutScroll {
+  display: block;
+
+  flex-direction: column;
+  // height: 200px;
 }
 .Scroll {
   display: block;
@@ -411,7 +451,7 @@ main {
 .ScrollForFeed {
   display: block;
   flex-direction: column;
-  height: 20s0px;
+  height: 200px;
   overflow-y: scroll;
 }
 .button {
@@ -437,13 +477,52 @@ main {
 
 .PostsFeed {
   margin: 20px;
-  padding: 40px;
+  padding: 30px;
+  margin-top: 50px;
+  .PostsFeed-one {
+    border-width: 20;
+    border-color: #ffffff;
+    background: #edf8f89e;
+    border-radius: 5px;
+    border-style: solid;
+    margin-bottom: 40px;
+    transition: 0.3s;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    .Owner {
+      margin: 10px;
+    }
+  }
+}
+.MyCarousel {
+  // display: block;
+  object-fit: cover;
+  background: #84898987;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
+  background-color: white;
+  border: 6px solid #dbebfa;
+  margin: 0 7%;
+  border-radius: 5px;
+  .PostImage {
+    display: flex;
+    align-items: center;
+    width: 600px;
+    height: 400px;
+    object-fit: cover;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.22);
+  }
 }
 .SpoilerButton {
   right: 30px;
   margin: 20px;
 }
-
+.ProfilePage {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px;
+}
 .NumberPosts {
   float: right;
   margin-bottom: 10px;
@@ -460,12 +539,38 @@ main {
   box-shadow: 0 5px 10px rgba(21, 46, 57, 0.25),
     0 10px 10px rgba(12, 43, 58, 0.22);
 }
-
+.OnePost{
+  margin-top: 100px;
+}
 .ResultUserFind {
   max-width: 500px;
   min-width: 320px;
   max-height: 500px;
   padding: 15px 0;
+  overflow: auto;
+}
+.Search {
+  padding: 10px;
+  display: flex;
+  position: fixed;
+  z-index: 4;
+  width: 100%;
+  //  background-color: rgb(206, 227, 255);
+  background-color: #ffffff;
+  top: 0;
+  transition: 0.3s;
+  box-shadow: 0 5px 10px rgba(73, 80, 83, 0.25),
+    0 10px 5px rgba(191, 194, 196, 0.22);
+}
+.ResultUserFindMobile {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  // max-width: 500px;
+  // min-width: 320px;
+  // max-height: 500px;
+  margin-top: 50px;
+  padding: 15px 5px;
   overflow: auto;
 }
 .InputOnePost {
@@ -474,102 +579,295 @@ main {
   margin-left: 10px;
   margin-right: 10px;
 }
+.ProfileAvatar {
+  margin-right: 20px;
 
-/* Responsive */
+  width: 150px;
+  height: 150px;
+}
+.FooterPost{
+
+.CommentsPost{
+  height: 250px;
+}
+}
+
+@media screen and (max-width: 1450px) {
+  .Explore {
+    .Wrapper {
+      margin: 20px;
+      .Card {
+        width: 220px;
+        height: 220px;
+      }
+    }
+  }
+
+}
 /* 992px - 1200px */
 @media screen and (max-width: 1200px) {
   .LoginForm {
     p {
+      text-align: center;
       font-size: xx-large;
-    }
-  }
-  .InputForm {
-    // width: 960px;
-    img {
-      // width: 50%;
-      // height: 50%;
-    }
-    Title {
-      width: 100%;
     }
     section {
       display: flex;
       // flex-direction: row;
       // width: 100%;
       align-items: center;
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
+  .InputForm {
+    // width: 960px;
+    img {
+      width: 100%;
+      // height: 50%;
+      margin-bottom: 40%;
+      margin-left: 20%;
+    }
+    Title {
+      width: 100%;
+    }
+  }
+  .OneLike {
+    flex-direction: column;
+    margin: 0px auto;
+    .Like {
+      .LikeStyle {
+        padding: 0px;
+      }
     }
   }
 
-  .LoginForm-Form {
-    // width: 90%;
-    // width: 960px;
+  .Explore {
+    .Wrapper {
+      margin: 20px;
+      .Card {
+        width: 220px;
+        height: 220px;
+      }
+    }
+  }
+  .ProfilePage {
+    .Wrapper {
+      .Card {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  }
+  
+}
+
+// /* 768px - 992px */
+@media screen and (max-width: 992px) {
+  .LoginForm {
+    p {
+      text-align: center;
+      font-size: xx-large;
+    }
+  }
+  .Header {
+    bottom: 0;
+    top: auto;
+  }
+  .AboutMe {
+    margin-top: 20px;
+    
+  }
+  .PostsFeed {
+    margin: 10px;
+  }
+  .ProfilePage {
+    .Wrapper {
+      margin: 10px;
+      .Card {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  }
+  .Explore {
+    .Wrapper {
+      margin: 20px;
+      .Card {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  }
+  .Preloader{
+    margin-bottom:80px ;
+  }
+  .AboutMe{
+    .ProfileAvatar{
+      height: 100px;
+      width: 100px;
+    }
+   
+      .Info {
+        .Login{
+          font-size: 16px;
+        }
+    
+        p{font-size: 14px;
+ 
+        }
+      }
+    }
+  }
+
+/*576px-768px*/
+@media screen and (max-width: 768px) {
+  .LoginForm {
+    width: 70%;
+    align-content: center;
+    justify-content: center;
+    margin: 0 auto;
+    margin: 0 100px;
+    padding: 0;
+    // height: 90%;
+    p {
+      font-size: x-large;
+      margin: 35px;
+    }
+    .LoginForm-Form {
+      width: 90%;
+      // padding: 10px;
+    }
+  }
+  .Preloader{
+    margin-bottom:40px ;
+  }
+  .Explore {
+    margin-top: 0px;
+    .Wrapper {
+      margin: 10px;
+      .Card {
+        width: 120px;
+        height: 120px;
+      }
+    }
   }
 }
-// 	.wrapper{
-// 		flex-direction: column;
-// 	}
-// 	.offer{
-// 		width: 90%;
-// 	}
-// 	.intro{
-// 		width: auto;
-// 	}
-// 	.travel{
-// 		display: block;
-// 		width: 549px;
-// 	}
-// 	.bonuses{
-// 		flex-direction: column;
-// 	}
-// 	.bonus{
-// 		width: auto;
-// 		margin-bottom: 25px;
-// 	}
-// 	.title{
-// 		width: auto;
-// 	}
-// 	.logo{
-// 		margin-bottom: 40px;
-// 	}
-// }
-// /* 768px - 992px */
-// @media screen and (max-width: 992px)
-// {
-// 	.container{
-// 		width: 720px;
-// 	}
-// 	.btn{
-// 		display: block;
-// 		align-items:center;
-// 		margin: auto;
-// 	}
-// }
-// /*576px-768px*/
-// @media screen and (max-width: 768px)
-// {
+/*320px-576px*/
+@media screen and (max-width: 576px) {
+  .Title {
+    font-size: 15px;
+  }
+  .Dropzone {
+    padding: 10px;
+      font-size: 10px;
+  font-size: small;
 
-// 	.container{
-// 		width: 540px;
-// 	}
-// 	.travel{
-// 		width: 100%;
-// 	}
-// 	.input{
-// 		width: 80%;
-// 	}
-// 	.btn{
-// 		width: 80%;
-// 	}
-// }
-// /*320px-576px*/
-// @media screen and (max-width: 576px)
-// {
-// 	.container{
-// 		width: 90%;
-// 	}
+  }
+  .OnePost{  
+    margin-top: 40px;
+  
+  }
+  .ScrollForFeed{
+    height: 150px;
+  }
+  .FooterPost{
+    margin-bottom: 100px;
+    .CommentsPost{
+      height: 180px;
+    }
+    }
+  
+.OneLike {
+  display: flex;
+  font-size: 12px;
+  .Like {
+    font-size: x-large;
+    color: black;
+  }
+  .LikeStyle {
+    cursor: pointer;
+    padding: 0px;
+  }
+}
 
-// 	.input{
-// 		font-size: 12px;
-// 	}
+  .MyCarousel {
+    // display: block;
+    object-fit: cover;
+    background: #84898987;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
+    background-color: white;
+    border: 6px solid #dbebfa;
+    margin: 0 5%;
+    border-radius: 5px;
+    .PostImage {
+    
+      width: 300px;
+      height: 300px;
+     
+    }
+  }
+  .LoginForm {
+    width: 90%;
+    align-content: center;
+    justify-content: center;
+    margin: 30px 20px;
+    // padding: 20px;
+    height: 90%;
+    padding-right: 12px;
 
-// }
+    p {
+      font-size: x-large;
+      margin: 5px;
+    }
+    .LoginForm-Form {
+      padding: 10px 20px;
+
+      // width: 80%;
+      // padding: 20px;
+    }
+  }
+  .AboutMe{
+    .ProfileAvatar{
+      height: 80px;
+      width: 80px;
+    }
+    .Info {
+      .Login{
+        font-size: 14px;
+      }
+  
+      p{font-size: 12px;
+
+      }
+    }
+  }
+  .ProfilePage {
+    .Wrapper {
+      margin: 10px;
+      .Card {
+        width: 90px;
+        height: 90px;
+      }
+    }
+  }
+  .Post {
+    max-width: 380px;
+    // height: 500px;
+    margin-top: 40px;
+    margin-bottom: 0px;
+    
+    }
+  .Explore {
+    margin-top: 0px;
+    margin:5px;
+    .Wrapper {
+      margin: 10px;
+      .Card {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  }
+}

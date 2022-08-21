@@ -22,6 +22,7 @@ export const ResultUserFind = ({ userFind = [], handleCancel }) => {
     </div>
   )
 }
+
 const SearchUser = ({ my_Id, onSearch, searchUser, onPageData }) => {
   const onSearchUser = (value) => onSearch(value)
   const { Search } = Input
