@@ -2,14 +2,19 @@ import { connect } from 'react-redux'
 import { Input, Popover } from 'antd'
 import { actionSearchUser } from '../../actions/query/searchUserQuery'
 import { UserOutlined } from '@ant-design/icons'
-
+import {actionSearchSaga,actionClearSearchType} from '../../actions/types/searchType'
 import { actionFullProfilePageUserTypeSaga } from '../../actions/typeSaga/userTypesSaga'
 import LinkToUser from '../../components/LinkToUser'
-export const ResultUserFind = ({text, userFind = [], handleCancel }) => {
+export const ResultUserFind = ({ userFind, handleCancel }) => {
   return (
     <div className="ResultUserFindMobile">
+      {console.log('userfind ', userFind)}
+     
+      {typeof userFind === 'undefined' 
       
-      {userFind ?
+        ? 
+        null :
+        userFind?.length > 0 ?
       userFind?.map(({ _id, login, avatar }) => (
         <LinkToUser
           _id={_id}
@@ -23,39 +28,22 @@ export const ResultUserFind = ({text, userFind = [], handleCancel }) => {
         />
       ))
         :
-        <p> Not found by request "{text} "</p>
+        <p style={{fontSize:'16px', textAlign:'center'}}> Not found by request </p>
     }
     </div>
   )
 }
 
-const SearchUser = ({my_Id, onSearch, searchUser, onPageData }) => {
-  // const [value, setSearch] = useState('')
-  // const onSearchUser = onSearch(setSearch(value))
+const SearchUser = ({my_Id,onSearch,actionClear, searchUser, onPageData }) => {
   const onSearchUser = (value) =>
-    console.log('value ', value)&&
     onSearch(value)
     const { Search } = Input
-    // console.log('value ', value)
   return (
       <>
-        {/* <Popover
-          placement="bottom"
-          destroyTooltipOnHide={true}
-          size="large"
-          content={
-            <ResultUserFind
-              my_Id={my_Id}
-              size={'20px'}
-              onPageData={onPageData}
-              userFind={searchUser}
-            />
-          }
-        > */}
           <Search
             placeholder="Enter search user"
-            allowClear
-            prefix={<UserOutlined />}
+            allowClear={actionClear}
+        prefix={<UserOutlined />}
             enterButton="Search"
             size="large"
                 onSearch={onSearchUser}
@@ -63,7 +51,6 @@ const SearchUser = ({my_Id, onSearch, searchUser, onPageData }) => {
             />
             <div>
           <ResultUserFind
-            text={value}
               my_Id={my_Id}
               size={'20px'}
               onPageData={onPageData}
@@ -83,7 +70,8 @@ const SearchUser = ({my_Id, onSearch, searchUser, onPageData }) => {
     }),
   
     {
-      onSearch: actionSearchUser,
+      onSearch: actionSearchSaga,
+      actionClear:actionClearSearchType,
       onPageData: actionFullProfilePageUserTypeSaga,
     },
   )(SearchUser)

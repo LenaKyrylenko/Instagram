@@ -9,6 +9,8 @@ import { actionFullProfilePageTypeSaga } from './actions/typeSaga/myDataTypesSag
 import { CShowHeader } from './pages/header'
 import { CRouting } from './components/Routing'
 import history from './helpers/history'
+import Root from './components/rootTheme/index'
+import ThemeProvider from './providers/ThemeProvider'
 store.subscribe(() => console.log(store.getState()))
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
   return (
     <Router history={history}>
       <Provider store={store}>
+        
         <div className="App">
           <CRouting />
           <CShowHeader />

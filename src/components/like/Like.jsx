@@ -5,10 +5,12 @@ import {
 } from '../../actions/typeSaga/likeTypesSaga'
 import { connect } from 'react-redux'
 import ModalLikes from './ModalLikes'
+
 export const Like = ({ my_Id, postId, likes = [], changeLike }) => {
   const likeId = likes.find((like) => like?.owner?._id === my_Id)?._id
   return (
     <>
+    
       <div className='OneLike'>
         <p onClick={() => changeLike(likeId, postId)}
           style={{ margin: '0 auto' }}>
@@ -20,7 +22,7 @@ export const Like = ({ my_Id, postId, likes = [], changeLike }) => {
           )}
         </p>
         <ModalLikes likes={likes} myId={my_Id} />
-      </div>
+        </div>
     </>
   )
 }

@@ -97,12 +97,16 @@ const EditSetting = ({
         setIsModalVisible={setIsModalVisibleEdit}
         handleCancel={handleCancelEdit}
       >
-        <h3> Edit avatar </h3>
-        <SpoilerButton text={'Change avatar'} style={{ width: '100%' }}>
-          <CEditAvatar setIsModalVisibleEdit={setIsModalVisibleEdit} />
+        <div className='ModalEdit'> 
+        <p> Edit avatar </p>
+          <SpoilerButton text={'Change avatar'}
+            style={{ width: '100%' }}>
+            <CEditAvatar
+              setIsModalVisibleEdit={setIsModalVisibleEdit} />
         </SpoilerButton>
-        <h3> Edit login </h3>
-        <SpoilerButton text={'Change login'} style={{ width: '100%' }}>
+        <p> Edit login </p>
+          <SpoilerButton text={'Change login'}
+            style={{ width: '100%' }}>
           <div
             style={{
               display: 'flex',
@@ -124,10 +128,11 @@ const EditSetting = ({
               {' '}
               Save login{' '}
             </Button>
-          </div>
+            </div>
+            
         </SpoilerButton>
 
-        <h3> Edit nick </h3>
+        <p> Edit nick </p>
         <SpoilerButton text={'Change nick'} style={{ width: '100%' }}>
           <div
             style={{
@@ -151,9 +156,10 @@ const EditSetting = ({
             </Button>
           </div>
         </SpoilerButton>
-        <h3> Edit password </h3>
-        <SpoilerButton text={'Change password'} style={{ width: '100%' }}>
-          <h3> Login</h3>
+        <p> Edit password </p>
+          <SpoilerButton text={'Change password'}
+            style={{ width: '100%', marginBottom:'10px' }}>
+          <p> Login</p>
           <div
             style={{
               display: 'flex',
@@ -167,7 +173,7 @@ const EditSetting = ({
               type={true}
             />
           </div>
-          <h3> Old password</h3>
+          <p> Old password</p>
           <div
             style={{
               display: 'flex',
@@ -193,7 +199,7 @@ const EditSetting = ({
               />
             )}
           </div>
-          <h3> New password</h3>
+          <p> New password</p>
           <div
             style={{
               display: 'flex',
@@ -243,7 +249,8 @@ const EditSetting = ({
               Save new password
             </Button>
           </div>
-        </SpoilerButton>
+          </SpoilerButton>
+          </div>
       </ConstructorModal>
     </div>
   )

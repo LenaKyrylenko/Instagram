@@ -111,18 +111,12 @@ const PostEditor = ({
       <br />
       <Col offset={5}>
         <Button
-          style={{
-            display: 'flex',
-            marginTop: '30px',
-            alignItems: 'center',
-            alignContent: 'center',
-            justifyContent: 'center',
-            width: '200px',
-          }}
+          className='Save'
           disabled={disabledBtn}
           onClick={savePost}
           size="large"
           type="primary"
+
         >
           Save
         </Button>

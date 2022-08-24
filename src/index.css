@@ -1,13 +1,44 @@
-body {
+ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
 }
-
+/*
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+} */
+html[data-theme='light']{ 
+  --modal-color: #fafafa;
+  --arrow-color: rgb(84, 132, 222);
+   --background-color: #fafafa;
+   --background-color-new-post: #fafafa;
+
+  --background-color-header: rgb(206, 227, 255);
+  --background-color-login: linear-gradient(
+    90deg,
+    rgba(58, 100, 180, 1) 0%,
+    rgba(92, 168, 221, 1) 51%,
+    rgba(29, 253, 182, 1) 100%
+  );
+  --font-color:black;
+  --font-color-hover:white;
+
 }
+html[data-theme='dark']{
+  --modal-color: rgb(70, 87, 122);
+
+  --background-color-new-post: #a6bce2;
+  --arrow-color: rgb(34, 56, 98);
+  --background-color-header: rgb(46, 55, 67);
+--background-color-login:linear-gradient(90deg, rgba(37,40,84,1) 0%, rgba(78,31,128,1) 42%, rgba(40,145,142,1) 100%);
+ --background-color: #2b3e51;
+ --font-color:white;
+ --font-color-hover:black;
+
+}
+

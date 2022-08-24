@@ -9,19 +9,34 @@ import {
 } from '../../components/buttons/HeaderButtons'
 import { connect } from 'react-redux'
 import { Row, Col } from 'antd'
-
+import  Root  from '../../components/rootTheme'
+import ThemeProvider from '../../providers/ThemeProvider'
 export const Header = () => {
   return (
     <section className="Header">
+
+
       <Col
-        xl={{ offset: 4, span: 16 }}
-        lg={{ offset: 4, span: 17 }}
+        xl={{ offset: 3, span: 17 }}
+        lg={{ offset: 4, span: 18 }}
         md={{ offset: 3, span: 17 }}
         sm={{ offset: 3, span: 15 }}
         xs={{ offset: 2, span: 17 }}
         // span={12} offset={6}
       >
         <Row justify="space-between" align="middle">
+          <Col
+            xl={{span:2, style:{marginBottom:'15px'}}}
+            md={{ span: 2 }}
+           sm={{ span: 2 }}
+            xs={{ span: 2 }}
+         
+          >
+         
+          <ThemeProvider>
+            <Root />
+            </ThemeProvider>
+          </Col>
           <Col
            md={{ span: 1 }}
            sm={{ span: 1 }}

@@ -53,9 +53,13 @@ const User = ({ my_Id, aboutMe: { _id, avatar } = {}, onMyPage }) => {
   return (
     <Link to={`/profile/${my_Id}`} className="Links" >
       {avatar?.url ? (
-        <Avatar src={backendURL + '/'  + avatar?.url} size={50} className="Avatar" />
+        <Avatar src={backendURL + '/' + avatar?.url}
+         xl={{size:50 }} 
+          className="Avatar" />
       ) : (
-        <Avatar src={user} size={50} className="Avatar" />
+          <Avatar src={user}
+            // size={50}
+            className="Avatar" />
       )}
     </Link>
   )

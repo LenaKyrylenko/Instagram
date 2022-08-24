@@ -106,7 +106,7 @@ export const PagePost = ({
             <Row>
               <Col
                 xl={{ span: 4, offset: 1 }}
-                lg={{ span: 10, offset: 1 }}
+                lg={{ span: 3, offset: 1 }}
                 xs={{ offset: 1, span: 3 }}
               >
                 {/* <div style={{ display: 'flex', margin: '20px 0px' }}> */}

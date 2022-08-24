@@ -8,6 +8,7 @@ import { postReducer } from './reducers/postReducer'
 import { exploreReducer } from './reducers/exploreReducer'
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from './rootSaga'
+import { searchReducer } from './reducers/searchReducer'
 const sagaMiddleware = createSagaMiddleware()
 
 export const store = createStore(
@@ -19,6 +20,7 @@ export const store = createStore(
     feed: feedReducer,
     post: postReducer,
     explore: exploreReducer,
+    search: searchReducer
   }),
   applyMiddleware(sagaMiddleware),
 )

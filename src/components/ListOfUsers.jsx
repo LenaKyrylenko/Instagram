@@ -28,10 +28,11 @@ export const ListOfUsers = ({ listUsers, text }) => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
       >
-        <div className="">
+        <div className="Modal">
           {listUsers?.map(({ _id, login, avatar }) => (
             <LinkToUser
               _id={_id}
+              className="ModalLink"
               login={login}
               avatar={avatar}
               size={40}

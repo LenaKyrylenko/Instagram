@@ -38,14 +38,19 @@
   @font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
   'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
   'Noto Color Emoji';
+  background: var(--background-color);
 }
+
+.Body {
+  // font-size: 20px;
+  background: var(--background-color);
+}
+@import '~antd/dist/antd.css';
 body {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 20px;
+  background: var(--background-color);
 }
-
-@import '~antd/dist/antd.css';
-
 .Dropzone {
   display: flex;
   flex-direction: column;
@@ -77,7 +82,9 @@ body {
   padding: 10px;
   z-index: 4;
   width: 100%;
-  background-color: rgb(206, 227, 255);
+  opacity: 1;
+  background-color: var(--background-color-header);
+  // background-color: rgb(206, 227, 255);
   top: 0;
   transition: 0.3s;
   box-shadow: 0 5px 10px rgba(73, 80, 83, 0.25),
@@ -85,20 +92,36 @@ body {
   .Links {
     margin: 0 10px;
     font-size: xx-large;
-    color: black;
+    color: var(--font-color);
     transition: 0.3s;
     padding: 0 5px;
     &:hover {
-      color: white;
+      color: var(--font-color-hover);
 
-      opacity: 0.7;
+      opacity: 0.9;
     }
     &:active {
       transform: scale(1.1);
     }
+
+    .Avatar {
+      // margin-left: 20px;
+      width: 50px;
+      border: 3px solid #fffff7;
+      height: 50px;
+      transition: 0.3s;
+    }
   }
 }
-
+.Save {
+  display: flex;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  width: 200px;
+}
 .Recomendations {
   margin-left: 20px;
 }
@@ -124,17 +147,25 @@ body {
 .Post {
   max-width: 450px;
   margin: 0 auto;
-  background-color: white;
+  display: block;
+  background-color: var(--background-color-new-post);
   border: 6px solid #dbebfa;
   padding: 30px;
   border-radius: 25px;
-  display: 'flex';
+  // display: 'flex';
   align-items: 'center';
   justify-content: 'center';
-  margin-top: 100px;
+  // margin-top: 100px;
   transition: 0.3s;
+  // margin-bottom: 20px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  // margin-right: -50%;
+
+  // transform: translate(-10%, -50%)
 }
 ul {
   margin: 0;
@@ -153,8 +184,7 @@ main {
   text-align: left;
   font-size: 18px;
   margin: 10px 0px;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .Input {
   display: flex;
@@ -177,25 +207,28 @@ main {
   margin-top: 100px;
   display: flex;
   justify-content: center;
-  .ProfileAvatar{
-  margin-right: 20px;
-  width: 150px;
-  height: 150px;
+  .ProfileAvatar {
+    margin-right: 20px;
+    width: 150px;
+    height: 150px;
   }
   .Info {
-    .Login{
+    .Login {
       font-weight: 600;
       font-size: 18px;
+      color: var(--font-color);
     }
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     justify-content: center;
     display: flex;
     flex-direction: column;
-    p{font-size: 16px;
+    p {
+      font-size: 16px;
       font-weight: 400;
+      color: var(--font-color);
 
-    padding:0 auto;
-margin-bottom: 3px;
+      padding: 0 auto;
+      margin-bottom: 3px;
     }
   }
 }
@@ -233,13 +266,13 @@ margin-bottom: 3px;
   padding: 10px;
 }
 .Gallery {
-  position: fixed;
-  right: 0;
+  position: absolute;
   z-index: 2;
-  top: 0;
+  // right: 0;
   width: 50px;
   height: 50px;
   margin: 10px;
+  padding: 5px;
 }
 .Wrapper {
   margin: 40px;
@@ -295,11 +328,14 @@ margin-bottom: 3px;
 
 // }
 .Modal {
+  background-color: var(--modal-color);
   font-size: medium;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  padding: 10px;
+  // margin-bottom: 20px;
 }
+
 // .PostFeed {
 //   border-width: 20;
 //   border-color: #ffffff;
@@ -313,7 +349,7 @@ margin-bottom: 3px;
 
 .NextArrow {
   font-size: 35px;
-  color: rgb(84, 132, 222);
+  color: var(--arrow-color);
   position: absolute;
   left: 100%;
   top: 50%;
@@ -329,7 +365,7 @@ margin-bottom: 3px;
   transform: scale(1.1);
 }
 .PreviousArrow {
-  color: rgb(84, 132, 222);
+  color: var(--arrow-color);
   font-size: 35px;
   position: absolute;
   margin: auto;
@@ -392,13 +428,9 @@ margin-bottom: 3px;
   height: 100%;
   text-align: center;
   float: right;
-  background: rgb(58, 100, 180);
-  background: linear-gradient(
-    90deg,
-    rgba(58, 100, 180, 1) 0%,
-    rgba(92, 168, 221, 1) 51%,
-    rgba(29, 253, 182, 1) 100%
-  );
+  // background: var(--background-color-start);
+  background: var(--background-color-login);
+
   transition: 0.3s;
   // right: 0;
   text-align: center;
@@ -419,14 +451,18 @@ margin-bottom: 3px;
   font-size: xx-large;
   // margin-right: 15px;
 }
-.Send{
+.Send {
   font-size: xx-large;
-margin-bottom: 10px;
+  bottom: 5px;
 }
 .SmileBtnFilled {
   font-size: xx-large;
   // margin-right: 15px;
   color: #108ee9;
+}
+.FooterFeed {
+  display: flex;
+  margin: 15px 0px;
 }
 .Comments {
   position: fixed;
@@ -539,7 +575,7 @@ margin-bottom: 10px;
   box-shadow: 0 5px 10px rgba(21, 46, 57, 0.25),
     0 10px 10px rgba(12, 43, 58, 0.22);
 }
-.OnePost{
+.OnePost {
   margin-top: 100px;
 }
 .ResultUserFind {
@@ -547,7 +583,8 @@ margin-bottom: 10px;
   min-width: 320px;
   max-height: 500px;
   padding: 15px 0;
-  overflow: auto;
+  overflow-y: auto;
+  color:black;
 }
 .Search {
   padding: 10px;
@@ -572,6 +609,7 @@ margin-bottom: 10px;
   margin-top: 50px;
   padding: 15px 5px;
   overflow: auto;
+  padding-bottom: 60px;
 }
 .InputOnePost {
   display: flex;
@@ -585,13 +623,38 @@ margin-bottom: 10px;
   width: 150px;
   height: 150px;
 }
-.FooterPost{
-
-.CommentsPost{
-  height: 250px;
+.FooterPost {
+  .CommentsPost {
+    height: 250px;
+  }
 }
+.ModalLink {
+  display: flex;
+  padding: 5px;
+  flex-direction: row;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  color: var(--font-color);
+
+ color: var(--font-color);
+  .ModalAvatar {
+    width: 50px;
+    height: 50px;
+  }
 }
 
+.ModalEdit {
+  background-color: var(--modal-color);
+
+  display: flex;
+  padding: 10px 30px;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  color: var(--font-color);
+
+ color: var(--font-color);
+}
 @media screen and (max-width: 1450px) {
   .Explore {
     .Wrapper {
@@ -602,10 +665,15 @@ margin-bottom: 10px;
       }
     }
   }
-
 }
+
 /* 992px - 1200px */
 @media screen and (max-width: 1200px) {
+  .OneLike {
+    .LikeStyle {
+      width: 60px;
+    }
+  }
   .LoginForm {
     p {
       text-align: center;
@@ -637,7 +705,7 @@ margin-bottom: 10px;
     margin: 0px auto;
     .Like {
       .LikeStyle {
-        padding: 0px;
+        padding: 5px;
       }
     }
   }
@@ -659,11 +727,18 @@ margin-bottom: 10px;
       }
     }
   }
-  
 }
 
 // /* 768px - 992px */
 @media screen and (max-width: 992px) {
+  .OneLike {
+    .LikeStyle {
+      width: 60px;
+    }
+  }
+  .FooterFeed {
+    margin: 10px 0px;
+  }
   .LoginForm {
     p {
       text-align: center;
@@ -676,7 +751,6 @@ margin-bottom: 10px;
   }
   .AboutMe {
     margin-top: 20px;
-    
   }
   .PostsFeed {
     margin: 10px;
@@ -692,6 +766,11 @@ margin-bottom: 10px;
   }
   .Explore {
     .Wrapper {
+      .Gallery {
+        width: 15px;
+        height: 15px;
+        padding: 0px;
+      }
       margin: 20px;
       .Card {
         width: 150px;
@@ -699,29 +778,56 @@ margin-bottom: 10px;
       }
     }
   }
-  .Preloader{
-    margin-bottom:80px ;
+  .Preloader {
+    margin-bottom: 80px;
   }
-  .AboutMe{
-    .ProfileAvatar{
+  .AboutMe {
+    .ProfileAvatar {
       height: 100px;
       width: 100px;
     }
-   
-      .Info {
-        .Login{
-          font-size: 16px;
-        }
-    
-        p{font-size: 14px;
- 
-        }
+
+    .Info {
+      .Login {
+        font-size: 16px;
+      }
+
+      p {
+        font-size: 14px;
       }
     }
   }
+}
 
 /*576px-768px*/
 @media screen and (max-width: 768px) {
+  .Header {
+    .Links {
+      // margin: 0 10px;
+      // padding: 5px;
+      font-size: x-large;
+
+      .Avatar {
+        width: 40px;
+        border: 3px solid #fffff7;
+        height: 40px;
+        transition: 0.3s;
+      }
+    }
+  }
+  .FooterFeed {
+    margin: 10px 0px;
+  }
+  .NextArrow {
+    font-size: 30px;
+    padding-left: 0px;
+    margin-left: 10px;
+  }
+  .PreviousArrow {
+    font-size: 30px;
+    padding-right: 0px;
+    margin-right: 10px;
+  }
   .LoginForm {
     width: 70%;
     align-content: center;
@@ -729,6 +835,7 @@ margin-bottom: 10px;
     margin: 0 auto;
     margin: 0 100px;
     padding: 0;
+
     // height: 90%;
     p {
       font-size: x-large;
@@ -739,8 +846,8 @@ margin-bottom: 10px;
       // padding: 10px;
     }
   }
-  .Preloader{
-    margin-bottom:40px ;
+  .Preloader {
+    margin-bottom: 40px;
   }
   .Explore {
     margin-top: 0px;
@@ -752,44 +859,119 @@ margin-bottom: 10px;
       }
     }
   }
+  .Post {
+    display: block;
+    // left: 0%;
+    top: 20%;
+    left: 20%;
+
+    padding: 50px;
+    margin-right: -50%;
+
+    // right: 0%;
+  }
+  .MyCarousel {
+    margin: 0 10%;
+    border-radius: 5px;
+    // .PostImage {
+
+    //   width: 300px;
+    //   height: 300px;
+
+    // }
+  }
+  .OneLike {
+    .LikeStyle {
+      width: 60px;
+    }
+  }
 }
 /*320px-576px*/
 @media screen and (max-width: 576px) {
+  .Modal {
+    display: flex;
+    flex-direction: column;
+    // margin: 20px;
+    // width: 300px;
+    .ModalAvatar {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .SmileBtn {
+    font-size: x-large;
+    // margin-right: 15px;
+  }
+  .Send {
+    font-size: x-large;
+    bottom: 5px;
+  }
+  .SmileBtnFilled {
+    font-size: x-large;
+    // margin-right: 15px;
+    color: #108ee9;
+  }
+  .NextArrow {
+    font-size: 25px;
+    padding-left: 0px;
+    margin-left: 10px;
+  }
+  .PreviousArrow {
+    font-size: 25px;
+    padding-right: 0px;
+    margin-right: 10px;
+  }
+  .PostsFeed {
+    margin: 20px;
+    padding: 0px;
+    margin-top: 20px;
+    .PostsFeed-one {
+      padding: 10px;
+    }
+  }
+  .Preview {
+    height: 80px;
+    width: 80px;
+    margin-bottom: 5px;
+  }
+  .Save {
+    width: 150px;
+  }
   .Title {
     font-size: 15px;
   }
   .Dropzone {
     padding: 10px;
-      font-size: 10px;
-  font-size: small;
-
+    font-size: 10px;
+    font-size: small;
   }
-  .OnePost{  
+  .OnePost {
     margin-top: 40px;
-  
   }
-  .ScrollForFeed{
+  .ScrollForFeed {
     height: 150px;
   }
-  .FooterPost{
+  .FooterPost {
     margin-bottom: 100px;
-    .CommentsPost{
+    .CommentsPost {
       height: 180px;
     }
+  }
+
+  .OneLike {
+    display: flex;
+    font-size: 12px;
+    .Like {
+      font-size: x-large;
+      color: black;
     }
-  
-.OneLike {
-  display: flex;
-  font-size: 12px;
-  .Like {
-    font-size: x-large;
-    color: black;
+    .LikeStyle {
+      cursor: pointer;
+      padding: 0px;
+      width: 40px;
+    }
   }
-  .LikeStyle {
-    cursor: pointer;
-    padding: 0px;
-  }
-}
 
   .MyCarousel {
     // display: block;
@@ -799,13 +981,11 @@ margin-bottom: 10px;
     box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
     background-color: white;
     border: 6px solid #dbebfa;
-    margin: 0 5%;
+    margin: 0 10%;
     border-radius: 5px;
     .PostImage {
-    
-      width: 300px;
-      height: 300px;
-     
+      width: 200px;
+      height: 200px;
     }
   }
   .LoginForm {
@@ -828,23 +1008,28 @@ margin-bottom: 10px;
       // padding: 20px;
     }
   }
-  .AboutMe{
-    .ProfileAvatar{
+  .AboutMe {
+    .ProfileAvatar {
       height: 80px;
       width: 80px;
     }
     .Info {
-      .Login{
+      .Login {
         font-size: 14px;
       }
-  
-      p{font-size: 12px;
 
+      p {
+        font-size: 12px;
       }
     }
   }
   .ProfilePage {
     .Wrapper {
+      .Gallery {
+        width: 15px;
+        height: 15px;
+        padding: 0px;
+      }
       margin: 10px;
       .Card {
         width: 90px;
@@ -852,17 +1037,35 @@ margin-bottom: 10px;
       }
     }
   }
+  .ModalLink {
+    font-size: 13px;
+    padding: 10px;
+    margin: 10px;
+  }
   .Post {
+    display: flex;
+    flex-direction: column;
     max-width: 380px;
+    top: 0%;
+    left: 0%;
+    overflow: hidden;
+
+    background-color: var(background-color-new-post);
+    // margin-top: 50px;
+    margin: 10% 0;
     // height: 500px;
-    margin-top: 40px;
-    margin-bottom: 0px;
-    
-    }
+    // margin-top: 40px;
+    // margin-bottom: 40px;
+  }
   .Explore {
     margin-top: 0px;
-    margin:5px;
+    margin: 5px;
     .Wrapper {
+      .Gallery {
+        margin: 5px;
+        width: 20px;
+        height: 20px;
+      }
       margin: 10px;
       .Card {
         width: 120px;

@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { ConstructorModal } from '../../helpers'
 import LikeList from './LikeList'
+import { Col } from 'antd'
+
 const ModalLikes = ({ likes, myId }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const showModal = () => {
@@ -8,9 +10,18 @@ const ModalLikes = ({ likes, myId }) => {
   }
   return (
     <>
+       <Col
+        xl={{ span: 15, offset: 0 }}
+        lg={{ span: 10, offset: 0 }}
+        
+       sm={{ offset: 0, span: 10 }}
+       xs={{ offset: 1, span: 20 }}
+      >
       {likes.length ?
         (
-        <h3 className="LikeStyle" style={{margin:'0 auto'}} onClick={showModal}>
+            <h3 className="LikeStyle"
+              style={{ margin: '0 auto' }}
+              onClick={showModal}>
           {' '}
           {likes.length} likes
         </h3>
@@ -24,7 +35,8 @@ const ModalLikes = ({ likes, myId }) => {
         setIsModalVisible={setIsModalVisible}
       >
         <LikeList likes={likes} myId={myId} />
-      </ConstructorModal>
+        </ConstructorModal>
+      </Col>
     </>
   )
 }

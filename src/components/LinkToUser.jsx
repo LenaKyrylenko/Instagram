@@ -9,8 +9,8 @@ export const LinkToUser = ({
   avatar,
   login,
   size,
-  font = '15px',
-  padding = '10px',
+  // font = '15px',
+  // padding = '10px',
   onClick,
   key,
 }) => {
@@ -18,32 +18,35 @@ export const LinkToUser = ({
     <Row style={{ marginBottom:'5px'}}>
       <Link
         to={`/profile/${_id}`}
-        style={{
-          display: 'flex',
-          padding: padding,
-          flexDirection: 'row',
-          fontSize: font,
-          fontWeight: 'bold',
-          color: 'black'
-        }}
+        // style={{
+        //   display: 'flex',
+        //   padding: padding,
+        //   flexDirection: 'row',
+        //   fontSize: font,
+        //   fontWeight: 'bold',
+        //   color: 'black'
+        // }}
+        className="ModalLink"
         onClick={onClick}
         key={key}
       >
         <Col offset={1} className="gutter-row">
           {avatar ? (
             <Avatar
-              size={size}
+              className='ModalAvatar'
               src={backendURL+'/' + avatar?.url}
              
             />
           ) : (
-              <Avatar size={size} src={user}
+              <Avatar  className='ModalAvatar' src={user}
                 // style={{ marginRight: '3px' }}
               />
           )}
         </Col>
         <Col offset={3} style={{ marginTop: '5px' }}>
-          <h3> {login || 'Anon'}</h3>
+        
+          <h3 className="ModalLink"
+          > {login || 'Anon'}</h3>
         </Col>
       </Link>
     </Row>
@@ -55,8 +58,8 @@ export const LinkWithSubscribe = ({
   avatar,
   login,
   size,
-  font = '15px',
-  padding = '10px',
+  // font = '15px',
+  // padding = '10px',
   onClick,
   key,
   myId,
@@ -66,14 +69,7 @@ export const LinkWithSubscribe = ({
       <Link
         to={`/profile/${_id}`} 
 
-        style={{
-          display: 'flex',
-          padding: padding,
-          flexDirection: 'row',
-          fontSize: font,
-          fontWeight: 'bold',
-          color: 'black'
-        }}
+       className="ModalLink"
         onClick={onClick}
         key={key}
       >
@@ -89,7 +85,7 @@ export const LinkWithSubscribe = ({
           )}
         </Col>
         <Col offset={2} style={{ marginTop: '5px' }}>
-          <h3> {login || 'Anon'}</h3>
+          <h3 className='ModalLink'> {login || 'Anon'}</h3>
         </Col>
       </Link>
 

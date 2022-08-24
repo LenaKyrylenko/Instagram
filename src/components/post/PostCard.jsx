@@ -9,7 +9,8 @@ export const Card = ({ post }) => (
       {post?.images && post?.images.length > 1 ? (
         <div className="Wrapper">
           <img src={galery} className="Gallery" />
-          <img className="Card" src={backendURL+'/' + post.images[0].url} />
+          <img className="Card" src={backendURL + '/' +
+            post.images[0].url} />
         </div>
       ) : post?.images && post?.images[0] && post.images[0]?.url ? (
         <div className="Wrapper">
@@ -17,7 +18,7 @@ export const Card = ({ post }) => (
         </div>
       ) : (
         <div className="Wrapper">
-          <img className="Card" src={defaultPhoto} />
+          <img className="Card" style={{background:'white'}} src={defaultPhoto} />
         </div>
       )}
     </Link>

@@ -72,8 +72,8 @@ const MyPostFeed = ({
           <div>
             {postsFeed?.length == 0 && (
               <div style={{ textAlign: 'center' }}>
-                <h1> You have no posts to feed! </h1>
-                <h1> Post and follow other users! </h1>
+                <p style={{fontSize:'20px'}}> You have no posts to feed! </p>
+                <p style={{fontSize:'20px'}}> Post and follow other users! </p>
               </div>
             )}
             {(postsFeed || []).map(
@@ -92,18 +92,28 @@ const MyPostFeed = ({
                       size={40}
                     />
                   </Col>
+                  <Col
+                    xs={{ offset: 1, span: 22 }}
+                  
+                  >
+            
                   <MyCarousel
                     images={images}
                     carouselWidth={'600px'}
                     carouselHeight={'400px'}
-                  />
-                  <div style={{ margin: '0 7%' }}>
+                    />
+                  </Col>
+                  <div style={{ margin: '0 5%' }}>
                     <p className="Title"> Title: {title || ''}</p>
                     <p className="Title"> Text: {text || ''}</p>
-                    <Divider>Comments</Divider>
-                    <div style={{ margin: '10px', position: 'relative' }}>
+                    <p>
+                    <Divider>Comments</Divider></p>
+                    <div style={{
+                      margin: '10px',
+                      position: 'relative'
+                    }}>
                       <CCommentsForFeed postId={_id} comments={comments} />
-                      <div style={{ display: 'flex', margin: '20px 0px' }}>
+                      <div className='FooterFeed'>
                         <CLikeFeed likes={likes} postId={_id} />
                         <AddComment
                           addComment={addComment}

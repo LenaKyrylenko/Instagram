@@ -23,6 +23,7 @@ import { onePostWatcher, postsWatcher } from './saga/post'
 import { changeLikePostWatcher, changeLikePostFeedWatcher } from './saga/like'
 import { changeSubscribeWatcher } from './saga/subscribe'
 import { editPostWatcher } from './saga/post'
+import {searchWatcher} from './saga/search'
 function* rootSaga() {
   yield all([
     promiseWatcher(),
@@ -46,7 +47,8 @@ function* rootSaga() {
     getSubCommentWatcher(),
     changeLikePostFeedWatcher(),
     getSubCommentFeedWatcher(),
-    addSubCommentFeedWatcher()
+    addSubCommentFeedWatcher(),
+    searchWatcher()
   ])
 
 }

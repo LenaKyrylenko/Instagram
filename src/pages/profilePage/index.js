@@ -136,7 +136,7 @@ export const PageAboutUser = ({
           lg={{ offset: 4, span: 20 }}
           md={{ offset: 4, span: 20}}
           sm={{ offset: 3, span: 15 }}
-          xs={{ offset: 1, span: 24 }}
+          xs={{ offset: 0, span: 24 }}
         //  md={{ span: 1 }}
         >
           <div

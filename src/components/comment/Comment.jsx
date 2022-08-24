@@ -26,7 +26,7 @@ export const Comments = ({
       {comments?.length && Object.keys(comments[0])?.length > 1
         ?
         <ViewComment text={'View all '} count={comments?.length}
-          style={{ overflowY: 'none' }}
+          
           textClosed={'Hide comments'}>
           {comments?.map((comment) => {
             return (
@@ -79,15 +79,3 @@ export const CCommentsOnePost = connect(
     findSubComment: actionFindSubCommentTypeSaga,
   },
 )(Comments)
-
-// export const CCommentsForFeed = connect(
-//   (state) => ({
-//     // postId: state.promise.onePost?.payload?._id,
-//     addComment: state.promise?.addComment?.payload,
-//     addSubComment: state.promise?.addSubComment,
-//   }),
-//   {
-//     addCommentReply: actionAddSubFullComment,
-//     findSubComment: actionFindSubComment,
-//   },
-// )(Comments)

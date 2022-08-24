@@ -18,6 +18,7 @@ export const ConstructorModal = ({
       <Modal
         title={title}
         centered
+        bodyStyle={{ padding:'0px'}}
         className="Modal"
         footer={null}
         onCancel={handleCancel}
