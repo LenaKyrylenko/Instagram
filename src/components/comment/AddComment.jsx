@@ -3,9 +3,10 @@ import 'emoji-mart/css/emoji-mart.css'
 import React, { useState } from 'react'
 import { Input, Col, Button } from 'antd'
 import { SmileOutlined, SmileFilled, SendOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import styles from '../../index.css'
 
-const AddComment = ({ addComment, postId, style, width }) => {
+console.log('styles', styles)
+const AddComment = ({ addComment, postId, style, className, width }) => {
   const [text, setComment] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const handleOK = () => setShowEmojiPicker(!showEmojiPicker)
@@ -15,7 +16,7 @@ const AddComment = ({ addComment, postId, style, width }) => {
       {showEmojiPicker && (
         <Picker
           style={style}
-          theme="light"
+          theme={localStorage.theme}
           native={true}
           showPreview={false}
           showSkinTones={false}
@@ -33,11 +34,6 @@ const AddComment = ({ addComment, postId, style, width }) => {
         <Input
           style={{
             display: 'flex',
-            // display: 'flex',
-            // width,
-            // margin: '5px 10px',
-            // padding:'5px'
-            // width:'100%'
           }}
           xl={{ size: 'large' }}
           xs={{ size: 'small' }}
@@ -56,15 +52,19 @@ const AddComment = ({ addComment, postId, style, width }) => {
         xs={{ offset: 1, span: 1 }}
       >
         {!showEmojiPicker ? (
-          <SmileOutlined className="SmileBtn" onClick={handleOK} />
+          <span className="SmileBtn">
+            <SmileOutlined onClick={handleOK} />
+          </span>
         ) : (
-          <SmileFilled className="SmileBtnFilled" onClick={handleOK} />
+          <span className="SmileBtnFilled">
+            <SmileFilled onClick={handleOK} />
+          </span>
         )}
       </Col>
       <Col
         xl={{ offset: 1, span: 1 }}
         sm={{ offset: 1, span: 1 }}
-        xs={{ offset: 1 }}
+        xs={{ offset: 1, span: 1 }}
       >
         <Button
           type="text"
@@ -76,21 +76,6 @@ const AddComment = ({ addComment, postId, style, width }) => {
         >
           <SendOutlined className="Send" type="primary" />
         </Button>
-        {/* <Button
-          
-          xl={{ size: 'large' }}
-          xs={{ size: 'small' }}
-
-        disabled={text.length < 1}
-        type="primary"
-        onClick={(e) => {
-          addComment(postId, text) &&
-          setComment((e.target.value = ''))
-        }}
-      >
-        {' '}
-        Publish{' '}
-        </Button> */}
       </Col>
     </>
   )

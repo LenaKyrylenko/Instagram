@@ -1,4 +1,4 @@
-import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; //
+import { all, put,take, fork, takeEvery, takeLatest, takeLeading, select,call, join } from 'redux-saga/effects'; 
 import { fullProfilePageWorker } from '../../saga/myProfile'
 import { promiseWorker } from '../promise';
 import {actionFullProfilePageTypeSaga} from '../../../actions/typeSaga/myDataTypesSaga'

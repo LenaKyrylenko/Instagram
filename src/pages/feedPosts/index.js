@@ -99,8 +99,7 @@ const MyPostFeed = ({
             
                   <MyCarousel
                     images={images}
-                    carouselWidth={'600px'}
-                    carouselHeight={'400px'}
+                   
                     />
                   </Col>
                   <div style={{ margin: '0 5%' }}>
@@ -119,12 +118,16 @@ const MyPostFeed = ({
                           addComment={addComment}
                           postId={_id}
                           style={{
-                            position: 'absolute',
-                            // bottom: '70px',
-                            // zIndex: '100',
-                            // height:'30px'
+                            position: 'absolute', width: '250px',
+                            bottom: '80px', right: '0px'
                           }}
-                          // width={'300px'}
+                          // xs={{
+                          //   style: {
+                          //     position: 'absolute',
+                          //     bottom: '100px', right: '30px'
+                          //   }
+                          // }}
+                      
                         />
                       </div>
                     </div>

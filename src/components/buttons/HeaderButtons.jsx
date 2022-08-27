@@ -10,7 +10,7 @@ import {
   CompassOutlined,
   PlusSquareOutlined,
   ImportOutlined,
-  SearchOutlined
+  SearchOutlined,
 } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 const DefaultLink = ({ link, tag }) => {
@@ -20,15 +20,13 @@ const DefaultLink = ({ link, tag }) => {
     </Link>
   )
 }
-export const Feed = () =>
-  <DefaultLink link={'/feed'}  tag={<HomeOutlined />} />
+export const Feed = () => <DefaultLink link={'/feed'} tag={<HomeOutlined />} />
 export const Explore = () => (
   <DefaultLink link={'/explore'} tag={<CompassOutlined />} />
 )
 export const SearchMobile = () => (
   <DefaultLink link={'/search'} tag={<SearchOutlined />} />
 )
-
 
 export const AddPost = ({ children }) => {
   const [state, setState] = useState(false)
@@ -51,15 +49,11 @@ const User = ({ my_Id, aboutMe: { _id, avatar } = {}, onMyPage }) => {
     if (my_Id) onMyPage(my_Id)
   }, [my_Id])
   return (
-    <Link to={`/profile/${my_Id}`} className="Links" >
+    <Link to={`/profile/${my_Id}`} className="Links">
       {avatar?.url ? (
-        <Avatar src={backendURL + '/' + avatar?.url}
-         xl={{size:50 }} 
-          className="Avatar" />
+        <Avatar src={backendURL + '/' + avatar?.url} className="Avatar" />
       ) : (
-          <Avatar src={user}
-            // size={50}
-            className="Avatar" />
+        <Avatar src={user} className="Avatar" />
       )}
     </Link>
   )
@@ -72,4 +66,3 @@ export const CUser = connect(
   }),
   { onMyPage: actionFullProfilePageUserTypeSaga },
 )(User)
-

@@ -1,4 +1,4 @@
-import { put, takeEvery, takeLeading, select, call } from 'redux-saga/effects' //
+import { put, takeEvery, takeLeading, select, call } from 'redux-saga/effects' 
 import { promiseWorker } from '../promise'
 import {
   actionAddComment,
@@ -53,6 +53,7 @@ function* addCommentFeedWorker({ postId, text }) {
 export function* addCommentFeedWatcher() {
   yield takeLeading('FEED_POST_COMMENT', addCommentFeedWorker)
 }
+
 
 function* addSubCommentWorker({ commentId, newResult }) {
   yield call(promiseWorker, actionAddSubComment(commentId, newResult))

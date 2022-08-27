@@ -2,7 +2,7 @@ import { useDropzone } from 'react-dropzone'
 import React, { useEffect } from 'react'
 import { Button,Image } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
+import "antd/dist/antd.css";
 export function Dropzone({ onLoad }) {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
   const files = acceptedFiles.map((file) => (
@@ -19,7 +19,6 @@ export function Dropzone({ onLoad }) {
         <input {...getInputProps()} />
         <Button type="dashed" xl={{ size: 'large' }}
           sm={{size:'small'}}
-          // size="large"
           icon={<UploadOutlined />}>
           Drag 'n' drop some files here, or click to select files
         </Button>

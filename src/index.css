@@ -1,4 +1,4 @@
- body {
+body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -12,11 +12,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
-html[data-theme='light']{ 
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *:before,
+html.theme-transition *:after {
+  transition: all 750ms !important;
+  transition-delay: 0 !important;
+}
+
+html[data-theme='light'] {
+  --color-comments: rgb(74, 73, 73);
+  --color-tooltip: #108ee9;
   --modal-color: #fafafa;
-  --arrow-color: rgb(84, 132, 222);
-   --background-color: #fafafa;
-   --background-color-new-post: #fafafa;
+  --color-smile: #108ee9;
+  --shadow: 0 5px 10px rgba(73, 80, 83, 0.25),
+    0 10px 5px rgba(191, 194, 196, 0.22);
+
+  --arrow-color: rgb(68, 89, 129);
+  --background-color: #fafafa;
+  --background-color-new-post: #fafafa;
 
   --background-color-header: rgb(206, 227, 255);
   --background-color-login: linear-gradient(
@@ -25,20 +39,34 @@ html[data-theme='light']{
     rgba(92, 168, 221, 1) 51%,
     rgba(29, 253, 182, 1) 100%
   );
-  --font-color:black;
-  --font-color-hover:white;
+  --font-color: black;
+  --font-color-hover: white;
 
+  --background-post: #edf8f8b9;
+  --border-color-post: #fff;
 }
-html[data-theme='dark']{
+html[data-theme='dark'] {
+  --color-comments: rgb(228, 220, 220);
+
+  --shadow: 0 5px 10px rgba(137, 151, 157, 0.111),
+    0 10px 5px rgba(87, 91, 94, 0.148);
+
   --modal-color: rgb(70, 87, 122);
-
+  --color-tooltip: #aecbe1;
+  --color-smile: #aecbe1;
   --background-color-new-post: #a6bce2;
-  --arrow-color: rgb(34, 56, 98);
+  --arrow-color: rgb(196, 206, 226);
   --background-color-header: rgb(46, 55, 67);
---background-color-login:linear-gradient(90deg, rgba(37,40,84,1) 0%, rgba(78,31,128,1) 42%, rgba(40,145,142,1) 100%);
- --background-color: #2b3e51;
- --font-color:white;
- --font-color-hover:black;
+  --background-color-login: linear-gradient(
+    90deg,
+    rgba(37, 40, 84, 1) 0%,
+    rgba(78, 31, 128, 1) 42%,
+    rgba(40, 145, 142, 1) 100%
+  );
+  --background-color: #354d66;
+  --font-color: white;
+  --font-color-hover: black;
+  --background-post: #90a6bdb9;
 
+  --border-color-post: #233243;
 }
-

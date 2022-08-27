@@ -55,8 +55,6 @@ function* setAvatarWorker({ file }) {
   if (setAvatar) {
     yield call(fullPageAboutUserWorker, { _id })
     yield put(actionUpdateAvatarType(avatar))
-    // yield call(promiseWorker,actionClearPromiseForName("setAvatar"))
-    // yield call(promiseWorker,actionClearPromiseForName("uploadFile"))
   }
 }
 

@@ -54,14 +54,14 @@ export const Comments = ({
         </ViewComment>
         : 
      comments?.length && (
-            <Text className='ButtonComment'
+            <p className='ButtonComment'
               type="secondary"
               strong
               style={{ margin: '0 auto' }}
               onClick={() => findSubComment(parentId)}
             >
               {/* __ View answers ({comments.length}) */}
-            </Text>
+            </p>
           )}
       
       

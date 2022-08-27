@@ -1,4 +1,4 @@
-import { put, takeLeading, select, call } from 'redux-saga/effects' //
+import { put, takeLeading, select, call } from 'redux-saga/effects' 
 import { promiseWorker } from '../promise'
 import {
   actionExplorePostsCount,

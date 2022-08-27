@@ -7,6 +7,6 @@ export const CustomInput = ({ state, onChangeText, checked }) => (
       placeholder={state || ''}
     onChange={onChangeText}
     type={checked ? 'password':'text'}
-    size="large"
+
   />
   )

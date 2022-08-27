@@ -49,7 +49,6 @@ const EditAvatar = ({
         style={{ width: '200px' }}
         disabled={fileStatus ? false : true}
         onClick={saveAvatar}
-        size="large"
         type="primary"
       >
         Save avatar

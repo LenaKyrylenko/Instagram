@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
 import { Input, Button } from 'antd'
 import { connect } from 'react-redux'
+import { SendOutlined } from '@ant-design/icons'
+
 import { actionAddSubCommentTypeSaga } from '../../actions/typeSaga/postTypesSaga'
 import { ReplyButton } from './SpoilerButton'
 export const CommentAction = ({ commentId }) => {
   return (
     <>
       <div style={{ flexDirection: 'column' }}>
-        <ReplyButton text={'Reply to'}
-        
-          style={{margin:'0 auto', padding:'0 auto'}}>
-          <CCommentsForReply  commentId={commentId}  />
+        <ReplyButton
+          text={'Reply to'}
+          style={{ margin: '0 auto', padding: '0 auto' }}
+        >
+          <CCommentsForReply commentId={commentId} />
         </ReplyButton>
       </div>
     </>
   )
 }
 
-const CommentForReply = ({ addCommentReply, commentId}) => {
+const CommentForReply = ({ addCommentReply, commentId }) => {
   const [newResult, setComment] = useState('')
 
   console.log('comment', newResult)
@@ -27,8 +30,7 @@ const CommentForReply = ({ addCommentReply, commentId}) => {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          width: '100%',
-          padding: '5px',
+          margin: '5px',
           marginLeft: '10px',
         }}
       >
@@ -40,23 +42,21 @@ const CommentForReply = ({ addCommentReply, commentId}) => {
           }}
         />
         <Button
+          type="text"
+          className="Send"
           disabled={newResult.length < 1}
-          type="primary"
-          onClick={(e) =>
+          onClick={(e) => {
             addCommentReply(commentId, newResult) &&
-            setComment((e.target.value = ''))
-          }
+              setComment((e.target.value = ''))
+          }}
         >
-          {' '}
-          Publish{' '}
+          <SendOutlined className="Send" type="primary" />
         </Button>
       </div>
     </>
   )
 }
 
-const CCommentsForReply = connect(null,
-  {
-    addCommentReply: actionAddSubCommentTypeSaga,
-  },
-)(CommentForReply)
+const CCommentsForReply = connect(null, {
+  addCommentReply: actionAddSubCommentTypeSaga,
+})(CommentForReply)

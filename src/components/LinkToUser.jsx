@@ -10,7 +10,7 @@ export const LinkToUser = ({
   login,
   size,
   // font = '15px',
-  // padding = '10px',
+  padding = '10px',
   onClick,
   key,
 }) => {
@@ -18,14 +18,14 @@ export const LinkToUser = ({
     <Row style={{ marginBottom:'5px'}}>
       <Link
         to={`/profile/${_id}`}
-        // style={{
-        //   display: 'flex',
-        //   padding: padding,
-        //   flexDirection: 'row',
-        //   fontSize: font,
-        //   fontWeight: 'bold',
-        //   color: 'black'
-        // }}
+        style={{
+          // display: 'flex',
+          padding: padding,
+          // flexDirection: 'row',
+          // fontSize: font,
+          // fontWeight: 'bold',
+          // color: 'black'
+        }}
         className="ModalLink"
         onClick={onClick}
         key={key}

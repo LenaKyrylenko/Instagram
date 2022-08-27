@@ -14,8 +14,6 @@ export const EditAccount = ({ showModalEdit }) => {
     <Button
       type="primary"
       style={{
-        fontWeight: '600',
-        fontSize: '15px',
         transition: '.3s',
         boxShadow: '0 5px 15px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
       }}
@@ -71,7 +69,7 @@ const EditSetting = ({
     })
   const saveChange = () => {
     onSaveUserUpsert(state, myId) &&
-      message.success(`Successfully saved changed new login!`) &&
+      message.success(`Successfully saved changed !`) &&
       setIsModalVisibleEdit(false)
   }
   const saveNewPassword = () => {
@@ -97,160 +95,157 @@ const EditSetting = ({
         setIsModalVisible={setIsModalVisibleEdit}
         handleCancel={handleCancelEdit}
       >
-        <div className='ModalEdit'> 
-        <p> Edit avatar </p>
-          <SpoilerButton text={'Change avatar'}
-            style={{ width: '100%' }}>
-            <CEditAvatar
-              setIsModalVisibleEdit={setIsModalVisibleEdit} />
-        </SpoilerButton>
-        <p> Edit login </p>
-          <SpoilerButton text={'Change login'}
-            style={{ width: '100%' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <CustomInput
-              state={state?.login || ''}
-              onChangeText={onChangeLogin}
-            />
-            <Button
-              size="large"
-              style={{ margin: '10px' }}
-              onClick={saveChange}
-              disabled={state?.login && state?.login.length >= 5 ? false : true}
-              type="primary"
-            >
-              {' '}
-              Save login{' '}
-            </Button>
-            </div>
-            
-        </SpoilerButton>
-
-        <p> Edit nick </p>
-        <SpoilerButton text={'Change nick'} style={{ width: '100%' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <CustomInput
-              state={state?.nick || ''}
-              onChangeText={onChangeNick}
-            />
-            <Button
-              style={{ margin: '10px' }}
-              disabled={state?.nick && state?.nick.length >= 5 ? false : true}
-              onClick={saveChange}
-              size="large"
-              type="primary"
-            >
-              Save nick
-            </Button>
-          </div>
-        </SpoilerButton>
-        <p> Edit password </p>
-          <SpoilerButton text={'Change password'}
-            style={{ width: '100%', marginBottom:'10px' }}>
-          <p> Login</p>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <CustomInput
-              state={changePass?.login}
-              onChangeText={onChangePassLogin}
-              type={true}
-            />
-          </div>
-          <p> Old password</p>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <CustomInput
-              state={changePass?.password}
-              onChangeText={onChangePassPassword}
-              checked={checked1}
-            />
-
-            {checked1 ? (
-              <EyeInvisibleOutlined
-                onClick={() => setChecked1(!checked1)}
-                style={{ marginLeft: '5px', fontSize: 'xx-large' }}
-              />
-            ) : (
-              <EyeOutlined
-                onClick={() => setChecked1(!checked1)}
-                style={{ marginLeft: '5px', fontSize: 'xx-large' }}
-              />
-            )}
-          </div>
-          <p> New password</p>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <CustomInput
-              state={changePass?.newPassword || ''}
-              checked={checked2}
-              onChangeText={onChangePassNew}
-            />
-            {checked2 ? (
-              <EyeInvisibleOutlined
-                onClick={() => setChecked2(!checked2)}
-                style={{ marginLeft: '5px', fontSize: 'xx-large' }}
-              />
-            ) : (
-              <EyeOutlined
-                onClick={() => setChecked2(!checked2)}
-                style={{ marginLeft: '5px', fontSize: 'xx-large' }}
-              />
-            )}
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-          >
-            <Button
-              style={{ margin: '10px' }}
-              disabled={
-                changePass?.login &&
-                changePass?.password &&
-                /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9!@#$%^&*a-zA-Z]{8,}/g.test(
-                  changePass?.newPassword,
-                )
-                  ? false
-                  : true
-              }
-              onClick={saveNewPassword}
-              size="x-large"
-              type="primary"
-            >
-              Save new password
-            </Button>
-          </div>
+        <div className="ModalEdit">
+          <p> Edit avatar </p>
+          <SpoilerButton text={'Change avatar'} style={{ width: '100%' }}>
+            <CEditAvatar setIsModalVisibleEdit={setIsModalVisibleEdit} />
           </SpoilerButton>
-          </div>
+          <p> Edit login </p>
+          <SpoilerButton text={'Change login'} style={{ width: '100%' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <CustomInput
+                state={state?.login || ''}
+                onChangeText={onChangeLogin}
+              />
+              <Button
+                style={{ margin: '10px' }}
+                onClick={saveChange}
+                disabled={
+                  state?.login && state?.login.length >= 5 ? false : true
+                }
+                type="primary"
+              >
+                {' '}
+                Save login{' '}
+              </Button>
+            </div>
+          </SpoilerButton>
+
+          <p> Edit nick </p>
+          <SpoilerButton text={'Change nick'} style={{ width: '100%' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <CustomInput
+                state={state?.nick || ''}
+                onChangeText={onChangeNick}
+              />
+              <Button
+                style={{ margin: '10px' }}
+                disabled={state?.nick && state?.nick.length >= 5 ? false : true}
+                onClick={saveChange}
+                type="primary"
+              >
+                Save nick
+              </Button>
+            </div>
+          </SpoilerButton>
+          <p> Edit password </p>
+          <SpoilerButton
+            text={'Change password'}
+            style={{ width: '100%', marginBottom: '10px' }}
+          >
+            <p> Login</p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <CustomInput
+                state={changePass?.login}
+                onChangeText={onChangePassLogin}
+                type={true}
+              />
+            </div>
+            <p> Old password</p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <CustomInput
+                state={changePass?.password}
+                onChangeText={onChangePassPassword}
+                checked={checked1}
+              />
+
+              {checked1 ? (
+                <EyeInvisibleOutlined
+                  onClick={() => setChecked1(!checked1)}
+                  style={{ marginLeft: '5px', fontSize: 'x-large' }}
+                />
+              ) : (
+                <EyeOutlined
+                  onClick={() => setChecked1(!checked1)}
+                  style={{ marginLeft: '5px', fontSize: 'x-large' }}
+                />
+              )}
+            </div>
+            <p> New password</p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <CustomInput
+                state={changePass?.newPassword || ''}
+                checked={checked2}
+                onChangeText={onChangePassNew}
+              />
+              {checked2 ? (
+                <EyeInvisibleOutlined
+                  onClick={() => setChecked2(!checked2)}
+                  style={{ marginLeft: '5px', fontSize: 'x-large' }}
+                />
+              ) : (
+                <EyeOutlined
+                  onClick={() => setChecked2(!checked2)}
+                  style={{ marginLeft: '5px', fontSize: 'x-large' }}
+                />
+              )}
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <Button
+                style={{ margin: '10px' }}
+                disabled={
+                  changePass?.login &&
+                  changePass?.password &&
+                  /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9!@#$%^&*a-zA-Z]{8,}/g.test(
+                    changePass?.newPassword,
+                  )
+                    ? false
+                    : true
+                }
+                onClick={saveNewPassword}
+                type="primary"
+              >
+                Save new password
+              </Button>
+            </div>
+          </SpoilerButton>
+        </div>
       </ConstructorModal>
     </div>
   )

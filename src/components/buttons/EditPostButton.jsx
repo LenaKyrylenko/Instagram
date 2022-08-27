@@ -7,11 +7,10 @@ export const EditMyPostButton = ({ _id }) => {
       <Link to={`/edit/post/${_id}`}>
         <Button
           style={{
-            // marginLeft: '200px',
-            // marginTop: '10px',
             width: '100px',
           }}
-          size="large"
+          xl={{ size: 'large' }}
+          xs={{ size: 'small' }}
           type="primary"
         >
           Edit Post

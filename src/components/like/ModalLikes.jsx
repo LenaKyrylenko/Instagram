@@ -15,18 +15,18 @@ const ModalLikes = ({ likes, myId }) => {
         lg={{ span: 10, offset: 0 }}
         
        sm={{ offset: 0, span: 10 }}
-       xs={{ offset: 1, span: 20 }}
+       xs={{ offset: 0, span: 5 }}
       >
       {likes.length ?
         (
-            <h3 className="LikeStyle"
+            <p className="LikeStyle"
               style={{ margin: '0 auto' }}
               onClick={showModal}>
           {' '}
           {likes.length} likes
-        </h3>
+        </p>
       ) : (
-        <h3 className="LikeStyle"> 0 likes</h3>
+        <p className="LikeStyle"> 0 likes</p>
       )}
 
       <ConstructorModal

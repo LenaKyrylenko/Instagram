@@ -68,7 +68,8 @@ export const PageAboutUser = ({
   return (
     <>
       <Row>
-        <Col xl={{ span: 12, offset: 6 }}
+        <Col
+          xl={{ span: 12, offset: 6 }}
           md={{ span: 20, offset: 3 }}
           sm={{ offset: 3, span: 15 }}
           xs={{ offset: 2, span: 20 }}
@@ -77,18 +78,18 @@ export const PageAboutUser = ({
             <Row>
               {avatar?.url ? (
                 <Avatar
-                  
-        className='ProfileAvatar'
-                  src={backendURL+'/' + avatar?.url}
+                  className="ProfileAvatar"
+                  src={backendURL + '/' + avatar?.url}
                 />
               ) : (
-                <Avatar
-                className='ProfileAvatar'
-                  src={user}
-                />
+                <Avatar className="ProfileAvatar" src={user} />
               )}
               <div className="Info">
-                {login ? <p className='Login'> {login}</p> : <p className='Login'> {'Anon'}</p>}
+                {login ? (
+                  <p className="Login"> {login}</p>
+                ) : (
+                  <p className="Login"> {'Anon'}</p>
+                )}
 
                 <p>
                   Created Account:{' '}
@@ -131,17 +132,14 @@ export const PageAboutUser = ({
         </Col>
       </Row>
       <Row>
-
-        <Col xl={{ span: 17, offset: 4 }}
+        <Col
+          xl={{ span: 17, offset: 4 }}
           lg={{ offset: 4, span: 20 }}
-          md={{ offset: 4, span: 20}}
+          md={{ offset: 4, span: 20 }}
           sm={{ offset: 3, span: 15 }}
-          xs={{ offset: 0, span: 24 }}
-        //  md={{ span: 1 }}
+          xs={{ offset: 1, span: 21 }}
         >
-          <div
-            className='ProfilePage'
-          >
+          <div className="ProfilePage">
             {(allPosts || [])?.map((item) => (
               <Card post={item} onPost={onPost} />
             ))}

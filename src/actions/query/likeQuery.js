@@ -62,20 +62,3 @@ export const actionFindLikes = (_id) =>
     ),
   )
 
-//   export const actionGetFindLiked = (_id) => 
-//     actionPromise(
-//       'findLiked',
-//       gql(
-//         ` query LikeFindPost($id:String!) {
-//           LikeFind(query:$id){
-//              owner { _id nick login
-//                 avatar{_id url}
-//                   }
-//                 }
-//             } `,
-//         {
-//           id: JSON.stringify([{ 'post._id': _id }]),
-//         },
-//       ),
-//     )
-

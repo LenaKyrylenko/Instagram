@@ -21,7 +21,7 @@ const SamplePrevArrow = (props) => {
   )
 }
 
-export const MyCarousel = ({ images = [],carouselWidth,carouselHeight }) => {
+export const MyCarousel = ({ images = [], carouselWidth, carouselHeight }) => {
   return (
     <>
       <div className="MyCarousel">
@@ -36,18 +36,17 @@ export const MyCarousel = ({ images = [],carouselWidth,carouselHeight }) => {
               (i, index) =>
                 i?.url && (
                   <div key={index}>
-                    <img key={index} className="PostImage"
-                      // style={{width:carouselWidth, height: carouselHeight }}
-                      src={backendURL+'/' + i?.url} />
+                    <img
+                      key={index}
+                      className="PostImage"
+                      src={backendURL + '/' + i?.url}
+                    />
                   </div>
                 ),
             )
           ) : (
             <div>
-                <img className="PostImage"
-                      style={{width:carouselWidth, height: carouselHeight }}
-                  
-                  src={defaultPhoto} />
+              <img className="PostImage" src={defaultPhoto} />
             </div>
           )}
         </Carousel>

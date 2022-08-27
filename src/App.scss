@@ -42,8 +42,10 @@
 }
 
 .Body {
-  // font-size: 20px;
   background: var(--background-color);
+}
+p {
+  color: var(--font-color);
 }
 @import '~antd/dist/antd.css';
 body {
@@ -84,11 +86,9 @@ body {
   width: 100%;
   opacity: 1;
   background-color: var(--background-color-header);
-  // background-color: rgb(206, 227, 255);
   top: 0;
   transition: 0.3s;
-  box-shadow: 0 5px 10px rgba(73, 80, 83, 0.25),
-    0 10px 5px rgba(191, 194, 196, 0.22);
+  box-shadow: var(--shadow);
   .Links {
     margin: 0 10px;
     font-size: xx-large;
@@ -105,7 +105,6 @@ body {
     }
 
     .Avatar {
-      // margin-left: 20px;
       width: 50px;
       border: 3px solid #fffff7;
       height: 50px;
@@ -152,20 +151,14 @@ body {
   border: 6px solid #dbebfa;
   padding: 30px;
   border-radius: 25px;
-  // display: 'flex';
   align-items: 'center';
   justify-content: 'center';
-  // margin-top: 100px;
   transition: 0.3s;
-  // margin-bottom: 20px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
   position: absolute;
   top: 20%;
   left: 30%;
-  // margin-right: -50%;
-
-  // transform: translate(-10%, -50%)
 }
 ul {
   margin: 0;
@@ -188,17 +181,18 @@ main {
 }
 .Input {
   display: flex;
-  // padding: 5px;
   margin: 10px;
   width: 80%;
   border-radius: 5px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 20px;
 }
 .container {
   margin: 10px;
   background-color: rgb(84, 132, 222);
   margin-top: 20px;
+}
+.ButtonComment {
+  color: var(--color-comments);
 }
 .ButtonComment:hover {
   cursor: pointer;
@@ -232,13 +226,16 @@ main {
     }
   }
 }
-
+.Tooltip {
+  color: var(--color-tooltip);
+}
 .Card {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   width: 250px;
   height: 250px;
   object-fit: cover;
   position: relative;
+  background-color: #ffffff;
 }
 .EditAvatar {
   display: flex;
@@ -268,7 +265,6 @@ main {
 .Gallery {
   position: absolute;
   z-index: 2;
-  // right: 0;
   width: 50px;
   height: 50px;
   margin: 10px;
@@ -284,20 +280,12 @@ main {
   filter: brightness(50%);
 }
 
-// .Like {
-//   cursor: pointer;
-//   font-size: xx-large;
-//   color: red;
-// }
-// .Like:active {
-//   transform: scale(1.1);
-// }
 .OneLike {
   display: flex;
   .Like {
     cursor: pointer;
     font-size: xx-large;
-    color: black;
+    color: var(--font-color);
     transition: filter 0.3s;
     &:active {
       transform: scale(1.1);
@@ -311,41 +299,13 @@ main {
     padding: 3px;
   }
 }
-// .UnLike:hover {
-//   opacity: 0.6;
-// }
-
-// .MyCarousel {
-//   display: block;
-//   object-fit: cover;
-//   background: #84898987;
-//   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-//   box-shadow: inset 2px 2px 5px rgba(128, 125, 125, 0.9);
-//   background-color: white;
-//   border: 6px solid #dbebfa;
-//   margin: 0 10%;
-//   border-radius: 5px;
-
-// }
 .Modal {
   background-color: var(--modal-color);
   font-size: medium;
   display: flex;
   flex-direction: column;
   padding: 10px;
-  // margin-bottom: 20px;
 }
-
-// .PostFeed {
-//   border-width: 20;
-//   border-color: #ffffff;
-//   background: #edf8f89e;
-//   border-radius: 5px;
-//   border-style: solid;
-//   margin-bottom: 40px;
-//   transition: 0.3s;
-//   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-// }
 
 .NextArrow {
   font-size: 35px;
@@ -428,11 +388,9 @@ main {
   height: 100%;
   text-align: center;
   float: right;
-  // background: var(--background-color-start);
   background: var(--background-color-login);
 
   transition: 0.3s;
-  // right: 0;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -442,24 +400,32 @@ main {
   }
 }
 
-// .LikeStyle {
-//   cursor: pointer;
-//   padding: 3px;
-// }
-
+.SmilePosition {
+  right: 30px;
+}
 .SmileBtn {
   font-size: xx-large;
-  // margin-right: 15px;
+  color: var(--color-smile);
+
+  padding: 0 auto;
+  margin: 0 auto;
+  bottom: 10px;
+  position: relative;
 }
 .Send {
   font-size: xx-large;
   bottom: 5px;
+  color: var(--font-color);
 }
 .SmileBtnFilled {
   font-size: xx-large;
-  // margin-right: 15px;
-  color: #108ee9;
+  color: var(--color-smile);
+  padding: 0 auto;
+  margin: 0 auto;
+  bottom: 10px;
+  position: relative;
 }
+
 .FooterFeed {
   display: flex;
   margin: 15px 0px;
@@ -475,15 +441,15 @@ main {
   display: block;
 
   flex-direction: column;
-  // height: 200px;
 }
 .Scroll {
   display: block;
 
   flex-direction: column;
-  height: 200px;
+  height: 250px;
   overflow-y: scroll;
 }
+
 .ScrollForFeed {
   display: block;
   flex-direction: column;
@@ -517,8 +483,8 @@ main {
   margin-top: 50px;
   .PostsFeed-one {
     border-width: 20;
-    border-color: #ffffff;
-    background: #edf8f89e;
+    border-color: var(--border-color-post);
+    background: var(--background-post);
     border-radius: 5px;
     border-style: solid;
     margin-bottom: 40px;
@@ -530,7 +496,6 @@ main {
   }
 }
 .MyCarousel {
-  // display: block;
   object-fit: cover;
   background: #84898987;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -539,6 +504,7 @@ main {
   border: 6px solid #dbebfa;
   margin: 0 7%;
   border-radius: 5px;
+
   .PostImage {
     display: flex;
     align-items: center;
@@ -584,7 +550,7 @@ main {
   max-height: 500px;
   padding: 15px 0;
   overflow-y: auto;
-  color:black;
+  color: black;
 }
 .Search {
   padding: 10px;
@@ -592,7 +558,6 @@ main {
   position: fixed;
   z-index: 4;
   width: 100%;
-  //  background-color: rgb(206, 227, 255);
   background-color: #ffffff;
   top: 0;
   transition: 0.3s;
@@ -602,10 +567,6 @@ main {
 .ResultUserFindMobile {
   display: flex;
   flex-direction: column;
-  // align-items: center;
-  // max-width: 500px;
-  // min-width: 320px;
-  // max-height: 500px;
   margin-top: 50px;
   padding: 15px 5px;
   overflow: auto;
@@ -619,7 +580,6 @@ main {
 }
 .ProfileAvatar {
   margin-right: 20px;
-
   width: 150px;
   height: 150px;
 }
@@ -630,13 +590,11 @@ main {
 }
 .ModalLink {
   display: flex;
-  padding: 5px;
   flex-direction: row;
-  font-size: 16px;
   font-weight: bold;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  color: var(--font-color);
-
- color: var(--font-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--font-color);
+  color: var(--font-color);
   .ModalAvatar {
     width: 50px;
     height: 50px;
@@ -651,9 +609,10 @@ main {
   flex-direction: column;
   font-size: 16px;
   font-weight: bold;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  color: var(--font-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--font-color);
 
- color: var(--font-color);
+  color: var(--font-color);
 }
 @media screen and (max-width: 1450px) {
   .Explore {
@@ -681,18 +640,14 @@ main {
     }
     section {
       display: flex;
-      // flex-direction: row;
-      // width: 100%;
       align-items: center;
       text-align: center;
       margin: 0 auto;
     }
   }
   .InputForm {
-    // width: 960px;
     img {
       width: 100%;
-      // height: 50%;
       margin-bottom: 40%;
       margin-left: 20%;
     }
@@ -729,7 +684,7 @@ main {
   }
 }
 
-// /* 768px - 992px */
+/* 768px - 992px */
 @media screen and (max-width: 992px) {
   .OneLike {
     .LikeStyle {
@@ -803,8 +758,6 @@ main {
 @media screen and (max-width: 768px) {
   .Header {
     .Links {
-      // margin: 0 10px;
-      // padding: 5px;
       font-size: x-large;
 
       .Avatar {
@@ -835,15 +788,12 @@ main {
     margin: 0 auto;
     margin: 0 100px;
     padding: 0;
-
-    // height: 90%;
     p {
       font-size: x-large;
       margin: 35px;
     }
     .LoginForm-Form {
       width: 90%;
-      // padding: 10px;
     }
   }
   .Preloader {
@@ -861,24 +811,14 @@ main {
   }
   .Post {
     display: block;
-    // left: 0%;
     top: 20%;
     left: 20%;
-
     padding: 50px;
     margin-right: -50%;
-
-    // right: 0%;
   }
   .MyCarousel {
     margin: 0 10%;
     border-radius: 5px;
-    // .PostImage {
-
-    //   width: 300px;
-    //   height: 300px;
-
-    // }
   }
   .OneLike {
     .LikeStyle {
@@ -888,11 +828,12 @@ main {
 }
 /*320px-576px*/
 @media screen and (max-width: 576px) {
+  .DropzoneText {
+    font-size: 12px;
+  }
   .Modal {
     display: flex;
     flex-direction: column;
-    // margin: 20px;
-    // width: 300px;
     .ModalAvatar {
       width: 30px;
       height: 30px;
@@ -901,7 +842,7 @@ main {
 
   .SmileBtn {
     font-size: x-large;
-    // margin-right: 15px;
+    bottom: 5px;
   }
   .Send {
     font-size: x-large;
@@ -909,8 +850,8 @@ main {
   }
   .SmileBtnFilled {
     font-size: x-large;
-    // margin-right: 15px;
-    color: #108ee9;
+
+    bottom: 5px;
   }
   .NextArrow {
     font-size: 25px;
@@ -946,6 +887,7 @@ main {
     font-size: 10px;
     font-size: small;
   }
+
   .OnePost {
     margin-top: 40px;
   }
@@ -953,18 +895,18 @@ main {
     height: 150px;
   }
   .FooterPost {
-    margin-bottom: 100px;
+    margin-bottom: 80px;
     .CommentsPost {
-      height: 180px;
+      height: 220px;
     }
   }
 
   .OneLike {
     display: flex;
     font-size: 12px;
+    margin: 0 -10px;
     .Like {
       font-size: x-large;
-      color: black;
     }
     .LikeStyle {
       cursor: pointer;
@@ -974,7 +916,6 @@ main {
   }
 
   .MyCarousel {
-    // display: block;
     object-fit: cover;
     background: #84898987;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -984,8 +925,8 @@ main {
     margin: 0 10%;
     border-radius: 5px;
     .PostImage {
-      width: 200px;
-      height: 200px;
+      width: 250px;
+      height: 220px;
     }
   }
   .LoginForm {
@@ -993,7 +934,6 @@ main {
     align-content: center;
     justify-content: center;
     margin: 30px 20px;
-    // padding: 20px;
     height: 90%;
     padding-right: 12px;
 
@@ -1003,9 +943,6 @@ main {
     }
     .LoginForm-Form {
       padding: 10px 20px;
-
-      // width: 80%;
-      // padding: 20px;
     }
   }
   .AboutMe {
@@ -1032,15 +969,13 @@ main {
       }
       margin: 10px;
       .Card {
-        width: 90px;
-        height: 90px;
+        width: 120px;
+        height: 120px;
       }
     }
   }
   .ModalLink {
     font-size: 13px;
-    padding: 10px;
-    margin: 10px;
   }
   .Post {
     display: flex;
@@ -1049,13 +984,18 @@ main {
     top: 0%;
     left: 0%;
     overflow: hidden;
-
     background-color: var(background-color-new-post);
-    // margin-top: 50px;
     margin: 10% 0;
-    // height: 500px;
-    // margin-top: 40px;
-    // margin-bottom: 40px;
+  }
+  .ModalLink {
+    padding: 0px;
+    font-size: 14px;
+    font-weight: 540;
+    color: var(--font-color);
+    .ModalAvatar {
+      width: 40px;
+      height: 40px;
+    }
   }
   .Explore {
     margin-top: 0px;

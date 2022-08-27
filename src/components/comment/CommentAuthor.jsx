@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 
-const CommentAuthor = ({ owner }) =>
-    <Link to={`/profile/${owner?._id}`} style={{fontWeight:'bold',fontSize:'14px', color:'black'}}>
-{owner?.login || 'Anon'}
-    </Link>
+const CommentAuthor = ({ owner }) => (
+  <Link to={`/profile/${owner?._id}`}>
+    <p className="ModalLink">{owner?.login || 'Anon'}</p>
+  </Link>
+)
 export default CommentAuthor

@@ -28,7 +28,7 @@ export const ResultUserFind = ({ userFind, handleCancel }) => {
         />
       ))
         :
-        <p style={{fontSize:'16px', textAlign:'center'}}> Not found by request </p>
+        <p style={{fontSize:'16px',textAlign:'center'}}> Not found by request </p>
     }
     </div>
   )

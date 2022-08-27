@@ -1,6 +1,5 @@
 input {
   display: none;
-  // margin-bottom: 10px;
 }
 .slider {
   position: absolute;
@@ -39,30 +38,23 @@ input {
   position: absolute;
   width: 80px;
   height: 30px;
-    bottom: -30px;
+  bottom: -30px;
   margin-bottom: 15px;
   border-radius: 50px;
   transition: all 1.4s;
 }
 input:checked + .slider {
   background-color: transparent;
-  //
-
   &:before,
   &:after {
     transform: translateX(50px);
   }
 }
 input:checked ~ .wave {
-  // display: block;
-  // bottom: -30px;
-  // margin-bottom: 20px;
-
   background-color: #a5c1d1;
 }
 
 @media screen and (max-width: 768px) {
-
   .slider {
     position: absolute;
     width: 50px;
@@ -71,7 +63,7 @@ input:checked ~ .wave {
     &:before,
     &:after {
       content: '';
-  
+
       position: absolute;
       left: 5px;
       bottom: 5px;
@@ -88,12 +80,9 @@ input:checked ~ .wave {
   }
   input:checked + .slider {
     background-color: transparent;
-    //
-  
     &:before,
     &:after {
       transform: translateX(20px);
     }
   }
-
 }

@@ -29,8 +29,7 @@ const InitialForm = ({ onLogin, children }) => {
               message: 'Please input login!',
             },
           ]}
-          style={{ marginBottom: '5px',  }}
-          // wrapperCol={{ offset: 3, span: 17 }}
+          style={{ marginBottom: '5px' }}
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
@@ -40,10 +39,7 @@ const InitialForm = ({ onLogin, children }) => {
             onChange={(e) => setLogin(e.target.value)}
           />
         </Form.Item>
-        <Form.Item
-          style={{ margin: '0 auto' }}
-          // wrapperCol={{ offset: 3, span: 17 }}
-        >
+        <Form.Item style={{ margin: '0 auto' }}>
           <p> * Login must be at least 5 characters </p>
         </Form.Item>
         <Form.Item
@@ -56,7 +52,6 @@ const InitialForm = ({ onLogin, children }) => {
             },
           ]}
           style={{ padding: '0 auto', marginBottom: '5px' }}
-          // wrapperCol={{ offset: 3, span: 17 }}
         >
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
@@ -67,17 +62,13 @@ const InitialForm = ({ onLogin, children }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
-        <Form.Item
-          style={{ margin: '0 auto' }}
-          // wrapperCol={{ offset: 3, span: 17 }}
-        >
+        <Form.Item style={{ margin: '0 auto' }}>
           <p>* Use a combination of 8 or more letters, numbers, and symbols</p>
         </Form.Item>
 
         <Form.Item
           name="checked"
           valuePropName="checked"
-          // wrapperCol={{ offset: 0 }}
           style={{ margin: '10px 0px' }}
         >
           <Checkbox
@@ -91,9 +82,7 @@ const InitialForm = ({ onLogin, children }) => {
           </Checkbox>
         </Form.Item>
 
-        <Form.Item
-          // wrapperCol={{ offset: 3, span: 17 }}
-        >
+        <Form.Item>
           <Button
             size="large"
             type="primary"
