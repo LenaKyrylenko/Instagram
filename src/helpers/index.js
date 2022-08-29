@@ -2,7 +2,7 @@ import { Modal,Button } from 'antd'
 import { useDropzone } from 'react-dropzone'
 import React, {useEffect } from 'react'
 import { UploadOutlined } from '@ant-design/icons'
-
+export const videoRegex = (/\.(mp4|mov|avi|wmv|avchd|webm|mpeg-2|3gpp|mp2|flv|3gp|mpg)$/i)
 export const ConstructorModal = ({
   title,
   children,
@@ -37,7 +37,6 @@ export function Dropzone({ onLoad }) {
       {file.path} - {file.size} bytes
     </li>
   ))
-  console.log('acceptedFiles', acceptedFiles)
   useEffect(() => {
     acceptedFiles[0] && onLoad(acceptedFiles[0])
   }, [acceptedFiles])

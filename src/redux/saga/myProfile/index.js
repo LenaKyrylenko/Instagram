@@ -50,7 +50,6 @@ function* setAvatarWorker({ file }) {
     },
   } = yield select()
   const setAvatar = yield call(promiseWorker, actionAvatar(file, _id))
-  console.log('setAvatar', setAvatar)
   const { avatar } = yield call(promiseWorker, actionGetAvatar(_id))
   if (setAvatar) {
     yield call(fullPageAboutUserWorker, { _id })

@@ -15,9 +15,6 @@ function* changeSubscribeWorker({ followId, checkFollowId }) {
       aboutMe: { _id, following },
     },
   } = yield select()
-  console.log('my following', following)
-  console.log('check follow id', checkFollowId)
-  console.log('my id', _id)
 
   const oldFollowing = checkFollowId
     ? {

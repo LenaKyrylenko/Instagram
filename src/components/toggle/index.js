@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './index.module.scss'
-  console.log('styles ttt, ',styles)
 const Toggle = ({ value, onChange }) => (
 
     <label className={styles.switch}

@@ -1,6 +1,5 @@
 import { LinkWithSubscribe } from '../LinkToUser'
 const LikeList = ({ likes, myId }) => {
-  console.log('likes ', likes)
   return (
     <>
       <div className="Modal">

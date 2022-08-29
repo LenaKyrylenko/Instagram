@@ -8,7 +8,7 @@ export const actionExplorePosts = (skip) =>
       ` query PostsFeed($_id:String){
       PostFind(query:$_id){
       owner{_id login avatar{url}}
-      images{_id url} title text
+      images{_id url originalFileName} title text
       _id likesCount 
 
         likes{

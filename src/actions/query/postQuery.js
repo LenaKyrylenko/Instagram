@@ -52,7 +52,9 @@ export const actionPostUpsert = (post, postId) =>
       `
 mutation PostUpsert($post:PostInput){
   PostUpsert(post:$post){
-    _id title text images{_id url}
+    _id title text images{_id url 
+      originalFileName
+    }
   }
 }`,
       {
@@ -60,6 +62,7 @@ mutation PostUpsert($post:PostInput){
           ...post,
           _id: postId,
           images: post.images.map(({ _id }) => ({ _id })),
+         
         },
       },
     ),

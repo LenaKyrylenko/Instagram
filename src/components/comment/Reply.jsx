@@ -22,8 +22,6 @@ export const CommentAction = ({ commentId }) => {
 
 const CommentForReply = ({ addCommentReply, commentId }) => {
   const [newResult, setComment] = useState('')
-
-  console.log('comment', newResult)
   return (
     <>
       <div

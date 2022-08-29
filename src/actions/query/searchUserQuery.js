@@ -6,7 +6,7 @@ export const actionSearchUser = (userName) =>
     'searchUser',
     gql(
       `
-query gf($query: String){
+query searchUser($query: String){
     UserFind(query: $query){
         _id, login avatar{url}
     }

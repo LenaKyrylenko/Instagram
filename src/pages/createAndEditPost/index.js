@@ -27,6 +27,7 @@ const PostEditor = ({
     text: post?.text || '',
     images: post?.images || [],
   }
+
   const [state, setState] = useState(post)
   useEffect(() => {
     if (fileStatus?.status === 'FULFILLED' && fileStatus?.payload != [])
@@ -36,7 +37,7 @@ const PostEditor = ({
       })
     else if (fileStatus?.status === 'REJECTED') message.error('Error')
   }, [fileStatus])
-
+console.log('state images ', state?.images)
   const onSortEnd = ({ oldIndex, newIndex }) => {
     setState({
       ...state,
@@ -71,7 +72,7 @@ const PostEditor = ({
       state['images'] = []
       return false
     } else {
-      return <h2 className="NumberPosts"> {state?.images.length} / 8</h2>
+      return <p className="NumberPosts"> {state?.images.length} / 8</p>
     }
   }
 
@@ -81,13 +82,14 @@ const PostEditor = ({
       <div style={{}}>
         <SortableContainer onSortEnd={onSortEnd}>
           {state?.images?.length <= 8 &&
-            (state?.images || []).map(({ _id, url }, index) => (
+            (state?.images || []).map(({_id, url, originalFileName }, index) => (
               <SortableItem
                 key={`item-${_id}`}
                 url={url}
                 index={index}
                 onRemoveImage={onRemoveImage}
                 _id={_id}
+                originalFileName={originalFileName}
               />
             ))}
         </SortableContainer>

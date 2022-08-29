@@ -2,7 +2,7 @@ import { Carousel } from 'antd'
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons'
 import defaultPhoto from '../../materials/default-photo.png'
 import backendURL from '../../helpers/backendUrl'
-
+import { videoRegex } from '../../helpers'
 const SampleNextArrow = (props) => {
   const { onClick } = props
   return (
@@ -23,6 +23,7 @@ const SamplePrevArrow = (props) => {
 
 export const MyCarousel = ({ images = [], carouselWidth, carouselHeight }) => {
   return (
+   
     <>
       <div className="MyCarousel">
         <Carousel
@@ -31,10 +32,26 @@ export const MyCarousel = ({ images = [], carouselWidth, carouselHeight }) => {
           nextArrow={<SampleNextArrow />}
           prevArrow={<SamplePrevArrow />}
         >
-          {images ? (
+          {
+
+            images ? (
+            
             images?.map(
               (i, index) =>
+                
                 i?.url && (
+                  i?.originalFileName?.match(videoRegex) ?
+                    
+                    <div key={index}>
+                      <video 
+                        className="PostImage"
+                        muted="muted"  controls loop preload="true" >
+  <source src={backendURL + '/' + i?.url}/>
+                        </video>
+
+                
+                </div>
+                    :
                   <div key={index}>
                     <img
                       key={index}
@@ -43,7 +60,9 @@ export const MyCarousel = ({ images = [], carouselWidth, carouselHeight }) => {
                     />
                   </div>
                 ),
-            )
+                )
+                // :
+
           ) : (
             <div>
               <img className="PostImage" src={defaultPhoto} />

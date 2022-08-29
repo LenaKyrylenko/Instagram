@@ -548,9 +548,9 @@ main {
   max-width: 500px;
   min-width: 320px;
   max-height: 500px;
-  padding: 15px 0;
+  // padding: 15px 0;
   overflow-y: auto;
-  color: black;
+ background-color: var(--modal-color);
 }
 .Search {
   padding: 10px;
@@ -593,7 +593,6 @@ main {
   flex-direction: row;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: var(--font-color);
   color: var(--font-color);
   .ModalAvatar {
     width: 50px;

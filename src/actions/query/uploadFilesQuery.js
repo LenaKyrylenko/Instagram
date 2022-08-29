@@ -9,7 +9,8 @@ export const uploadFile = (file) => {
       ? { Authorization: 'Bearer ' + localStorage.authToken }
       : {},
     body: myForm,
-  }).then((result) => result.json())
+  })
+    .then((result) => result.json())
 }
 
 export const actionUploadFile = (file) =>

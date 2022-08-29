@@ -4,8 +4,6 @@ import React, { useState } from 'react'
 import { Input, Col, Button } from 'antd'
 import { SmileOutlined, SmileFilled, SendOutlined } from '@ant-design/icons'
 import styles from '../../index.css'
-
-console.log('styles', styles)
 const AddComment = ({ addComment, postId, style, className, width }) => {
   const [text, setComment] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)

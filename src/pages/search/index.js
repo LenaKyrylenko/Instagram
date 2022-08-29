@@ -8,7 +8,6 @@ import LinkToUser from '../../components/LinkToUser'
 export const ResultUserFind = ({ userFind, handleCancel }) => {
   return (
     <div className="ResultUserFindMobile">
-      {console.log('userfind ', userFind)}
      
       {typeof userFind === 'undefined' 
       

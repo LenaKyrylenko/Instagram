@@ -8,7 +8,7 @@ export const actionPostsFeed = (myFollowing, skip) =>
       `query PostsFeed($ownerId:String){
         PostFind(query:$ownerId){
         owner{_id login avatar{url}}
-        images{_id url} title text
+        images{_id url originalFileName} title text
         _id likesCount 
           likes{
                 _id

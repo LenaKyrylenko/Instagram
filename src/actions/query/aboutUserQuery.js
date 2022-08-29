@@ -25,7 +25,7 @@ export const actionAllPostsUser = (userId, skip) =>
     gql(
       `query allPosts($userId:String!){
 PostFind(query:$userId){
-       owner{_id} _id title text images{_id url}
+       owner{_id} _id title text images{_id url originalFileName}
 }
 }`,
       {

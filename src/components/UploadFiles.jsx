@@ -13,6 +13,7 @@ export function Dropzone({ onLoad }) {
   useEffect(() => {
     if (acceptedFiles) onLoad(acceptedFiles)
   }, [acceptedFiles])
+  
   return (
     <section className="container">
       <div {...getRootProps({ className: 'Dropzone' })}>

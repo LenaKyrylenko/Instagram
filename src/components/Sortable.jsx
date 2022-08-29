@@ -4,11 +4,17 @@ import {
 } from 'react-sortable-hoc'
 import { Button} from 'antd'
 import backendURL  from '../helpers/backendUrl'
-
-export const SortableItem = SortableElement(({ url, onRemoveImage, _id }) => {
+import { videoRegex } from '../helpers'
+export const SortableItem = SortableElement(({ url,onRemoveImage, _id,originalFileName }) => {
   return (
-    <>
-      <img className="Preview" src={backendURL+'/' + url} />
+    <>{originalFileName?.match(videoRegex) ?
+      <video className="Preview">
+        <source src={backendURL + '/' + url} />
+      </video>
+     
+      :
+      <img className="Preview" src={backendURL + '/' + url} />
+    }
       <Button
         type="primary"
         danger

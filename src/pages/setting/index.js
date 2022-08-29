@@ -85,7 +85,6 @@ const EditSetting = ({
         setIsModalVisibleEdit(false)
     }
   }
-  console.log('save pass', changePass?.login != info?.login)
   return (
     <div>
       <EditAccount showModalEdit={showModalEdit} />

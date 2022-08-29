@@ -8,45 +8,34 @@ export const LinkToUser = ({
   _id,
   avatar,
   login,
-  size,
-  // font = '15px',
   padding = '10px',
   onClick,
   key,
 }) => {
   return (
-    <Row style={{ marginBottom:'5px'}}>
+    <Row style={{ marginBottom: '5px' }}>
       <Link
         to={`/profile/${_id}`}
         style={{
-          // display: 'flex',
           padding: padding,
-          // flexDirection: 'row',
-          // fontSize: font,
-          // fontWeight: 'bold',
-          // color: 'black'
         }}
         className="ModalLink"
+        
         onClick={onClick}
         key={key}
       >
         <Col offset={1} className="gutter-row">
           {avatar ? (
             <Avatar
-              className='ModalAvatar'
-              src={backendURL+'/' + avatar?.url}
-             
+              className="ModalAvatar"
+              src={backendURL + '/' + avatar?.url}
             />
           ) : (
-              <Avatar  className='ModalAvatar' src={user}
-                // style={{ marginRight: '3px' }}
-              />
+            <Avatar className="ModalAvatar" src={user} />
           )}
         </Col>
         <Col offset={3} style={{ marginTop: '5px' }}>
-        
-          <h3 className="ModalLink"
-          > {login || 'Anon'}</h3>
+          <h3 className="ModalLink"> {login || 'Anon'}</h3>
         </Col>
       </Link>
     </Row>
@@ -58,8 +47,6 @@ export const LinkWithSubscribe = ({
   avatar,
   login,
   size,
-  // font = '15px',
-  // padding = '10px',
   onClick,
   key,
   myId,
@@ -67,9 +54,8 @@ export const LinkWithSubscribe = ({
   return (
     <Row style={{ margin: '10px', marginBottom: '20px' }}>
       <Link
-        to={`/profile/${_id}`} 
-
-       className="ModalLink"
+        to={`/profile/${_id}`}
+        className="ModalLink"
         onClick={onClick}
         key={key}
       >
@@ -77,7 +63,7 @@ export const LinkWithSubscribe = ({
           {avatar ? (
             <Avatar
               size={size}
-              src={backendURL+'/' + avatar?.url}
+              src={backendURL + '/' + avatar?.url}
               style={{ marginRight: '3px' }}
             />
           ) : (
@@ -85,7 +71,7 @@ export const LinkWithSubscribe = ({
           )}
         </Col>
         <Col offset={2} style={{ marginTop: '5px' }}>
-          <h3 className='ModalLink'> {login || 'Anon'}</h3>
+          <h3 className="ModalLink"> {login || 'Anon'}</h3>
         </Col>
       </Link>
 

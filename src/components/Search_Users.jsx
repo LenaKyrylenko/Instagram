@@ -13,8 +13,7 @@ export const ResultUserFind = ({ userFind = [], handleCancel }) => {
           _id={_id}
           login={login}
           avatar={avatar}
-          size={40}
-          padding={'0px'}
+          padding={'5px'}
           onClick={handleCancel}
           key={_id}
         />

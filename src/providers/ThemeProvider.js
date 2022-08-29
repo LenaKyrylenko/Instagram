@@ -19,10 +19,10 @@ const ThemeProvider = ({ children }) => {
     document.documentElement.dataset.theme = theme
     localStorage.setItem('theme', theme)
   }, [theme])
-  console.log('theme ', theme)
 
   document.documentElement.classList.add('theme-transition')
   document.documentElement.setAttribute('data-theme', theme)
+  
   window.setTimeout(function() {
     document.documentElement.classList.remove('theme-transition')
   }, 100)
