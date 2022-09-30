@@ -7,8 +7,10 @@ const Root = () => (
     {({ theme, setTheme }) => (
       <Toggle
         onChange={() => {
-          if (theme === themes.light) setTheme(themes.dark)
-          if (theme === themes.dark) setTheme(themes.light)
+                    if (theme === themes.light)
+                        setTheme(themes.dark)
+                    if (theme === themes.dark)
+                        setTheme(themes.light)
         }}
         value={theme === themes.dark}
       />

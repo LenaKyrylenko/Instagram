@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import InitialForm from './InitialForm'
 import { actionClearPromiseForName } from '../../actions/types/promiseTypes'
 import { actionLoginTypeSaga } from '../../actions/typeSaga/loginTypesSaga'
-const LoginForm = ({ onLogin, children, auth, onClearPromise }) => {
+const LoginForm = ({ onLogin, auth, onClearPromise }) => {
   useEffect(() => {
     if (auth?.status === 'FULFILLED' && auth?.payload === null) {
       message.error({
@@ -16,7 +16,7 @@ const LoginForm = ({ onLogin, children, auth, onClearPromise }) => {
     }
   }, [auth])
 
-  return <InitialForm onLogin={onLogin}>{'Sign In'}</InitialForm>
+  return <InitialForm onLogin={onLogin} >{'Sign In'}</InitialForm>
 }
 
 export const CLoginForm = connect(

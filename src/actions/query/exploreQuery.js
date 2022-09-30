@@ -10,7 +10,6 @@ export const actionExplorePosts = (skip) =>
       owner{_id login avatar{url}}
       images{_id url originalFileName} title text
       _id likesCount 
-
         likes{
               _id
               owner{				

@@ -53,8 +53,6 @@ const ExplorePosts = ({
           md={{ offset: 2, span: 20 }}
           sm={{ offset: 2, span: 22 }}
           xs={{offset:2, span: 22 }}
-          // span={18} offset={4}
-        
         >
           <div className="Explore">
             {(explorePosts || [])?.map((item) => (

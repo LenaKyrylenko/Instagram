@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThemeContext, themes } from '../contexts/ThemeContext'
+import { Theme, themes } from '../contexts/ThemeContext'
 
 const getTheme = () => {
   const theme = `${window?.localStorage?.getItem('theme')}`

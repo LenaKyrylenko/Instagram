@@ -72,8 +72,11 @@ const MyPostFeed = ({
           <div>
             {postsFeed?.length == 0 && (
               <div style={{ textAlign: 'center' }}>
-                <p style={{fontSize:'20px'}}> You have no posts to feed! </p>
-                <p style={{fontSize:'20px'}}> Post and follow other users! </p>
+                <p style={{ fontSize: '20px' }}> You have no posts to feed! </p>
+                <p style={{ fontSize: '20px' }}>
+                  {' '}
+                  Post and follow other users!{' '}
+                </p>
               </div>
             )}
             {(postsFeed || []).map(
@@ -92,42 +95,33 @@ const MyPostFeed = ({
                       size={40}
                     />
                   </Col>
-                  <Col
-                    xs={{ offset: 1, span: 22 }}
-                  
-                  >
-            
-                  <MyCarousel
-                    images={images}
-                   
-                    />
+                  <Col xs={{ offset: 1, span: 22 }}>
+                    <MyCarousel images={images} />
                   </Col>
                   <div style={{ margin: '0 5%' }}>
                     <p className="Title"> Title: {title || ''}</p>
                     <p className="Title"> Text: {text || ''}</p>
                     <p>
-                    <Divider>Comments</Divider></p>
-                    <div style={{
-                      margin: '10px',
-                      position: 'relative'
-                    }}>
+                      <Divider>Comments</Divider>
+                    </p>
+                    <div
+                      style={{
+                        margin: '10px',
+                        position: 'relative',
+                      }}
+                    >
                       <CCommentsForFeed postId={_id} comments={comments} />
-                      <div className='FooterFeed'>
+                      <div className="FooterFeed">
                         <CLikeFeed likes={likes} postId={_id} />
                         <AddComment
                           addComment={addComment}
                           postId={_id}
                           style={{
-                            position: 'absolute', width: '250px',
-                            bottom: '80px', right: '0px'
+                            position: 'absolute',
+                            width: '250px',
+                            bottom: '80px',
+                            right: '0px',
                           }}
-                          // xs={{
-                          //   style: {
-                          //     position: 'absolute',
-                          //     bottom: '100px', right: '30px'
-                          //   }
-                          // }}
-                      
                         />
                       </div>
                     </div>
