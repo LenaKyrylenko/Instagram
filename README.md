@@ -15,6 +15,6 @@ Install all libraries, run:
 
 Then, to start the web server, run:
 
-### `nnpm start`
+### `npm start`
 
 The application opens in http://localhost:3000/ or any other available port.
